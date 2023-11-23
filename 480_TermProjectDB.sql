@@ -1,11 +1,11 @@
 /* F23 ENSF 480 Term Project Databases
  
  */
-DROP DATABASE IF EXISTS AIRLINE;
-CREATE DATABASE AIRLINE; 
-
 DROP DATABASE IF EXISTS BILLING;
 CREATE DATABASE BILLING; 
+
+DROP DATABASE IF EXISTS AIRLINE;
+CREATE DATABASE AIRLINE; 
 
 USE AIRLINE;
 
@@ -83,18 +83,19 @@ CREATE TABLE Seats (
     FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
 );
 
--- Insert sample data into Seats table
 -- Assuming all seats are initially available
 INSERT INTO Seats (flight_id, seat_number, is_available, seat_type)
 SELECT Flights.flight_id, SEAT_NUMBER.seat_number, TRUE, 'Economy'
 FROM Flights
 CROSS JOIN (
-    SELECT DISTINCT
-        ones + tens + units AS seat_number
-    FROM
-        (SELECT 0 AS ones UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS ones,
-        (SELECT 0 AS tens UNION SELECT 10 UNION SELECT 20 UNION SELECT 30 UNION SELECT 40 UNION SELECT 50 UNION SELECT 60 UNION SELECT 70 UNION SELECT 80 UNION SELECT 90) AS tens,
-        (SELECT 0 AS units UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS units
+    SELECT ones + tens + units AS seat_number
+    FROM (
+        SELECT 
+            0 AS ones, 10 AS tens, units
+        FROM
+            (SELECT 0 AS units UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS units_table
+    ) AS SEAT_NUMBER
+    WHERE ones + tens + units <= (SELECT MAX(number_of_seats) FROM Aircrafts)
 ) AS SEAT_NUMBER;
 
 -- Create Tickets table
@@ -117,18 +118,18 @@ VALUES
 
     
 USE BILLING;
--- Inside billingDB
+	-- Inside billingDB
 
--- Create Payments table
-CREATE TABLE Payments (
-	payment_id INT PRIMARY KEY AUTO_INCREMENT,
-	user_id INT,
-	flight_id INT,
-	payment_amount DECIMAL(10, 2) NOT NULL,
-	payment_date DATETIME NOT NULL,
-	credit_card_number VARCHAR(16) NOT NULL,
-	expiration_date DATE NOT NULL,
-	-- other payment-related columns
-	FOREIGN KEY (user_id) REFERENCES AIRLINE.Users(user_id),
-	FOREIGN KEY (flight_id) REFERENCES AIRLINE.Flights(flight_id)
-);
+	-- Create Payments table
+	CREATE TABLE Payments (
+		payment_id INT PRIMARY KEY AUTO_INCREMENT,
+		user_id INT,
+		flight_id INT,
+		payment_amount DECIMAL(10, 2) NOT NULL,
+		payment_date DATETIME NOT NULL,
+		credit_card_number VARCHAR(16) NOT NULL,
+		expiration_date DATE NOT NULL,
+		-- other payment-related columns
+		FOREIGN KEY (user_id) REFERENCES AIRLINE.Users(user_id),
+		FOREIGN KEY (flight_id) REFERENCES AIRLINE.Flights(flight_id)
+	);
