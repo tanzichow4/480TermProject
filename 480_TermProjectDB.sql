@@ -13,7 +13,7 @@ USE AIRLINE;
 		username VARCHAR(50) NOT NULL,
 		password VARCHAR(50) NOT NULL,
 		email VARCHAR(100) NOT NULL,
-        is_member BOOLEAN NOT NULL
+        	is_member BOOLEAN NOT NULL
 		-- other user-related columns
 	);
     
@@ -34,15 +34,15 @@ USE AIRLINE;
 		arrival_location VARCHAR(50) NOT NULL,
 		departure_time DATETIME NOT NULL,
 		arrival_time DATETIME NOT NULL,
-        aircraft_id INT,
-        FOREIGN KEY (aircraft_id) REFERENCES Aircrafts(aircraft_id)
+        	aircraft_id INT,
+        	FOREIGN KEY (aircraft_id) REFERENCES Aircrafts(aircraft_id)
 		-- other flight-related columns
 	);
     
 	-- Create Ticket table
 	CREATE TABLE Ticket (
 		ticket_id INT PRIMARY KEY AUTO_INCREMENT,
-        price DECIMAL(10, 2) NOT NULL,
+        	price DECIMAL(10, 2) NOT NULL,
 		user_id INT,
 		flight_id INT,
 		FOREIGN KEY (user_id) REFERENCES Users(user_id),
