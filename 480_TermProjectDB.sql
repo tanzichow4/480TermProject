@@ -22,10 +22,34 @@ USE AIRLINE;
 		arrival_location VARCHAR(50) NOT NULL,
 		departure_time DATETIME NOT NULL,
 		arrival_time DATETIME NOT NULL,
-		price DECIMAL(10, 2) NOT NULL
+        FOREIGN KEY (aircraft_id) REFERENCES Aircrafts(aircraft_id)
 		-- other flight-related columns
 	);
+    
+	CREATE TABLE Ticket (
+		ticket_id INT PRIMARY KEY AUTO_INCREMENT,
+        price DECIMAL(10, 2) NOT NULL,
+		user_id INT,
+		flight_id INT,
+		FOREIGN KEY (user_id) REFERENCES Users(user_id),
+		FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
+	);
+    
+	CREATE TABLE Seats (
+		seat_id INT PRIMARY KEY AUTO_INCREMENT,
+		flight_id INT,
+		seat_number VARCHAR(10) NOT NULL,
+		is_available BOOLEAN NOT NULL,
+		-- Add other seat-related columns as needed
+		FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
+	);
 
+    
+    CREATE TABLE Aircrafts (
+		aircraft_id INT PRIMARY KEY AUTO_INCREMENT
+        
+    );
+    
 USE BILLING;
 	-- Inside billingDB
 
@@ -41,6 +65,3 @@ USE BILLING;
 		FOREIGN KEY (user_id) REFERENCES airlineDB.Users(user_id),
 		FOREIGN KEY (flight_id) REFERENCES airlineDB.Flights(flight_id)
 	);
-
-
-
