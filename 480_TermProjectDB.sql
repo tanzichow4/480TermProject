@@ -1,3 +1,6 @@
+/* F23 ENSF 480 Term Project Databases
+ 
+ */
 DROP DATABASE IF EXISTS AIRLINE;
 CREATE DATABASE AIRLINE; 
 
@@ -7,15 +10,33 @@ CREATE DATABASE BILLING;
 USE AIRLINE;
 	-- Inside airlineDB
 
+	-- Create Aircrafts table
+    	CREATE TABLE Aircrafts (
+		aircraft_id INT PRIMARY KEY AUTO_INCREMENT,
+		aircraft_name VARCHAR(50) NOT NULL
+    	);
+    
+    	-- Insert sample data into Aircrafts table
+	INSERT INTO Aircrafts (aircraft_name) VALUES
+		('Boeing 747'),
+		('Airbus A320');
+        
 	-- Create Users table
 	CREATE TABLE Users (
 		user_id INT PRIMARY KEY AUTO_INCREMENT,
 		username VARCHAR(50) NOT NULL,
-		password VARCHAR(50) NOT NULL,
+		pass VARCHAR(50) NOT NULL,
 		email VARCHAR(100) NOT NULL,
-        	is_member BOOLEAN NOT NULL
+        is_member BOOLEAN NOT NULL
 		-- other user-related columns
 	);
+    
+    	INSERT INTO Users (username, pass, email, is_member) VALUES
+		('Alice123', '1234', 'alice@example.com', TRUE),
+		('Bob456', '1234', 'bob@example.com', TRUE),
+		('Charlie789', '1234', 'charlie@example.com', TRUE),
+		('David010', '1234', 'david@example.com', TRUE),
+		('Eve112', '1234', 'eve@example.com', TRUE);
     
 	-- Create MemberPerks table
 	CREATE TABLE MemberPerks (
@@ -26,6 +47,19 @@ USE AIRLINE;
 		PRIMARY KEY (user_id)
 	);
     
+    	INSERT INTO MemberPerks (username, pass, email, is_member) VALUES
+		('Alice123', '1234hello', 'alice@example.com', FALSE),
+		('Bob456', '1234hello', 'bob@example.com', FALSE),
+		('Charlie789', '1234hello', 'charlie@example.com', TRUE),
+		('David010', '1234hello', 'david@example.com', TRUE),
+		('Eve112', '1234hello', 'eve@example.com', TRUE);
+    
+    	-- Insert corresponding data into MemberPerks table
+	INSERT INTO MemberPerks (user_id, credit_card, free_ticket)
+	SELECT user_id, '1234', TRUE
+	FROM Users
+	WHERE is_member = TRUE;
+    
 	-- Create Flights table
 	CREATE TABLE Flights (
 		flight_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -35,10 +69,17 @@ USE AIRLINE;
 		departure_time DATETIME NOT NULL,
 		arrival_time DATETIME NOT NULL,
         	aircraft_id INT,
-        	FOREIGN KEY (aircraft_id) REFERENCES Aircrafts(aircraft_id)
+        
+	FOREIGN KEY (aircraft_id) REFERENCES Aircrafts(aircraft_id)
 		-- other flight-related columns
 	);
     
+    	-- Insert sample data into Flights table
+	INSERT INTO Flights (flight_number, departure_location, arrival_location, departure_time, arrival_time, aircraft_id)
+	VALUES
+		('FL123', 'Chicago', 'New York', '2023-11-23 08:00:00', '2023-11-23 10:00:00', 1),
+		('FL456', 'Calgary', 'Quebec', '2023-11-23 12:00:00', '2023-11-23 14:00:00', 2);
+
 	-- Create Ticket table
 	CREATE TABLE Ticket (
 		ticket_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -58,12 +99,6 @@ USE AIRLINE;
 		-- Add other seat-related columns as needed
 		FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
 	);
-
-	-- Create Aircrafts table
-    	CREATE TABLE Aircrafts (
-		aircraft_id INT PRIMARY KEY AUTO_INCREMENT
-        
-    	);
     
 USE BILLING;
 	-- Inside billingDB
@@ -81,6 +116,3 @@ USE BILLING;
 		FOREIGN KEY (user_id) REFERENCES airlineDB.Users(user_id),
 		FOREIGN KEY (flight_id) REFERENCES airlineDB.Flights(flight_id)
 	);
-
-
-
