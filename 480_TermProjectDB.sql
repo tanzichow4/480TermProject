@@ -5,16 +5,28 @@ DROP DATABASE IF EXISTS BILLING;
 CREATE DATABASE BILLING; 
 
 USE AIRLINE;
--- Inside airlineDB
+	-- Inside airlineDB
 
+	-- Create Users table
 	CREATE TABLE Users (
 		user_id INT PRIMARY KEY AUTO_INCREMENT,
 		username VARCHAR(50) NOT NULL,
 		password VARCHAR(50) NOT NULL,
-		email VARCHAR(100) NOT NULL
+		email VARCHAR(100) NOT NULL,
+        is_member BOOLEAN NOT NULL
 		-- other user-related columns
 	);
-
+    
+	-- Create MemberPerks table
+	CREATE TABLE MemberPerks (
+		user_id INT,
+		credit_card VARCHAR(16), -- Assuming credit card is a string for simplicity
+		free_ticket BOOLEAN,
+		FOREIGN KEY (user_id) REFERENCES Users(user_id),
+		PRIMARY KEY (user_id)
+	);
+    
+	-- Create Flights table
 	CREATE TABLE Flights (
 		flight_id INT PRIMARY KEY AUTO_INCREMENT,
 		flight_number VARCHAR(20) NOT NULL,
@@ -22,10 +34,12 @@ USE AIRLINE;
 		arrival_location VARCHAR(50) NOT NULL,
 		departure_time DATETIME NOT NULL,
 		arrival_time DATETIME NOT NULL,
+        aircraft_id INT,
         FOREIGN KEY (aircraft_id) REFERENCES Aircrafts(aircraft_id)
 		-- other flight-related columns
 	);
     
+	-- Create Ticket table
 	CREATE TABLE Ticket (
 		ticket_id INT PRIMARY KEY AUTO_INCREMENT,
         price DECIMAL(10, 2) NOT NULL,
@@ -35,6 +49,7 @@ USE AIRLINE;
 		FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
 	);
     
+	-- Create Seats table
 	CREATE TABLE Seats (
 		seat_id INT PRIMARY KEY AUTO_INCREMENT,
 		flight_id INT,
@@ -44,15 +59,16 @@ USE AIRLINE;
 		FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
 	);
 
-    
-    CREATE TABLE Aircrafts (
+	-- Create Aircrafts table
+    	CREATE TABLE Aircrafts (
 		aircraft_id INT PRIMARY KEY AUTO_INCREMENT
         
-    );
+    	);
     
 USE BILLING;
 	-- Inside billingDB
 
+	-- Create Payments table
 	CREATE TABLE Payments (
 		payment_id INT PRIMARY KEY AUTO_INCREMENT,
 		user_id INT,
@@ -65,3 +81,6 @@ USE BILLING;
 		FOREIGN KEY (user_id) REFERENCES airlineDB.Users(user_id),
 		FOREIGN KEY (flight_id) REFERENCES airlineDB.Flights(flight_id)
 	);
+
+
+
