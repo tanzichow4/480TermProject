@@ -1,1 +1,6 @@
-package ensf480.term_project.domain
+package ensf480.term_project.domain; 
+
+public class User {
+
+
+}
