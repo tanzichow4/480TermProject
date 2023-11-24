@@ -39,17 +39,17 @@ INSERT INTO Users (username, pass, email, is_member) VALUES
     ('David010', '1234', 'david@example.com', TRUE),
     ('Eve112', '1234', 'eve@example.com', TRUE);
 
--- Create MemberPerks table
-CREATE TABLE MemberPerks (
+-- Create Promos table
+CREATE TABLE Promos (
     user_id INT,
     credit_card VARCHAR(16), -- Assuming credit card is a string for simplicity
-    free_ticket BOOLEAN,
+    free_ticket_code INT,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     PRIMARY KEY (user_id)
 );
 
-INSERT INTO MemberPerks (user_id, credit_card, free_ticket)
-SELECT user_id, '1234', TRUE
+INSERT INTO Promos (user_id, credit_card, free_ticket_code)
+SELECT user_id, '1234', 1111
 FROM Users
 WHERE is_member = TRUE;
 
@@ -62,6 +62,7 @@ CREATE TABLE Flights (
     departure_time DATETIME NOT NULL,
     arrival_time DATETIME NOT NULL,
     aircraft_id INT,
+    base_price DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (aircraft_id) REFERENCES Aircrafts(aircraft_id)
     -- other flight-related columns
 );
@@ -77,7 +78,7 @@ CREATE TABLE Seats (
     seat_id INT PRIMARY KEY AUTO_INCREMENT,
     flight_id INT,
     seat_number VARCHAR(10) NOT NULL,
-    is_available BOOLEAN NOT NULL,
+    booked BOOLEAN NOT NULL,
     seat_type VARCHAR(20) NOT NULL,
     -- Add other seat-related columns as needed
     FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
