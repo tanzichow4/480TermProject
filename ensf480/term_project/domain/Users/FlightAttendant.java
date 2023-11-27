@@ -1,5 +1,5 @@
 package ensf480.term_project.domain.Users;
 
-public class FlightAttendant {
-    
+public class FlightAttendant extends RegisteredUser {
+
 }
