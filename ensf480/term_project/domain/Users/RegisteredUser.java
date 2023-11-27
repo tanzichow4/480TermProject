@@ -109,6 +109,6 @@ public class RegisteredUser {
             e.printStackTrace();
         }
 
-        PopulateFromDB.updateUsers();
+        PopulateFromDB.updateRegisteredUsers();
     }
 }

@@ -28,16 +28,16 @@ CREATE TABLE RegisteredUsers (
     username VARCHAR(50) NOT NULL,
     pass VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    is_member BOOLEAN NOT NULL
+    userType INT NOT NULL,
     -- other user-related columns
 );
 
-INSERT INTO RegisteredUsers (username, pass, email, is_member) VALUES
-    ('Alice123', '1234', 'alice@example.com', TRUE),
-    ('Bob456', '1234', 'bob@example.com', TRUE),
-    ('Charlie789', '1234', 'charlie@example.com', TRUE),
-    ('David010', '1234', 'david@example.com', TRUE),
-    ('Eve112', '1234', 'eve@example.com', TRUE);
+INSERT INTO RegisteredUsers (username, pass, email, userType) VALUES
+    ('Alice123', '1234', 'alice@example.com', 0),
+    ('Bob456', '1234', 'bob@example.com', 0),
+    ('Charlie789', '1234', 'charlie@example.com', 0),
+    ('David010', '1234', 'david@example.com', 1),
+    ('Eve112', '1234', 'eve@example.com', 1);
 
 -- Create Promos table
 CREATE TABLE Promos (
@@ -68,10 +68,10 @@ CREATE TABLE Flights (
 );
 
 -- Insert sample data into Flights table
-INSERT INTO Flights (flight_number, departure_location, arrival_location, departure_time, arrival_time, aircraft_id)
+INSERT INTO Flights (flight_number, departure_location, arrival_location, departure_time, arrival_time, aircraft_id, base_price)
 VALUES
-    ('FL123', 'Chicago', 'New York', '2023-11-23 08:00:00', '2023-11-23 10:00:00', 1),
-    ('FL456', 'Calgary', 'Quebec', '2023-11-23 12:00:00', '2023-11-23 14:00:00', 2);
+    ('FL123', 'Chicago', 'New York', '2023-11-23 08:00:00', '2023-11-23 10:00:00', 1, 100.00),
+    ('FL456', 'Calgary', 'Quebec', '2023-11-23 12:00:00', '2023-11-23 14:00:00', 2, 150.00);
 
 -- Create Seats table
 CREATE TABLE Seats (
@@ -85,8 +85,8 @@ CREATE TABLE Seats (
 );
 
 -- Assuming all seats are initially available
-INSERT INTO Seats (flight_id, seat_number, is_available, seat_type)
-SELECT Flights.flight_id, SEAT_NUMBER.seat_number, TRUE, 'Economy'
+INSERT INTO Seats (flight_id, seat_number, booked, seat_type)
+SELECT Flights.flight_id, SEAT_NUMBER.seat_number, FALSE, 'Economy'
 FROM Flights
 CROSS JOIN (
     SELECT ones + tens + units AS seat_number
@@ -139,6 +139,6 @@ CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
 
 GRANT ALL PRIVILEGES ON AIRLINE.* TO 'user'@'localhost';
 
-GRANT ALL PRIVILEDES ON BILLING.* TO 'user'@'localhost';
+GRANT ALL PRIVILEGES ON BILLING.* TO 'user'@'localhost';
 
 FLUSH PRIVILEGES;

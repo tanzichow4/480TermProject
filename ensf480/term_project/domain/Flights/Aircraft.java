@@ -6,4 +6,9 @@ public class Aircraft {
     private String aircraftName;
     private int numberOfSeats;
 
+    public Aircraft(int aircraftID, String aircraftName, int numberOfSeats) {
+        this.aircraftID = aircraftID;
+        this.aircraftName = aircraftName;
+        this.numberOfSeats = numberOfSeats;
+    }
 }

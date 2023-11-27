@@ -14,6 +14,7 @@ public class PopulateFromDB {
 
     private static List<Flight> flightList = new ArrayList<>();
     private static List<RegisteredUser> registeredUserList = new ArrayList<>();
+    private static List<Aircraft> aircraftList = new ArrayList<>();
 
 
     // Method to populate ArrayList from Users table
@@ -71,18 +72,31 @@ public class PopulateFromDB {
         flightList = flights;
         return flightList;
     }
+
+    public static List<Aircraft> getAircrafts() {
+        try {
+            Connection connection = DatabaseManager.getConnection("AIRLINE");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Aircrafts");
     
+            while (resultSet.next()) {
+                int aircraftId = resultSet.getInt("aircraft_id");
+                String aircraftName = resultSet.getString("aircraft_name");
+                int numberOfSeats = resultSet.getInt("number_of_seats");
+    
+                Aircraft aircraft = new Aircraft(aircraftId, aircraftName, numberOfSeats);
+                aircraftList.add(aircraft);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-    public static List<Flight> getFlightList() {
-        return flightList;
-    }
+        return aircraftList;
 
-    public static List<RegisteredUser> getRegisteredUserList() {
-        return registeredUserList;
     }
 
     // Method to update ArrayList from Users table
-    public static void updateUsers() {
+    public static void updateRegisteredUsers() {
         registeredUserList.clear(); // Clear the existing list
 
         try {
@@ -104,6 +118,10 @@ public class PopulateFromDB {
         }
     }
 
+    /**
+     * Call this function whenever you go to update the flights in any way in the DB. 
+     * Ensures the lists stay up to date with the current DB
+     */
     public static void updateFlights() {
         flightList.clear(); // Clear the existing list
     
@@ -130,6 +148,20 @@ public class PopulateFromDB {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // Basic list getters
+
+    public static List<Flight> getFlightList() {
+        return flightList;
+    }
+
+    public static List<RegisteredUser> getRegisteredUserList() {
+        return registeredUserList;
+    }
+
+    public static List<Aircraft> getAircraftList() {
+        return aircraftList;
     }
     
 }
