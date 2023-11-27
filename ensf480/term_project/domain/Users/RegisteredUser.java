@@ -8,13 +8,14 @@ package ensf480.term_project.domain.Users;
 
 import java.sql.*;
 
-public class RegisteredUser {
+public abstract class RegisteredUser {
 
     private int userID;
     private String username;
     private String password;
     private String email;
-    private boolean isMember;
+    private boolean isMember = false;
+    private boolean loggedin = false;
 
     // JDBC URL, username, and password of MySQL server
     private static final String URL = "jdbc:mysql://localhost:3306/AIRLINE";
@@ -25,11 +26,10 @@ public class RegisteredUser {
 
     }
     
-    public RegisteredUser(String username, String password, String email, boolean isMember) {
+    public RegisteredUser(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.isMember = isMember;
     }
 
     // Getter and setter methods
@@ -66,7 +66,7 @@ public class RegisteredUser {
         this.email = email;
     }
 
-    public boolean isMember() {
+    public boolean getMember() {
         return isMember;
     }
 
@@ -74,12 +74,20 @@ public class RegisteredUser {
         isMember = member;
     }
 
+    public boolean getLoggedIN() {
+        return loggedin;
+    }
+
+    public void setLoggedIN(boolean value) {
+        loggedin = value;
+    }
+
     // Method to retrieve user information from the database
-    public void fetchUserInfoFromDB(int userID) {
+    public void fetchUserInfoFromDB(String enteredUsername) {
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             String query = "SELECT * FROM Users WHERE user_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, userID);
+                preparedStatement.setString(1, enteredUsername);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
                         this.userID = resultSet.getInt("user_id");
@@ -87,6 +95,7 @@ public class RegisteredUser {
                         this.password = resultSet.getString("pass");
                         this.email = resultSet.getString("email");
                         this.isMember = resultSet.getBoolean("is_member");
+                        this.loggedin = resultSet.getBoolean("logged_in");
                     }
                 }
             }
@@ -104,6 +113,7 @@ public class RegisteredUser {
                 preparedStatement.setString(2, this.password);
                 preparedStatement.setString(3, this.email);
                 preparedStatement.setBoolean(4, this.isMember);
+                preparedStatement.setBoolean(5, this.loggedin);
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
