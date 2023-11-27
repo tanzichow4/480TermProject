@@ -1,17 +1,17 @@
 package ensf480.term_project.domain.Singleton;
 
-import ensf480.term_project.domain.Users.RegisteredUser;
+import ensf480.term_project.domain.Users.*;
 
 public class Signup {
 
     // The single instance of the class
     private static Signup instance;
-    private RegisteredUser user;
+    private Customer user;
 
     // Private constructor to prevent instantiation outside of the class
     private Signup() {
         // Create a new registered user instance
-        user = new RegisteredUser();
+        user = new Customer();
     }
 
     public void sign_up(String username, String password, String email) {
