@@ -23,7 +23,7 @@ VALUES
     ('Airbus A320', 170);
 
 -- Create Users table
-CREATE TABLE Users (
+CREATE TABLE RegisteredUsers (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
     pass VARCHAR(50) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE Users (
     -- other user-related columns
 );
 
-INSERT INTO Users (username, pass, email, is_member) VALUES
+INSERT INTO RegisteredUsers (username, pass, email, is_member) VALUES
     ('Alice123', '1234', 'alice@example.com', TRUE),
     ('Bob456', '1234', 'bob@example.com', TRUE),
     ('Charlie789', '1234', 'charlie@example.com', TRUE),
@@ -134,3 +134,11 @@ USE BILLING;
 		FOREIGN KEY (user_id) REFERENCES AIRLINE.Users(user_id),
 		FOREIGN KEY (flight_id) REFERENCES AIRLINE.Flights(flight_id)
 	);
+    
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+
+GRANT ALL PRIVILEGES ON AIRLINE.* TO 'user'@'localhost';
+
+GRANT ALL PRIVILEDES ON BILLING.* TO 'user'@'localhost';
+
+FLUSH PRIVILEGES;

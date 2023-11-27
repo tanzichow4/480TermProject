@@ -4,7 +4,10 @@
  * 
  */
 
+
 package ensf480.term_project.domain.Users; 
+
+import ensf480.term_project.domain.Boundaries.*;
 
 import java.sql.*;
 
@@ -14,19 +17,15 @@ public abstract class RegisteredUser {
     private String username;
     private String password;
     private String email;
-    private boolean isMember = false;
-    private boolean loggedin = false;
-
-    // JDBC URL, username, and password of MySQL server
-    private static final String URL = "jdbc:mysql://localhost:3306/AIRLINE";
-    private static final String USER = "your_username"; // set to your username
-    private static final String PASSWORD = "your_password"; // set to your root
+    private boolean isMember;
+    private boolean isloggedin
 
     public RegisteredUser() {
 
     }
     
-    public RegisteredUser(String username, String password, String email) {
+    public RegisteredUser(int userID, String username, String password, String email, Boolean isloggedin) {
+        this.userID = userID;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -75,19 +74,19 @@ public abstract class RegisteredUser {
     }
 
     public boolean getLoggedIN() {
-        return loggedin;
+        return isloggedin;
     }
 
     public void setLoggedIN(boolean value) {
-        loggedin = value;
+        isloggedin = value;
     }
 
     // Method to retrieve user information from the database
-    public void fetchUserInfoFromDB(String enteredUsername) {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+    public void fetchUserInfoFromDB(int userID) {
+        try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
             String query = "SELECT * FROM Users WHERE user_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, enteredUsername);
+                preparedStatement.setInt(1, userID);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
                         this.userID = resultSet.getInt("user_id");
@@ -95,7 +94,7 @@ public abstract class RegisteredUser {
                         this.password = resultSet.getString("pass");
                         this.email = resultSet.getString("email");
                         this.isMember = resultSet.getBoolean("is_member");
-                        this.loggedin = resultSet.getBoolean("logged_in");
+                        this.isloggedin = resultSet.getBoolean("logged_in");
                     }
                 }
             }
@@ -106,18 +105,20 @@ public abstract class RegisteredUser {
 
     // Method to save user information to the database
     public void saveUserInfoToDB() {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
-            String query = "INSERT INTO Users (username, pass, email, is_member) VALUES (?, ?, ?, ?)";
+        try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
+            String query = "INSERT INTO RegisteredUsers (username, pass, email, is_member) VALUES (?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setString(1, this.username);
                 preparedStatement.setString(2, this.password);
                 preparedStatement.setString(3, this.email);
                 preparedStatement.setBoolean(4, this.isMember);
-                preparedStatement.setBoolean(5, this.loggedin);
+                preparedStatement.setBoolean(5, this.isloggedin);
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        PopulateFromDB.updateUsers();
     }
 }
