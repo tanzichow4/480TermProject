@@ -18,7 +18,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 public class main {
     public static void main(String[] args) {
@@ -37,13 +40,34 @@ public class main {
             }
         }
 
+        // Set the components of the LocalDateTime
+        int year = 2023;
+        int month = 11;
+        int day = 27;
+        int hour = 15;
+        int minute = 30;
+        int second = 0;
+
+        // Create a LocalDateTime object
+        LocalDateTime dTime = LocalDateTime.of(year, month, day, hour, minute, second);
+
+        hour = 18;
+        LocalDateTime aTime = LocalDateTime.of(year, month, day, hour, minute, second);
         
+        BigDecimal basePrice = new BigDecimal("150.00");
+        Flight added = new Flight(3, "FL1110", "Calgary", "Vancouver", dTime, aTime, 1, basePrice);
         
+        added.saveToDatabase();
+
+        flights = PopulateFromDB.setFlights();
+
+        for (Flight element : flights) {
+            System.out.println("Flight Number: " + element.getFlightNumber());
+        }
+
         // Connect to BILLING database
         DatabaseManager.connect("BILLING");
         Connection billingConnection = DatabaseManager.getConnection("BILLING");
-
-
 
         // Close connections
         DatabaseManager.close("AIRLINE");
