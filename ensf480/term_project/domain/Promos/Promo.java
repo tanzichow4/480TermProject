@@ -10,7 +10,7 @@ import java.util.List;
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 
 public class Promo {
-    private int promoID;
+    private int userID;
     private String promoCode;
     private int discountAmount;
     private boolean used;
@@ -75,7 +75,6 @@ public class Promo {
         }
     }
     
-
     // Add a method to update the list of promos in memory
 
     // Method to generate a seat promo
