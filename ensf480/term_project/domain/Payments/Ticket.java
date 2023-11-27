@@ -17,7 +17,6 @@ public class Ticket {
     private int userID;
     private int seatID;
     private int flightID;
-
     // Assume you have references to Flight and Seat objects
     private Flight flight;
     private Seat seat;
@@ -40,6 +39,7 @@ public class Ticket {
         this.flight = getFlightDetails(flightID);
         this.seat = getSeatDetails(seatID);
         this.ticketPrice = calculatePrice();
+        saveToDatabase();
     }
 
     public int getTicketID() {

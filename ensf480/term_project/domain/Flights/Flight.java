@@ -28,7 +28,9 @@ public class Flight {
         this.arrivalTime = aTime;
         this.aircraftID = aircraftID;
         this.basePrice = price;
+        // Populate the seats of the flight
         populateSeats();
+        // Update arraylist every time a new flight is added.
     }
 
     public int getFlightID() {
@@ -72,23 +74,68 @@ public class Flight {
     
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE");
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Seats");
+            // Modify the SQL query to only fetch seats for the current flight
+            String query = "SELECT * FROM Seats WHERE flight_id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, flightID);
+                ResultSet resultSet = preparedStatement.executeQuery();
     
-            while (resultSet.next()) {
-                int seatId = resultSet.getInt("seat_id");
-                String seatRow = resultSet.getString("seat_row");
-                String seatNumber = resultSet.getString("seat_number");
-                String seatType = resultSet.getString("seat_type");
-                boolean booked = resultSet.getBoolean("booked");
-                int flightId = resultSet.getInt("flight_id");
+                while (resultSet.next()) {
+                    int seatId = resultSet.getInt("seat_id");
+                    String seatRow = resultSet.getString("seat_row");
+                    String seatNumber = resultSet.getString("seat_number");
+                    String seatType = resultSet.getString("seat_type");
+                    boolean booked = resultSet.getBoolean("booked");
+                    int flightId = resultSet.getInt("flight_id");
     
-                Seat seat = new Seat(seatId, seatRow, seatNumber, seatType, booked, flightId);
-                seatList.add(seat);
+                    Seat seat = new Seat(seatId, seatRow, seatNumber, seatType, booked, flightId);
+                    seatList.add(seat);
+                }
             }
-    
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }   
+    }
+    
+    public void saveToDatabase() {
+        try {
+            Connection connection = DatabaseManager.getConnection("AIRLINE");
+
+            // Prepare the SQL query for inserting a new flight
+            String query = "INSERT INTO Flights (flight_number, departure_location, arrival_location, departure_time, arrival_time, aircraft_id, base_price) " +
+                           "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                // Set parameters for the prepared statement
+                preparedStatement.setString(1, flightNumber);
+                preparedStatement.setString(2, departureLocation);
+                preparedStatement.setString(3, arrivalLocation);
+                preparedStatement.setObject(4, departureTime);
+                preparedStatement.setObject(5, arrivalTime);
+                preparedStatement.setInt(6, aircraftID);
+                preparedStatement.setBigDecimal(7, basePrice);
+
+                // Execute the insert statement
+                int affectedRows = preparedStatement.executeUpdate();
+
+                // Check if the insertion was successful
+                if (affectedRows > 0) {
+                    System.out.println("Flight saved to the database successfully.");
+
+                    // Retrieve the auto-generated flight_id
+                    try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            flightID = generatedKeys.getInt(1);
+                        }
+                    }
+                } else {
+                    System.err.println("Failed to save flight to the database.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
 }

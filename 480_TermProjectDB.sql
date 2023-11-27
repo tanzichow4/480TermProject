@@ -113,10 +113,10 @@ INSERT INTO Seats (seat_id, seat_row, seat_number, seat_type, booked, flight_id)
 -- Create Tickets table
 CREATE TABLE Tickets (
     ticket_id INT PRIMARY KEY AUTO_INCREMENT,
-    price DECIMAL(10, 2) NOT NULL,
     user_id INT,
     flight_id INT,
     seat_id INT,
+    price DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (seat_id) REFERENCES Seats(seat_id),
     FOREIGN KEY (user_id) REFERENCES RegisteredUsers(user_id),
     FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
@@ -125,8 +125,8 @@ CREATE TABLE Tickets (
 -- Insert sample data into Tickets table
 INSERT INTO Tickets (flight_id, user_id, seat_id, price)
 VALUES
-    (1, 1, 1, 150.00),
-    (2, 2, 2, 200.00);
+    (1, 1, 1, 100.00),
+    (2, 2, 2, 100.00);
 
 USE BILLING;
 	-- Inside billingDB

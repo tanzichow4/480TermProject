@@ -31,6 +31,7 @@ public class RegisteredUser {
         this.email = email;
         this.isloggedin = isloggedin;
         this.userType = userType;
+        saveUserInfoToDB();
     }
 
     // Getter and setter methods
