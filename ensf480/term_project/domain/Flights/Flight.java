@@ -25,6 +25,10 @@ public class Flight {
         this.basePrice = price;
     }
 
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
     
 
 }
