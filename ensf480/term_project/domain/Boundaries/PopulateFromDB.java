@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 
 public class PopulateFromDB {
 
-
     private static List<Flight> flightList = new ArrayList<>();
     private static List<RegisteredUser> registeredUserList = new ArrayList<>();
-
 
     // Method to populate ArrayList from Users table
     // Gets all the RegisteredUsers currently in the DB table
@@ -29,9 +27,10 @@ public class PopulateFromDB {
                 String username = resultSet.getString("username");
                 String password = resultSet.getString("pass");
                 String email = resultSet.getString("email");
-                boolean isMember = resultSet.getBoolean("is_member");
+                int userType = resultSet.getInt("user_type");
+                boolean isloggedin = resultSet.getBoolean("logged_in");
 
-                RegisteredUser user = new RegisteredUser(userId, username, password, email, isMember);
+                RegisteredUser user = new RegisteredUser(userId, username, password, email, isloggedin, userType);
                 userList.add(user);
             }
         } catch (SQLException e) {
@@ -72,7 +71,6 @@ public class PopulateFromDB {
         return flightList;
     }
     
-
     public static List<Flight> getFlightList() {
         return flightList;
     }
@@ -94,9 +92,10 @@ public class PopulateFromDB {
                 String username = resultSet.getString("username");
                 String password = resultSet.getString("pass");
                 String email = resultSet.getString("email");
-                boolean isMember = resultSet.getBoolean("is_member");
+                int userType = resultSet.getInt("user_type");
+                boolean isloggedin = resultSet.getBoolean("logged_in");
 
-                RegisteredUser user = new RegisteredUser(userId, username, password, email, isMember);
+                RegisteredUser user = new RegisteredUser(userId, username, password, email, isloggedin, userType);
                 registeredUserList.add(user);
             }
         } catch (SQLException e) {

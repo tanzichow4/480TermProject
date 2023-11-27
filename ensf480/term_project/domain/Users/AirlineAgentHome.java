@@ -1,5 +1,4 @@
 package ensf480.term_project.domain.Users;
 
-public class AirlineAgentHome {
-    
+public class AirlineAgentHome extends Customer {
 }
