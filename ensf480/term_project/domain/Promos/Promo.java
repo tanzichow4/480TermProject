@@ -10,7 +10,7 @@ import java.util.List;
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 
 public class Promo {
-    private int userID;
+    private int promoID;
     private String promoCode;
     private int discountAmount;
     private boolean used;

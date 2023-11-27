@@ -17,7 +17,7 @@ public class PopulateFromDB {
 
     // Method to populate ArrayList from Users table
     // Gets all the RegisteredUsers currently in the DB table
-    public static List<RegisteredUser> getRegisteredUsers() {
+    public static List<RegisteredUser> setRegisteredUsers() {
         List<RegisteredUser> userList = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE"); // Use the connection from DatabaseManager
@@ -43,7 +43,7 @@ public class PopulateFromDB {
     }
 
     // Method to populate ArrayList from Flights table
-    public static List<Flight> getFlights() {
+    public static List<Flight> setFlights() {
         List<Flight> flights = new ArrayList<>();
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE");
@@ -72,7 +72,7 @@ public class PopulateFromDB {
         return flightList;
     }
 
-    public static List<Aircraft> getAircrafts() {
+    public static List<Aircraft> setAircrafts() {
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE");
             Statement statement = connection.createStatement();
@@ -81,9 +81,8 @@ public class PopulateFromDB {
             while (resultSet.next()) {
                 int aircraftId = resultSet.getInt("aircraft_id");
                 String aircraftName = resultSet.getString("aircraft_name");
-                int numberOfSeats = resultSet.getInt("number_of_seats");
-    
-                Aircraft aircraft = new Aircraft(aircraftId, aircraftName, numberOfSeats);
+        
+                Aircraft aircraft = new Aircraft(aircraftId, aircraftName);
                 aircraftList.add(aircraft);
             }
         } catch (SQLException e) {
@@ -147,6 +146,10 @@ public class PopulateFromDB {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void updateSeats() {
+
     }
 
     // Basic list getters
