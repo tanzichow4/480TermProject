@@ -91,12 +91,6 @@ public class PopulateFromDB {
         }
 
         return aircraftList;
-
-    public static List<Flight> getFlightList() {
-        return flightList;
-    }
-
-
     }
 
     // Method to update ArrayList from Users table

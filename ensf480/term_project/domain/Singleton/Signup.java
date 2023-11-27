@@ -1,5 +1,6 @@
 package ensf480.term_project.domain.Singleton;
 
+import ensf480.term_project.domain.Promos.Promo;
 import ensf480.term_project.domain.Users.*;
 
 public class Signup {
@@ -23,8 +24,21 @@ public class Signup {
         // Save user information to the database
         user.saveUserInfoToDB();
 
+        // Generate and save seat and flight promos for the new user
+        generateAndSavePromos(user.getUserID());
+
         // Set the user as logged in after successful signup
         user.setLoggedIN(true);
+    }
+
+    private void generateAndSavePromos(int userID) {
+        // Generate seat promo
+        Promo seatPromo = Promo.generateSeatPromo(userID);
+        seatPromo.saveToDatabase();
+
+        // Generate flight promo
+        Promo flightPromo = Promo.generateFlightPromo(userID);
+        flightPromo.saveToDatabase();
     }
 
     // Public method to get the single instance of the class
