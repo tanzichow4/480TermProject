@@ -1,6 +1,7 @@
 /**
  * TO RUN THIS MAIN CLASS
  * command: java -cp .:lib/mysql-connector-java-8.0.23.jar ensf480.term_project.domain.main
+ * Compile first !!!! javac ensf480/term_project/domain/main.java
  * ** delete your class files **
  */
 
@@ -20,18 +21,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class main {
-
     public static void main(String[] args) {
         // Connect to AIRLINE database
         DatabaseManager.connect("AIRLINE");
         Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
         
-        List<Flight> flights = PopulateFromDB.getFlights();
+        List<Flight> flights = PopulateFromDB.setFlights();
 
         for (Flight element : flights) {
-            System.out.println(element.getFlightNumber());
+            System.out.println("Flight Number: " + element.getFlightNumber());
+
+            List<Seat> seats = element.getSeats();
+            for (Seat seat : seats) {
+                System.out.println("Seat Row + Number in flight " + element.getFlightID() + ": " + seat.getSeatRow() + seat.getSeatNumber());
+            }
         }
 
+        
         
         // Connect to BILLING database
         DatabaseManager.connect("BILLING");

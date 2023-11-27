@@ -12,15 +12,14 @@ USE AIRLINE;
 -- Create Aircrafts table
 CREATE TABLE Aircrafts (
     aircraft_id INT PRIMARY KEY AUTO_INCREMENT,
-    aircraft_name VARCHAR(50) NOT NULL,
-    number_of_seats INT NOT NULL
+    aircraft_name VARCHAR(50) NOT NULL
 );
 
 -- Insert sample data into Aircrafts table
-INSERT INTO Aircrafts (aircraft_name, number_of_seats)
+INSERT INTO Aircrafts (aircraft_name)
 VALUES
-    ('Boeing 747', 416),
-    ('Airbus A320', 170);
+    ('Boeing 747'),
+    ('Airbus A320');
 
 -- Create Users table
 CREATE TABLE RegisteredUsers (
@@ -29,29 +28,26 @@ CREATE TABLE RegisteredUsers (
     pass VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
     userType INT NOT NULL,
+    isLoggedIn BOOLEAN
     -- other user-related columns
 );
 
-INSERT INTO RegisteredUsers (username, pass, email, userType) VALUES
-    ('Alice123', '1234', 'alice@example.com', 0),
-    ('Bob456', '1234', 'bob@example.com', 0),
-    ('Charlie789', '1234', 'charlie@example.com', 0),
-    ('David010', '1234', 'david@example.com', 1),
-    ('Eve112', '1234', 'eve@example.com', 1);
+INSERT INTO RegisteredUsers (username, pass, email, userType, isLoggedIn) VALUES
+    ('Alice123', '1234', 'alice@example.com', 0, FALSE),
+    ('Bob456', '1234', 'bob@example.com', 0, FALSE),
+    ('Charlie789', '1234', 'charlie@example.com', 0, FALSE),
+    ('David010', '1234', 'david@example.com', 1, FALSE),
+    ('Eve112', '1234', 'eve@example.com', 1, FALSE);
 
--- Create Promos table
+
 CREATE TABLE Promos (
     user_id INT,
-    credit_card VARCHAR(16), -- Assuming credit card is a string for simplicity
-    free_ticket_code INT,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    promo_code VARCHAR(8) NOT NULL,
+    discount_ammount INT,
+    used BOOLEAN,
+    FOREIGN KEY (user_id) REFERENCES RegisteredUsers(user_id),
     PRIMARY KEY (user_id)
 );
-
-INSERT INTO Promos (user_id, credit_card, free_ticket_code)
-SELECT user_id, '1234', 1111
-FROM Users
-WHERE is_member = TRUE;
 
 -- Create Flights table
 CREATE TABLE Flights (
@@ -76,28 +72,43 @@ VALUES
 -- Create Seats table
 CREATE TABLE Seats (
     seat_id INT PRIMARY KEY AUTO_INCREMENT,
+    -- flight_id INT,
+    seat_row ENUM('A', 'B', 'C', 'D', 'E', 'F'), 
+    seat_number VARCHAR(10),
+    seat_type ENUM('Ordinary', 'Business', 'Comfort'),
     flight_id INT,
-    seat_number VARCHAR(10) NOT NULL,
-    booked BOOLEAN NOT NULL,
-    seat_type VARCHAR(20) NOT NULL,
+	booked BOOLEAN,
+	FOREIGN KEY (flight_id) REFERENCES FLIGHTS(flight_id)
     -- Add other seat-related columns as needed
-    FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
+    -- FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
 );
 
 -- Assuming all seats are initially available
-INSERT INTO Seats (flight_id, seat_number, booked, seat_type)
-SELECT Flights.flight_id, SEAT_NUMBER.seat_number, FALSE, 'Economy'
-FROM Flights
-CROSS JOIN (
-    SELECT ones + tens + units AS seat_number
-    FROM (
-        SELECT 
-            0 AS ones, 10 AS tens, units
-        FROM
-            (SELECT 0 AS units UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) AS units_table
-    ) AS SEAT_NUMBER
-    WHERE ones + tens + units <= (SELECT MAX(number_of_seats) FROM Aircrafts)
-) AS SEAT_NUMBER;
+INSERT INTO Seats (seat_id, seat_row, seat_number, seat_type, booked, flight_id) VALUES
+(1, 'A', '1', 'Business', FALSE, 1),
+(2, 'A', '2', 'Business', FALSE, 1),
+(3, 'B', '3', 'Business', FALSE, 1),
+(4, 'B', '4', 'Business', FALSE, 1),
+(5, 'C', '5', 'Comfort', FALSE, 1),
+(6, 'C', '6', 'Comfort', FALSE, 1),
+(7, 'D', '7', 'Comfort', FALSE, 1),
+(8, 'D', '8', 'Comfort', FALSE, 1),
+(9, 'E', '9', 'Ordinary', FALSE, 1),
+(10, 'E', '10', 'Ordinary', FALSE, 1),
+(11, 'F', '11', 'Ordinary', FALSE, 1),
+(12, 'F', '12', 'Ordinary', FALSE, 1),
+(13, 'A', '1', 'Business', FALSE, 2),
+(14, 'A', '2', 'Business', FALSE, 2),
+(15, 'B', '3', 'Business', FALSE, 2),
+(16, 'B', '4', 'Business', FALSE, 2),
+(17, 'C', '5', 'Comfort', FALSE, 2),
+(18, 'C', '6', 'Comfort', FALSE, 2),
+(19, 'D', '7', 'Comfort', FALSE, 2),
+(20, 'D', '8', 'Comfort', FALSE, 2),
+(21, 'E', '9', 'Ordinary', FALSE, 2),
+(22, 'E', '10', 'Ordinary', FALSE, 2),
+(23, 'F', '11', 'Ordinary', FALSE, 2),
+(24, 'F', '12', 'Ordinary', FALSE, 2);
 
 -- Create Tickets table
 CREATE TABLE Tickets (
@@ -107,7 +118,7 @@ CREATE TABLE Tickets (
     flight_id INT,
     seat_id INT,
     FOREIGN KEY (seat_id) REFERENCES Seats(seat_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (user_id) REFERENCES RegisteredUsers(user_id),
     FOREIGN KEY (flight_id) REFERENCES Flights(flight_id)
 );
 
@@ -117,7 +128,6 @@ VALUES
     (1, 1, 1, 150.00),
     (2, 2, 2, 200.00);
 
-    
 USE BILLING;
 	-- Inside billingDB
 
@@ -131,9 +141,12 @@ USE BILLING;
 		credit_card_number VARCHAR(16) NOT NULL,
 		expiration_date DATE NOT NULL,
 		-- other payment-related columns
-		FOREIGN KEY (user_id) REFERENCES AIRLINE.Users(user_id),
+		FOREIGN KEY (user_id) REFERENCES AIRLINE.RegisteredUsers(user_id),
 		FOREIGN KEY (flight_id) REFERENCES AIRLINE.Flights(flight_id)
 	);
+    
+-- Drop the existing user (use with caution)
+DROP USER 'user'@'localhost';
     
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
 
