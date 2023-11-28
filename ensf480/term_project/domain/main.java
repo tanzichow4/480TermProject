@@ -27,7 +27,7 @@ public class main {
         Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
 
         List<Flight> flights = PopulateFromDB.setFlights();
-
+        List<RegisteredUser> registeredUsers = PopulateFromDB.setRegisteredUsers();
         for (Flight element : flights) {
             System.out.println("Flight Number: " + element.getFlightNumber());
 
@@ -36,6 +36,9 @@ public class main {
                 System.out.println("Seat Row + Number in flight " + element.getFlightID() + ": " + seat.getSeatRow()
                         + seat.getSeatNumber());
             }
+        }
+        for (RegisteredUser element : registeredUsers) {
+            System.out.println("Flight Number: " + element.getUsername());
         }
 
         // Connect to BILLING database

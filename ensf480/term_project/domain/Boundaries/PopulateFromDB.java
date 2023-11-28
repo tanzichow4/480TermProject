@@ -29,7 +29,7 @@ public class PopulateFromDB {
                 String password = resultSet.getString("pass");
                 String email = resultSet.getString("email");
                 int userType = resultSet.getInt("user_type");
-                boolean isloggedin = resultSet.getBoolean("logged_in");
+                boolean isloggedin = resultSet.getBoolean("is_logged_in");
 
                 RegisteredUser user = new RegisteredUser(userId, username, password, email, isloggedin, userType);
                 userList.add(user);
@@ -111,7 +111,7 @@ public class PopulateFromDB {
                 String password = resultSet.getString("pass");
                 String email = resultSet.getString("email");
                 int userType = resultSet.getInt("user_type");
-                boolean isloggedin = resultSet.getBoolean("logged_in");
+                boolean isloggedin = resultSet.getBoolean("is_logged_in");
 
                 RegisteredUser user = new RegisteredUser(userId, username, password, email, isloggedin, userType);
                 registeredUserList.add(user);
