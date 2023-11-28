@@ -3,11 +3,13 @@
  * command: java -cp .:lib/mysql-connector-java-8.0.23.jar ensf480.term_project.domain.main
  * Compile first !!!! javac ensf480/term_project/domain/main.java
  * ** delete your class files **
+ * 
  */
 
 package ensf480.term_project.domain;
 
 import ensf480.term_project.domain.Boundaries.*;
+import ensf480.term_project.domain.Controllers.EmailSender;
 import ensf480.term_project.domain.Flights.*;
 import ensf480.term_project.domain.Payments.*;
 import ensf480.term_project.domain.Singleton.*;
@@ -26,26 +28,32 @@ public class main {
         DatabaseManager.connect("AIRLINE");
         Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
 
-        List<Flight> flights = PopulateFromDB.setFlights();
+        // List<Flight> flights = PopulateFromDB.setFlights();
 
-        for (Flight element : flights) {
-            System.out.println("Flight Number: " + element.getFlightNumber());
+        // for (Flight element : flights) {
+        //     System.out.println("Flight Number: " + element.getFlightNumber());
 
-            List<Seat> seats = element.getSeats();
-            for (Seat seat : seats) {
-                System.out.println("Seat Row + Number in flight " + element.getFlightID() + ": " + seat.getSeatRow()
-                        + seat.getSeatNumber());
-            }
-        }
+        //     List<Seat> seats = element.getSeats();
+        //     for (Seat seat : seats) {
+        //         System.out.println("Seat Row + Number in flight " + element.getFlightID() + ": " + seat.getSeatRow()
+        //                 + seat.getSeatNumber());
+        //     }
+        // }
 
         // Connect to BILLING database
-        DatabaseManager.connect("BILLING");
-        Connection billingConnection = DatabaseManager.getConnection("BILLING");
+        // DatabaseManager.connect("BILLING");
+        // Connection billingConnection = DatabaseManager.getConnection("BILLING");
 
-        SwingUtilities.invokeLater(() -> MainGUI.createAndShowGUI());
-        // Close connections
-        DatabaseManager.close("AIRLINE");
-        DatabaseManager.close("BILLING");
+        // SwingUtilities.invokeLater(() -> MainGUI.createAndShowGUI());
+        // // Close connections
+        // DatabaseManager.close("AIRLINE");
+        // DatabaseManager.close("BILLING");
+
+        // Replace these values with your actual email and seat ID
+        String userEmail = "ryankhryss@gmail.com";
+
+        // Call the method to send a purchase confirmation email
+        EmailSender.sendPurchaseConfirmationEmail(userEmail, 1, 1);
 
         // Show the GUI after connecting to databases
 

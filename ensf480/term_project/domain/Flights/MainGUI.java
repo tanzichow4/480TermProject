@@ -60,7 +60,7 @@ public class MainGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Handle login button click
-            }
+            }  
         });
 
         topBar.add(menuBar, BorderLayout.WEST);
