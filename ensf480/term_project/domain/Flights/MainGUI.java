@@ -77,7 +77,8 @@ public class MainGUI {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon imageIcon = new ImageIcon("/Users/ibrahimwani/eclipse-workspace/AirlineProject/src/images/airplane-image.png");
+                //ImageIcon imageIcon = new ImageIcon("/Users/ibrahimwani/eclipse-workspace/AirlineProject/src/images/airplane-image.png");
+                ImageIcon imageIcon = new ImageIcon("/Users/raina/Downloads/480TermProject/images/airplane-image.png");
                 Image image = imageIcon.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
