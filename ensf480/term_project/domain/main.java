@@ -77,7 +77,7 @@ public class main {
                         + seat.getSeatNumber());
             }
         }
-        for (RegisteredUser element : registeredUsers) {
+        for (RegisteredUser element : users) {
             System.out.println("Flight Number: " + element.getUsername());
         }
 
