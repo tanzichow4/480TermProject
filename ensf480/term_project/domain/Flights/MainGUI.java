@@ -1,8 +1,3 @@
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            createAndShowGUI();
-//        });
-//    }
 package ensf480.term_project.domain.Flights;
 
 import javax.swing.*;
