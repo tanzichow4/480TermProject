@@ -33,20 +33,21 @@ public class main {
 
             List<Seat> seats = element.getSeats();
             for (Seat seat : seats) {
-                System.out.println("Seat Row + Number in flight " + element.getFlightID() + ": " + seat.getSeatRow() + seat.getSeatNumber());
+                System.out.println("Seat Row + Number in flight " + element.getFlightID() + ": " + seat.getSeatRow()
+                        + seat.getSeatNumber());
             }
         }
-        
+
         // Connect to BILLING database
         DatabaseManager.connect("BILLING");
         Connection billingConnection = DatabaseManager.getConnection("BILLING");
-        
+
         SwingUtilities.invokeLater(() -> MainGUI.createAndShowGUI());
         // Close connections
         DatabaseManager.close("AIRLINE");
         DatabaseManager.close("BILLING");
 
         // Show the GUI after connecting to databases
-        
+
     }
 }
