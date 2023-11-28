@@ -30,6 +30,10 @@ public class MainGUI {
         BrowseFlights browseFlights = new BrowseFlights(); // Use the BrowseFlights component
         cardPanel.add(browseFlights, "browseFlights");
 
+        //Create Admin Page
+        Login login = new Login();
+        cardPanel.add(login, "login");
+
         // frame.add(createTopBar(), BorderLayout.NORTH);
         frame.add(cardPanel, BorderLayout.CENTER);
 
@@ -110,6 +114,7 @@ public class MainGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Add logic for login button click if needed
+                cardLayout.show(cardPanel, "login");
             }
         });
 
