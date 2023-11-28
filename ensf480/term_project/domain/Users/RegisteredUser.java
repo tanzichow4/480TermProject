@@ -10,7 +10,6 @@ package ensf480.term_project.domain.Users;
 import ensf480.term_project.domain.Boundaries.*;
 import ensf480.term_project.domain.Flights.*;
 import java.util.List;
-import java.util.ArrayList;
 
 import java.sql.*;
 
@@ -21,11 +20,7 @@ public class RegisteredUser {
     private String password;
     private String email;
     private boolean isloggedin;
-    private int userType; // 0 = Customer, 1 = System Admin, 1 = Flight Attendant, 2 = Airline Agent
-    
-    public RegisteredUser() {
-
-    }
+    private int userType; // 0 = Customer, 1 = System Admin, 2 = Flight Attendant, 3 = Airline Agent
     
     public RegisteredUser(int userID, String username, String password, String email, boolean isloggedin, int userType) {
         this.userID = userID;
@@ -34,7 +29,10 @@ public class RegisteredUser {
         this.email = email;
         this.isloggedin = isloggedin;
         this.userType = userType;
-        saveUserInfoToDB();
+    }
+
+    public RegisteredUser() {
+        
     }
 
     // Getter and setter methods
@@ -108,25 +106,35 @@ public class RegisteredUser {
         }
     }
 
-    // Method to save user information to the database
     public void saveUserInfoToDB() {
-        try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
-            String query = "INSERT INTO RegisteredUsers (username, pass, email, is_member) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try {
+            Connection connection = DatabaseManager.getConnection("AIRLINE");
+            String query = "INSERT INTO RegisteredUsers (username, pass, email, user_type, is_logged_in) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, this.username);
                 preparedStatement.setString(2, this.password);
                 preparedStatement.setString(3, this.email);
-                preparedStatement.setInt(1, this.userType);
+                preparedStatement.setInt(4, this.userType);
                 preparedStatement.setBoolean(5, this.isloggedin);
-                preparedStatement.executeUpdate();
+    
+                int affectedRows = preparedStatement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating user failed, no rows affected.");
+                }
+    
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        this.userID = generatedKeys.getInt(1);
+                    } else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        PopulateFromDB.updateRegisteredUsers();
     }
-
+    
     public void cancelFlight() {
 
     }
