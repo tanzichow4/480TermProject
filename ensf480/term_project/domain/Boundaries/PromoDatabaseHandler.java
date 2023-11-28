@@ -39,30 +39,6 @@ public class PromoDatabaseHandler {
         return promoList;
     }
 
-    // Method to update ArrayList from Promos table for a specific user
-    public static void updatePromosForUser(int userID) {
-        promoList.clear(); // Clear the existing list
-
-        try {
-            Connection connection = DatabaseManager.getConnection("AIRLINE");
-            String query = "SELECT * FROM Promos WHERE user_id = ?";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, userID);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    String promoCode = resultSet.getString("promo_code");
-                    int discountAmount = resultSet.getInt("discount_amount");
-                    boolean used = resultSet.getBoolean("used");
-
-                    Promo promo = new Promo(userID, promoCode, discountAmount, used);
-                    promoList.add(promo);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     // Method to view promo codes for a specific user
     public static void viewPromoCodes(int userID) {
         List<Promo> promos = getPromosForUser(userID);
