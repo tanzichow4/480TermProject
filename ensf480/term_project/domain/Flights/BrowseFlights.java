@@ -219,7 +219,17 @@ public class BrowseFlights extends JPanel {
             flightsListPanel.add(Box.createRigidArea(new Dimension(0, 40)));
         }
 
-        return flightsListPanel;
+        // Create a JScrollPane and add the flightsListPanel to it
+        JScrollPane scrollPane = new JScrollPane(flightsListPanel);
+
+        // Set the vertical scrollbar policy to always show the scrollbar
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        // Add the scroll pane to the panel
+        JPanel flightsListPanelWrapper = new JPanel(new BorderLayout());
+        flightsListPanelWrapper.add(scrollPane, BorderLayout.CENTER);
+
+        return flightsListPanelWrapper;
     }
 
     private JPanel createFlightPanel(Flight flight) {

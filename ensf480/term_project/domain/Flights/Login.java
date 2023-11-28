@@ -10,8 +10,10 @@ import ensf480.term_project.domain.Users.RegisteredUser;
 import ensf480.term_project.domain.Boundaries.*;
 
 public class Login extends JPanel {
+
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private RegisteredUser loggedInUser;
 
 
     private void handleLogin() {
@@ -42,13 +44,13 @@ public class Login extends JPanel {
                 passwordField.setText("");
             }
         }
-        
 
         private int isValidLogin(String username, String password) {
             List<RegisteredUser> userList = PopulateFromDB.getRegisteredUserList();
             for (RegisteredUser user : userList) {
                 
                 if(user.getUsername().equals(username) && user.getPassword().equals(password)){
+                    loggedInUser = user;
                     return user.getUserType();
                 } 
                
@@ -93,7 +95,10 @@ public class Login extends JPanel {
         //Add login button event
         loginButton.addActionListener((ActionEvent e) -> {
             handleLogin();
-        });
-        
+        }); 
+    }
+
+    public RegisteredUser getLoggedInUser() {
+        return loggedInUser;
     }
 }

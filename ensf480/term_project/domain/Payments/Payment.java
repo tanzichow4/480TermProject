@@ -8,23 +8,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class Payment {
     private int paymentID;
     private int userID;
     private int flightID;
     private BigDecimal paymentAmount;
-    private LocalDateTime paymentDate;
-    private PaymentCard paymentCard;
+    private String paymentCardNumber;
+    private String cardCVV;
+    private String expiryDate;
 
-    public Payment(int paymentID, int userID, int flightID, BigDecimal paymentAmount, LocalDateTime paymentDate, PaymentCard paymentCard) {
-        this.paymentID = paymentID;
+    public Payment(int userID, int flightID, BigDecimal paymentAmount, String paymentCardNumber, String cardCVV, String expiryDate) {
         this.userID = userID;
         this.flightID = flightID;
         this.paymentAmount = paymentAmount;
-        this.paymentDate = paymentDate;
-        this.paymentCard = paymentCard;
+        this.paymentCardNumber = paymentCardNumber;
+        this.cardCVV = cardCVV;
+        this.expiryDate = expiryDate;
     }
 
     // Getter methods for retrieving information about the payment
@@ -44,12 +44,8 @@ public class Payment {
         return paymentAmount;
     }
 
-    public LocalDateTime getPaymentDate() {
-        return paymentDate;
-    }
-
-    public PaymentCard getPaymentCard() {
-        return paymentCard;
+    public String getPaymentCard() {
+        return paymentCardNumber;
     }
 
     public void saveToDatabase() {
@@ -65,9 +61,9 @@ public class Payment {
                 preparedStatement.setInt(1, userID);
                 preparedStatement.setInt(2, flightID);
                 preparedStatement.setBigDecimal(3, paymentAmount);
-                preparedStatement.setObject(4, paymentDate);
-                preparedStatement.setString(5, paymentCard.getCardNumber());
-                preparedStatement.setString(6, paymentCard.getExpirationDate());
+                preparedStatement.setString(4, paymentCardNumber);
+                preparedStatement.setString(5, expiryDate);
+                preparedStatement.setString(6, cardCVV);
 
                 // Execute the insert statement
                 int affectedRows = preparedStatement.executeUpdate();
