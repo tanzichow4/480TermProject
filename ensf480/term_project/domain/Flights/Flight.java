@@ -13,19 +13,23 @@ public class Flight {
     private String flightNumber;
     private String departureLocation; 
     private String arrivalLocation;
-    private LocalDateTime departureTime;
-    private LocalDateTime arrivalTime;
+    private String departureTime;
+    private String arrivalTime;
+    private String departureDate;
+    private String arrivalDate;
     private int aircraftID;
     private BigDecimal basePrice;
     private List<Seat> seatList = new ArrayList<>();
 
-    public Flight(int flightID, String flightNumber, String departureLocation, String arrivalLocation, LocalDateTime dTime, LocalDateTime aTime, int aircraftID, BigDecimal price) {
+    public Flight(int flightID, String flightNumber, String departureLocation, String arrivalLocation, String dTime, String aTime, String dDate, String aDate, int aircraftID, BigDecimal price) {
         this.flightID = flightID;
         this.flightNumber = flightNumber;
         this.departureLocation = departureLocation;
         this.arrivalLocation = arrivalLocation;
         this.departureTime = dTime;
         this.arrivalTime = aTime;
+        this.departureDate = dDate;
+        this.arrivalDate = aDate;
         this.aircraftID = aircraftID;
         this.basePrice = price;
         // Populate the seats of the flight
@@ -49,11 +53,19 @@ public class Flight {
         return arrivalLocation;
     }
 
-    public LocalDateTime getDepartureTime() {
+    public String getDepartureTime() {
         return departureTime;
     }
 
-    public LocalDateTime getArrivalTime() {
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public String getDepartureDate() {
+        return departureTime;
+    }
+
+    public String getArrivalDate() {
         return arrivalTime;
     }
 
@@ -112,8 +124,10 @@ public class Flight {
                 preparedStatement.setString(3, arrivalLocation);
                 preparedStatement.setObject(4, departureTime);
                 preparedStatement.setObject(5, arrivalTime);
-                preparedStatement.setInt(6, aircraftID);
-                preparedStatement.setBigDecimal(7, basePrice);
+                preparedStatement.setObject(6, departureDate);
+                preparedStatement.setObject(7, arrivalDate);
+                preparedStatement.setInt(8, aircraftID);
+                preparedStatement.setBigDecimal(9, basePrice);
 
                 // Execute the insert statement
                 int affectedRows = preparedStatement.executeUpdate();
@@ -135,6 +149,42 @@ public class Flight {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // Method to get flight by seat ID
+    public static Flight getFlightBySeatID(int seatID) {
+        Flight flight = null;
+
+        try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
+            String query = "SELECT * FROM Flights f " +
+                           "JOIN Seats s ON f.flight_id = s.flight_id " +
+                           "WHERE s.seat_id = ?";
+            
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, seatID);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        int flightID = resultSet.getInt("flight_id");
+                        String flightNumber = resultSet.getString("flight_number");
+                        String departureLocation = resultSet.getString("departure_location");
+                        String arrivalLocation = resultSet.getString("arrival_location");
+                        String departureTime = resultSet.getString("departure_time");
+                        String arrivalTime = resultSet.getString("arrival_time");
+                        String departureDate = resultSet.getString("departure_date");
+                        String arrivalDate = resultSet.getString("arrival_date");
+                        int aircraftID = resultSet.getInt("aircraft_id");
+                        BigDecimal basePrice = resultSet.getBigDecimal("base_price");
+
+                        flight = new Flight(flightID, flightNumber, departureLocation, arrivalLocation,
+                                departureTime, arrivalTime, departureDate, arrivalDate, aircraftID, basePrice);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flight;
     }
 
     
