@@ -1,27 +1,35 @@
 package ensf480.term_project.domain.Flights;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import ensf480.term_project.domain.Singleton.Signup;
+import ensf480.term_project.domain.Users.RegisteredUser;
+import ensf480.term_project.domain.Boundaries.*;
 
 public class Login extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
+
 
     private void handleLogin() {
             // Check if the entered username and password are correct (replace with your authentication logic)
             String enteredUsername = usernameField.getText();
             char[] enteredPasswordChars = passwordField.getPassword();
             String enteredPassword = new String(enteredPasswordChars);
+
+            int redirectValue = isValidLogin(enteredUsername, enteredPassword);
     
-            if (isValidLogin(enteredUsername, enteredPassword) == 0) {
+            if (redirectValue == 1) {
                 JOptionPane.showMessageDialog(null, "Login as admin successful!");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
                 cardLayout.show(getParent(), "adminManage");
                 usernameField.setText("");
                 passwordField.setText("");
             } 
-            else if(isValidLogin(enteredUsername, enteredPassword) == 1){
+            else if(redirectValue == 0){
                 JOptionPane.showMessageDialog(null, "Login as User Successful");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
                 cardLayout.show(getParent(), "browseFlights");
@@ -34,18 +42,17 @@ public class Login extends JPanel {
                 passwordField.setText("");
             }
         }
-    
+        
+
         private int isValidLogin(String username, String password) {
-            // Replace this with your actual authentication logic
-            // For example, you might check against a database of user credentials
-            if(username.equals("admin") && password.equals("adminpass")){
-                return 0;
-            }else if(username.equals("user") && password.equals("userpass")){
-                return 1;
+            List<RegisteredUser> userList = PopulateFromDB.getRegisteredUserList();
+            for (RegisteredUser user : userList) {
+                if(user.getUsername().equals(username) && user.getPassword().equals(password)){
+                    return user.getUserType();
+                } 
+                
             }
-            else{
-                return 2;
-            }
+            return 4;
         }
 
     public Login() {
