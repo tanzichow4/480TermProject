@@ -1,6 +1,6 @@
 package ensf480.term_project.domain.Flights;
 
-import ensf480.term_project.domain.Boundaries.*;
+import ensf480.term_project.domain.Boundaries.PopulateFromDB;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +18,7 @@ public class SeatSelector extends JFrame {
     private JLabel selectedSeatLabel;
     private JLabel seatPriceLabel;
     private JLabel selectedSeatTypeLabel; // Added for displaying seat type
+    private JButton closeButton; // Added close button
 
     public SeatSelector(String flightId, BigDecimal basePrice) {
         this.flightId = flightId;
@@ -116,9 +117,19 @@ public class SeatSelector extends JFrame {
             }
         });
 
+        // Initialize the close button
+        closeButton = new JButton("Close");
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Close the current SeatSelector page
+            }
+        });
+
         mainPanel.add(leftPanel, BorderLayout.WEST);
         mainPanel.add(rightPanel, BorderLayout.CENTER);
         mainPanel.add(continueButton, BorderLayout.SOUTH);
+        mainPanel.add(closeButton, BorderLayout.NORTH); // Add close button to the north
 
         add(mainPanel);
         pack();
@@ -193,11 +204,12 @@ public class SeatSelector extends JFrame {
     }
 
     private void openPurchasePage(Seat selectedSeat, JLabel selectedSeatTypeLabel) {
+        // Close the current SeatSelector page
+        dispose();
+
         // Create an instance of the PurchasePage class and pass relevant information
         SwingUtilities
                 .invokeLater(() -> new PurchasePage(flightId, selectedSeat, calculateSeatPrice(selectedSeat), flight));
-        // Close the current SeatSelector page if needed
-        dispose();
     }
 
     public static void main(String[] args) {
