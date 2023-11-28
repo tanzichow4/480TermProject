@@ -14,8 +14,6 @@ public class MainGUI {
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
 
-
-
     public static void createAndShowGUI() {
         JFrame frame = new JFrame("Airline Application");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,7 +30,7 @@ public class MainGUI {
         BrowseFlights browseFlights = new BrowseFlights(); // Use the BrowseFlights component
         cardPanel.add(browseFlights, "browseFlights");
 
-        frame.add(createTopBar(), BorderLayout.NORTH);
+        // frame.add(createTopBar(), BorderLayout.NORTH);
         frame.add(cardPanel, BorderLayout.CENTER);
 
         frame.setLocationRelativeTo(null);
@@ -45,7 +43,7 @@ public class MainGUI {
 
         // Menu bar on the left
         JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Menu");
+        JMenu menu = new JMenu("Manage Purchases");
         JMenuItem menuItem = new JMenuItem("Item 1");
         menu.add(menuItem);
         menuBar.add(menu);
@@ -56,7 +54,7 @@ public class MainGUI {
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
 
         // Login button on the right
-        JButton loginButton = new JButton("Login");
+        JButton loginButton = new JButton("Logout");
         loginButton.setFont(new Font("Arial", Font.PLAIN, 16));
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -77,7 +75,8 @@ public class MainGUI {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                //ImageIcon imageIcon = new ImageIcon("/Users/ibrahimwani/eclipse-workspace/AirlineProject/src/images/airplane-image.png");
+                // ImageIcon imageIcon = new
+                // ImageIcon("/Users/ibrahimwani/eclipse-workspace/AirlineProject/src/images/airplane-image.png");
                 ImageIcon imageIcon = new ImageIcon("/Users/raina/Downloads/480TermProject/images/airplane-image.png");
                 Image image = imageIcon.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
@@ -89,7 +88,6 @@ public class MainGUI {
         welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 30));
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         welcomeLabel.setForeground(Color.WHITE); // Set text color to white
-
 
         JButton continueAsGuestButton = new JButton("Continue as Guest");
         continueAsGuestButton.setFont(new Font("Arial", Font.PLAIN, 20));
