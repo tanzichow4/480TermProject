@@ -31,6 +31,10 @@ public class RegisteredUser {
         this.userType = userType;
     }
 
+    public RegisteredUser() {
+        
+    }
+
     // Getter and setter methods
     public int getUserID() {
         return userID;
