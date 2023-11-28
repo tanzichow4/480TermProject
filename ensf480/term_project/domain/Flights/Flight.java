@@ -81,7 +81,7 @@ public class Flight {
         return seatList;
     }
 
-    private void populateSeats() {
+    public void populateSeats() {
         seatList.clear(); // Clear the existing list
     
         try {

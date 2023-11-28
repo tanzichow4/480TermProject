@@ -10,6 +10,8 @@ import java.util.List;
 
 public class BrowseFlights extends JPanel {
     private List<Flight> flightsData;
+    private static CardLayout cardLayout;
+    private static JPanel cardPanel;
 
     public BrowseFlights() {
         setLayout(new BorderLayout());
@@ -20,6 +22,10 @@ public class BrowseFlights extends JPanel {
         flightsData = PopulateFromDB.setFlights();
         System.out.println("Flights Data: " + flightsData);
 
+        // Create top bar
+        JPanel topBar = createTopBar();
+        add(topBar, BorderLayout.NORTH);
+
         // Filter box on the left
         JPanel filterBoxPanel = createFilterBoxPanel();
         add(filterBoxPanel, BorderLayout.WEST);
@@ -27,6 +33,39 @@ public class BrowseFlights extends JPanel {
         // List of available flights on the right
         JPanel flightsListPanel = createFlightsListPanel();
         add(flightsListPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel createTopBar() {
+        JPanel topBar = new JPanel();
+        topBar.setLayout(new BorderLayout());
+
+        // Menu bar on the left
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Manage Purchases");
+        JMenuItem menuItem = new JMenuItem("Item 1");
+        menu.add(menuItem);
+        menuBar.add(menu);
+
+        // Title in the center
+        JLabel titleLabel = new JLabel("Airline");
+        titleLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        // Logout button on the right
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle logout button click
+            }
+        });
+
+        topBar.add(menuBar, BorderLayout.WEST);
+        topBar.add(titleLabel, BorderLayout.CENTER);
+        topBar.add(logoutButton, BorderLayout.EAST);
+
+        return topBar;
     }
 
     private JPanel createFilterBoxPanel() {
@@ -132,7 +171,7 @@ public class BrowseFlights extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Assuming SeatSelector is the class for Seat Selector page
-                SeatSelector seatSelector = new SeatSelector(flight.getFlightNumber());
+                SeatSelector seatSelector = new SeatSelector(flight.getFlightNumber(), flight.getBasePrice());
                 // Close the current BrowseFlights page
             }
         });
