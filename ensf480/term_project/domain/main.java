@@ -77,9 +77,7 @@ public class main {
                         + seat.getSeatNumber());
             }
         }
-        for (RegisteredUser element : registeredUsers) {
-            System.out.println("Flight Number: " + element.getUsername());
-        }
+
 
         // Connect to BILLING database
         DatabaseManager.connect("BILLING");
