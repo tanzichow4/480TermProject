@@ -77,7 +77,7 @@ public class MainGUI {
                 super.paintComponent(g);
                 // ImageIcon imageIcon = new
                 // ImageIcon("/Users/ibrahimwani/eclipse-workspace/AirlineProject/src/images/airplane-image.png");
-                ImageIcon imageIcon = new ImageIcon("/Users/raina/Downloads/480TermProject/images/airplane-image.png");
+                ImageIcon imageIcon = new ImageIcon("/Users/ibrahimwani/eclipse-workspace/480TermProject/images/airplane-image.png");
                 Image image = imageIcon.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
