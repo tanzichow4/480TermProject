@@ -16,17 +16,15 @@ public class Payment {
     private int flightID;
     private BigDecimal paymentAmount;
     private LocalDateTime paymentDate;
-    private String creditCardNumber;
-    private String expirationDate;
+    private PaymentCard paymentCard;
 
-    public Payment(int paymentID, int userID, int flightID, BigDecimal paymentAmount, LocalDateTime paymentDate, String creditCardNumber, String expirationDate) {
+    public Payment(int paymentID, int userID, int flightID, BigDecimal paymentAmount, LocalDateTime paymentDate, PaymentCard paymentCard) {
         this.paymentID = paymentID;
         this.userID = userID;
         this.flightID = flightID;
         this.paymentAmount = paymentAmount;
         this.paymentDate = paymentDate;
-        this.creditCardNumber = creditCardNumber;
-        this.expirationDate = expirationDate;
+        this.paymentCard = paymentCard;
     }
 
     // Getter methods for retrieving information about the payment
@@ -50,12 +48,8 @@ public class Payment {
         return paymentDate;
     }
 
-    public String getCreditCardNumber() {
-        return creditCardNumber;
-    }
-
-    public String getExpirationDate() {
-        return expirationDate;
+    public PaymentCard getPaymentCard() {
+        return paymentCard;
     }
 
     public void saveToDatabase() {
@@ -72,8 +66,8 @@ public class Payment {
                 preparedStatement.setInt(2, flightID);
                 preparedStatement.setBigDecimal(3, paymentAmount);
                 preparedStatement.setObject(4, paymentDate);
-                preparedStatement.setString(5, creditCardNumber);
-                preparedStatement.setString(6, expirationDate);
+                preparedStatement.setString(5, paymentCard.getCardNumber());
+                preparedStatement.setString(6, paymentCard.getExpirationDate());
 
                 // Execute the insert statement
                 int affectedRows = preparedStatement.executeUpdate();
@@ -120,5 +114,4 @@ public class Payment {
         // In case of an exception or if no rows were returned
         return false;
     }
-
 }

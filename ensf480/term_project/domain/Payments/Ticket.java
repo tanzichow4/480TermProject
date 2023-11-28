@@ -22,8 +22,7 @@ public class Ticket {
     private Seat seat;
 
     private static final BigDecimal BASE_PRICE = new BigDecimal("50.00");
-    private static final BigDecimal COMFORT_PRICE_MULTIPLIER = new BigDecimal("1.5");
-    private static final BigDecimal FIRST_CLASS_PRICE_MULTIPLIER = new BigDecimal("2.0");
+    private BigDecimal flightBasePrice;
 
     // Price calculated based on seat type
     private BigDecimal ticketPrice;
@@ -39,6 +38,7 @@ public class Ticket {
         this.flight = getFlightDetails(flightID);
         this.seat = getSeatDetails(seatID);
         this.ticketPrice = calculatePrice();
+        this.flightBasePrice = flight.getBasePrice();
         saveToDatabase();
     }
 
@@ -85,6 +85,10 @@ public class Ticket {
         return seat.getSeatType();
     }
 
+    public BigDecimal getFlightPrice(){
+        return flight.getBasePrice();
+    }
+
     // Assume you have methods to retrieve Flight and Seat details
     private Flight getFlightDetails(int flightID) {
         return FlightSeatTicketGets.getFlightDetails(flightID);
@@ -104,17 +108,17 @@ public class Ticket {
 
         switch (seatType) {
             case "Ordinary":
-                ticketPrice = BASE_PRICE;
+                ticketPrice = BASE_PRICE.add(flightBasePrice);
                 break;
             case "Comfort":
-                ticketPrice = BASE_PRICE.multiply(COMFORT_PRICE_MULTIPLIER);
+                ticketPrice = BASE_PRICE.multiply((new BigDecimal("1.5")).add(flightBasePrice));
                 break;
             case "Business":
-                ticketPrice = BASE_PRICE.multiply(FIRST_CLASS_PRICE_MULTIPLIER);
+                ticketPrice = BASE_PRICE.multiply((new BigDecimal("2.0")).add(flightBasePrice));
                 break;
             default:
                 // Handle unknown seat type, you can set a default price or throw an exception
-                ticketPrice = BASE_PRICE;
+                ticketPrice = BASE_PRICE.add(flightBasePrice);
         }
         return ticketPrice;
     }
@@ -132,6 +136,30 @@ public class Ticket {
                 preparedStatement.setBigDecimal(4, ticketPrice);
 
                 preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void markSeatAsBooked() {
+        try {
+            Connection connection = DatabaseManager.getConnection("AIRLINE");
+
+            // Prepare the SQL query to update the seat status
+            String query = "UPDATE Seats SET booked = true WHERE seat_id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, seatID);
+
+                // Execute the update statement
+                int affectedRows = preparedStatement.executeUpdate();
+
+                // Check if the update was successful
+                if (affectedRows > 0) {
+                    System.out.println("Seat marked as booked in the database.");
+                } else {
+                    System.err.println("Failed to mark seat as booked in the database.");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -142,7 +142,7 @@ USE BILLING;
 		payment_date DATETIME NOT NULL,
 		credit_card_number VARCHAR(16) NOT NULL,
 		expiration_date VARCHAR(5) NOT NULL,
-        CVV INT,
+    CVV INT,
 		-- other payment-related columns
 		FOREIGN KEY (user_id) REFERENCES AIRLINE.RegisteredUsers(user_id),
 		FOREIGN KEY (flight_id) REFERENCES AIRLINE.Flights(flight_id)
