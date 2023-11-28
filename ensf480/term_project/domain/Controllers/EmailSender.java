@@ -83,4 +83,59 @@ public class EmailSender {
         
         return content.toString();
     }
+
+    public static void sendPromoCodeEmail(String userEmail, String promoCode) {
+        // Set up properties for the email server
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", "smtp.gmail.com"); // Replace with your email server host
+        properties.put("mail.smtp.port", "465"); // Replace with your email server port
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.ssl.enable", "true");
+    
+        // Set up the email session
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("airlinecompany23@gmail.com", "lzib kwuj equd bofd"); // Replace with your email credentials
+            }
+        });
+    
+        try {
+            // Create a MimeMessage object
+            Message message = new MimeMessage(session);
+    
+            // Set the sender and recipient addresses
+            message.setFrom(new InternetAddress("airlinecompany23@gmail.com")); // Replace with your email address
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(userEmail));
+    
+            // Set the email subject and content
+            message.setSubject("Promo Code Notification");
+    
+            // Build the email content with promo code details
+            String emailContent = buildPromoCodeEmailContent(promoCode);
+    
+            message.setText(emailContent);
+    
+            // Send the email
+            Transport.send(message);
+    
+            System.out.println("Promo code email sent successfully.");
+    
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private static String buildPromoCodeEmailContent(String promoCode) {
+        StringBuilder content = new StringBuilder();
+    
+        content.append("Dear Passenger,\n\n");
+        content.append("Congratulations! You have received a promo code.\n\n");
+        content.append("Promo Code: ").append(promoCode).append("\n");
+        content.append("This code can be used to avail discounts on your future bookings.\n\n");
+        content.append("Thank you for choosing our airline. Enjoy your journey!\n\n");
+        content.append("Best regards,\nThe Airline Team");
+    
+        return content.toString();
+    }
+    
 }
