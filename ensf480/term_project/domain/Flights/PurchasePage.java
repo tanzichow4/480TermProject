@@ -12,9 +12,10 @@ public class PurchasePage extends JFrame {
     private BigDecimal seatPrice;
 
     private JLabel selectedSeatLabel;
-    private JTextField cardholderNameField;
+    private JTextField creditCardNumberField; // Updated variable
     private JTextField expiryDateField;
     private JTextField securityCodeField;
+    private JTextField promoCodeField; // New promo code field
 
     public PurchasePage(String flightNumber, Seat selectedSeat, BigDecimal seatPrice, Flight flight) {
         this.selectedSeat = selectedSeat;
@@ -23,7 +24,7 @@ public class PurchasePage extends JFrame {
 
         initComponents();
 
-        setTitle("Purchase Page");
+        setTitle("Payment Page");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(800, 600));
         pack();
@@ -55,14 +56,16 @@ public class PurchasePage extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String cardholderName = cardholderNameField.getText();
+                String creditCardNumber = creditCardNumberField.getText(); // Updated variable
                 String expiryDate = expiryDateField.getText();
                 String securityCode = securityCodeField.getText();
+                String promoCode = promoCodeField.getText(); // Get promo code
 
-                if (validateCreditCardInfo(cardholderName, expiryDate, securityCode)) {
+                if (validateCreditCardInfo(creditCardNumber, expiryDate, securityCode)) {
                     // If credit card info is valid, proceed with confirmation
                     JOptionPane.showMessageDialog(PurchasePage.this, "Purchase confirmed!", "Confirmation",
                             JOptionPane.INFORMATION_MESSAGE);
+                    // Additional logic for promo code processing can be added here
                 } else {
                     // If credit card info is not valid, display an error message
                     JOptionPane.showMessageDialog(PurchasePage.this,
@@ -86,9 +89,6 @@ public class PurchasePage extends JFrame {
         flightInfoPanel.add(new JLabel("Destination: " + flight.getArrivalLocation()));
         flightInfoPanel.add(new JLabel("Departure Date: " + flight.getDepartureDate()));
         flightInfoPanel.add(new JLabel("Arrival Date: " + flight.getArrivalDate()));
-        // flightInfoPanel.add(new JLabel("Selected Seat: "
-        // + (selectedSeat != null ? selectedSeat.getSeatRow() +
-        // selectedSeat.getSeatNumber() : "")));
 
         return flightInfoPanel;
     }
@@ -122,27 +122,29 @@ public class PurchasePage extends JFrame {
     }
 
     private JPanel createCreditCardInfoPanel() {
-        JPanel creditCardInfoPanel = new JPanel(new GridLayout(3, 2));
-        creditCardInfoPanel.setBorder(BorderFactory.createTitledBorder("Credit Card Info"));
+        JPanel creditCardInfoPanel = new JPanel(new GridLayout(4, 2));
+        creditCardInfoPanel.setBorder(BorderFactory.createTitledBorder("Payment Info"));
 
-        cardholderNameField = new JTextField();
+        creditCardNumberField = new JTextField(); // Updated variable
         expiryDateField = new JTextField();
         securityCodeField = new JTextField();
+        promoCodeField = new JTextField(); // New promo code field
 
-        creditCardInfoPanel.add(new JLabel("Cardholder Name:"));
-        creditCardInfoPanel.add(cardholderNameField);
+        creditCardInfoPanel.add(new JLabel("Credit Card Number:")); // Updated label
+        creditCardInfoPanel.add(creditCardNumberField); // Updated variable
         creditCardInfoPanel.add(new JLabel("Expiry Date:"));
         creditCardInfoPanel.add(expiryDateField);
         creditCardInfoPanel.add(new JLabel("Security Code:"));
         creditCardInfoPanel.add(securityCodeField);
+        creditCardInfoPanel.add(new JLabel("Promo Code:")); // Label for promo code
+        creditCardInfoPanel.add(promoCodeField); // Promo code input field
 
         return creditCardInfoPanel;
     }
 
-    private boolean validateCreditCardInfo(String cardholderName, String expiryDate, String securityCode) {
+    private boolean validateCreditCardInfo(String creditCardNumber, String expiryDate, String securityCode) {
         // Implement your validation logic here
         // For simplicity, just check if the fields are not empty
-        return !cardholderName.trim().isEmpty() && !expiryDate.trim().isEmpty() && !securityCode.trim().isEmpty();
+        return !creditCardNumber.trim().isEmpty() && !expiryDate.trim().isEmpty() && !securityCode.trim().isEmpty();
     }
-
 }

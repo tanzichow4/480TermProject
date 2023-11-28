@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Flight {
-    
+
     private int flightID;
     private String flightNumber;
-    private String departureLocation; 
+    private String departureLocation;
     private String arrivalLocation;
     private String departureTime;
     private String arrivalTime;
@@ -20,7 +20,8 @@ public class Flight {
     private BigDecimal basePrice;
     private List<Seat> seatList = new ArrayList<>();
 
-    public Flight(int flightID, String flightNumber, String departureLocation, String arrivalLocation, String dTime, String aTime, String dDate, String aDate, int aircraftID, BigDecimal price) {
+    public Flight(int flightID, String flightNumber, String departureLocation, String arrivalLocation, String dTime,
+            String aTime, String dDate, String aDate, int aircraftID, BigDecimal price) {
         this.flightID = flightID;
         this.flightNumber = flightNumber;
         this.departureLocation = departureLocation;
@@ -61,11 +62,11 @@ public class Flight {
     }
 
     public String getDepartureDate() {
-        return departureTime;
+        return departureDate;
     }
 
     public String getArrivalDate() {
-        return arrivalTime;
+        return arrivalDate;
     }
 
     public int getAircraftID() {
@@ -82,7 +83,7 @@ public class Flight {
 
     public void populateSeats() {
         seatList.clear(); // Clear the existing list
-    
+
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE");
             // Modify the SQL query to only fetch seats for the current flight
@@ -90,7 +91,7 @@ public class Flight {
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setInt(1, flightID);
                 ResultSet resultSet = preparedStatement.executeQuery();
-    
+
                 while (resultSet.next()) {
                     int seatId = resultSet.getInt("seat_id");
                     String seatRow = resultSet.getString("seat_row");
@@ -98,7 +99,7 @@ public class Flight {
                     String seatType = resultSet.getString("seat_type");
                     boolean booked = resultSet.getBoolean("booked");
                     int flightId = resultSet.getInt("flight_id");
-    
+
                     Seat seat = new Seat(seatId, seatRow, seatNumber, seatType, booked, flightId);
                     seatList.add(seat);
                 }
@@ -107,16 +108,18 @@ public class Flight {
             e.printStackTrace();
         }
     }
-    
+
     public void saveToDatabase() {
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE");
 
             // Prepare the SQL query for inserting a new flight
-            String query = "INSERT INTO Flights (flight_number, departure_location, arrival_location, departure_time, arrival_time, aircraft_id, base_price) " +
-                           "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Flights (flight_number, departure_location, arrival_location, departure_time, arrival_time, aircraft_id, base_price) "
+                    +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query,
+                    Statement.RETURN_GENERATED_KEYS)) {
                 // Set parameters for the prepared statement
                 preparedStatement.setString(1, flightNumber);
                 preparedStatement.setString(2, departureLocation);
@@ -156,9 +159,9 @@ public class Flight {
 
         try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
             String query = "SELECT * FROM Flights f " +
-                           "JOIN Seats s ON f.flight_id = s.flight_id " +
-                           "WHERE s.seat_id = ?";
-            
+                    "JOIN Seats s ON f.flight_id = s.flight_id " +
+                    "WHERE s.seat_id = ?";
+
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setInt(1, seatID);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
