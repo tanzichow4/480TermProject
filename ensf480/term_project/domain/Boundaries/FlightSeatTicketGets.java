@@ -25,12 +25,14 @@ public class FlightSeatTicketGets {
                     String flightNumber = resultSet.getString("flight_number");
                     String departureLocation = resultSet.getString("departure_location");
                     String arrivalLocation = resultSet.getString("arrival_location");
-                    LocalDateTime departureTime = resultSet.getTimestamp("departure_time").toLocalDateTime();
-                    LocalDateTime arrivalTime = resultSet.getTimestamp("arrival_time").toLocalDateTime();
+                    String departureTime = resultSet.getString("departure_time");
+                    String arrivalTime = resultSet.getString("arrival_time");
+                    String departureDate = resultSet.getString("departure_date");
+                    String arrivalDate = resultSet.getString("arrival_date");
                     int aircraftId = resultSet.getInt("aircraft_id");
                     BigDecimal basePrice = resultSet.getBigDecimal("base_price");
 
-                    flight = new Flight(flightId, flightNumber, departureLocation, arrivalLocation, departureTime, arrivalTime, aircraftId, basePrice);
+                    flight = new Flight(flightId, flightNumber, departureLocation, arrivalLocation, departureTime, arrivalTime, departureDate, arrivalDate, aircraftId, basePrice);
                 }
             }
         } catch (SQLException e) {

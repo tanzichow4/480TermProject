@@ -27,12 +27,12 @@ CREATE TABLE RegisteredUsers (
     username VARCHAR(50) NOT NULL,
     pass VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    userType INT NOT NULL,
-    isLoggedIn BOOLEAN
+    user_type INT NOT NULL,
+    is_logged_in BOOLEAN
     -- other user-related columns
 );
 
-INSERT INTO RegisteredUsers (username, pass, email, userType, isLoggedIn) VALUES
+INSERT INTO RegisteredUsers (username, pass, email, user_type, is_logged_in) VALUES
     ('Alice123', '1234', 'alice@example.com', 0, FALSE),
     ('Bob456', '1234', 'bob@example.com', 0, FALSE),
     ('Charlie789', '1234', 'charlie@example.com', 0, FALSE),
@@ -55,8 +55,10 @@ CREATE TABLE Flights (
     flight_number VARCHAR(20) NOT NULL,
     departure_location VARCHAR(50) NOT NULL,
     arrival_location VARCHAR(50) NOT NULL,
-    departure_time DATETIME NOT NULL,
-    arrival_time DATETIME NOT NULL,
+    departure_time VARCHAR(50) NOT NULL,
+    arrival_time VARCHAR(50) NOT NULL,
+    departure_date VARCHAR(50) NOT NULL,
+    arrival_date VARCHAR(50) NOT NULL,
     aircraft_id INT,
     base_price DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (aircraft_id) REFERENCES Aircrafts(aircraft_id)
@@ -64,10 +66,10 @@ CREATE TABLE Flights (
 );
 
 -- Insert sample data into Flights table
-INSERT INTO Flights (flight_number, departure_location, arrival_location, departure_time, arrival_time, aircraft_id, base_price)
+INSERT INTO Flights (flight_number, departure_location, arrival_location, departure_time, arrival_time, departure_date, arrival_date, aircraft_id, base_price)
 VALUES
-    ('FL123', 'Chicago', 'New York', '2023-11-23 08:00:00', '2023-11-23 10:00:00', 1, 100.00),
-    ('FL456', 'Calgary', 'Quebec', '2023-11-23 12:00:00', '2023-11-23 14:00:00', 2, 150.00);
+    ('FL123', 'Chicago', 'New York', '08:00:00', '10:00:00', '2023-11-23', '2023-11-23', 1, 100.00),
+    ('FL456', 'Calgary', 'Quebec', '12:00:00', '14:00:00', '2023-11-23', '2023-11-23', 2, 150.00);
 
 -- Create Seats table
 CREATE TABLE Seats (
@@ -140,6 +142,7 @@ USE BILLING;
 		payment_date DATETIME NOT NULL,
 		credit_card_number VARCHAR(16) NOT NULL,
 		expiration_date VARCHAR(5) NOT NULL,
+    CVV INT,
 		-- other payment-related columns
 		FOREIGN KEY (user_id) REFERENCES AIRLINE.RegisteredUsers(user_id),
 		FOREIGN KEY (flight_id) REFERENCES AIRLINE.Flights(flight_id)
