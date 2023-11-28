@@ -4,12 +4,15 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 import ensf480.term_project.domain.Boundaries.FlightSeatTicketGets;
 import ensf480.term_project.domain.Flights.Flight;
 import ensf480.term_project.domain.Flights.Seat;
+import ensf480.term_project.domain.Promos.Promo;
 
 public class Ticket {
 
@@ -100,6 +103,66 @@ public class Ticket {
     }
     public BigDecimal getTicketPrice() {
         return ticketPrice;
+    }
+
+    public void applyPromoCode(String promoCode) {
+        // Check if the promo code is valid and not used
+        Promo promo = getPromoDetails(promoCode);
+
+        if (promo != null && !promo.isUsed()) {
+            // Calculate the discounted price
+            BigDecimal discountedPrice = ticketPrice.subtract(new BigDecimal(promo.getDiscountAmount()));
+
+            // Save the discounted price to the database
+            savePaymentToDatabase(promoCode, promoCode, flightID, discountedPrice);
+
+            // Mark the promo code as used
+            promo.setUsed(true);
+            promo.saveToDatabase();
+
+            System.out.println("Promo code applied successfully. Discounted price: " + discountedPrice);
+        } else {
+            System.out.println("Invalid or used promo code. No discount applied.");
+        }
+    }
+
+    private void savePaymentToDatabase(String creditCardNumber, String expirationDate, int CVV, BigDecimal totalPrice) {
+        try (Connection connection = DatabaseManager.getConnection("BILLING")) {
+            String query = "INSERT INTO Payments (user_id, flight_id, payment_amount, payment_date, credit_card_number, expiration_date, CVV) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                preparedStatement.setInt(1, userID);
+                preparedStatement.setInt(2, flightID);
+                preparedStatement.setInt(3, seatID);
+                preparedStatement.setBigDecimal(4, ticketPrice);
+                preparedStatement.setString(5, creditCardNumber);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Promo getPromoDetails(String promoCode) {
+        try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
+            String query = "SELECT * FROM Promos WHERE promo_code = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, promoCode);
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        int userID = resultSet.getInt("user_id");
+                        int discountAmount = resultSet.getInt("discount_amount");
+                        boolean used = resultSet.getBoolean("used");
+
+                        return new Promo(userID, promoCode, discountAmount, used);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Promo code not found
     }
 
     // Calculate ticket price based on seat type
