@@ -13,7 +13,7 @@ public class Login extends JPanel {
 
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private RegisteredUser loggedInUser;
+    private static RegisteredUser loggedInUser;
 
 
     private void handleLogin() {
@@ -98,7 +98,7 @@ public class Login extends JPanel {
         }); 
     }
 
-    public RegisteredUser getLoggedInUser() {
+    public static RegisteredUser getLoggedInUser() {
         return loggedInUser;
     }
 }
