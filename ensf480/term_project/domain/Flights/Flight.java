@@ -3,7 +3,6 @@ package ensf480.term_project.domain.Flights;
 import ensf480.term_project.domain.Boundaries.*;
 import java.sql.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -187,5 +186,8 @@ public class Flight {
         return flight;
     }
 
-    
+    public void setFlightID(int id) {
+        this.flightID = id;
+    }
+
 }
