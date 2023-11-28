@@ -30,6 +30,14 @@ public class MainGUI {
         BrowseFlights browseFlights = new BrowseFlights(); // Use the BrowseFlights component
         cardPanel.add(browseFlights, "browseFlights");
 
+        //Create Login Page
+        Login login = new Login();
+        cardPanel.add(login, "login");
+
+        //Create Admin Page
+        AdminManage adminManage = new AdminManage();
+        cardPanel.add(adminManage, "adminManage");
+
         // frame.add(createTopBar(), BorderLayout.NORTH);
         frame.add(cardPanel, BorderLayout.CENTER);
 
@@ -77,7 +85,7 @@ public class MainGUI {
                 super.paintComponent(g);
                 // ImageIcon imageIcon = new
                 // ImageIcon("/Users/ibrahimwani/eclipse-workspace/AirlineProject/src/images/airplane-image.png");
-                ImageIcon imageIcon = new ImageIcon("/Users/raina/Downloads/480TermProject/images/airplane-image.png");
+                ImageIcon imageIcon = new ImageIcon("/Users/ibrahimwani/eclipse-workspace/480TermProject/images/airplane-image.png");
                 Image image = imageIcon.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
@@ -110,6 +118,7 @@ public class MainGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Add logic for login button click if needed
+                cardLayout.show(cardPanel, "login");
             }
         });
 

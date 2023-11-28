@@ -33,7 +33,6 @@ public class main {
 
         // Initialize the system admins in the database - this will now be updated and is only initialized once.
         List<SystemAdmin> admins = PopulateFromDB.createSystemAdmins(users);
-
         // Initialize the customers in the system
         List<Customer> customers = PopulateFromDB.createSystemCustomers(users);
 
@@ -68,27 +67,30 @@ public class main {
 
         admins.getFirst().insertAircraft("Dreamliner");
 
+
         for (Flight element : flights) {
             System.out.println("Flight Number: " + element.getFlightNumber());
 
             List<Seat> seats = element.getSeats();
             for (Seat seat : seats) {
-                System.out.println("Seat Row + Number in flight " + element.getFlightID() + ": " + seat.getSeatRow() + seat.getSeatNumber());
+                System.out.println("Seat Row + Number in flight " + element.getFlightID() + ": " + seat.getSeatRow()
+                        + seat.getSeatNumber());
             }
         }
+        for (RegisteredUser element : registeredUsers) {
+            System.out.println("Flight Number: " + element.getUsername());
+        }
 
-
-        
         // Connect to BILLING database
         DatabaseManager.connect("BILLING");
         Connection billingConnection = DatabaseManager.getConnection("BILLING");
-        
+
         SwingUtilities.invokeLater(() -> MainGUI.createAndShowGUI());
         // Close connections
         DatabaseManager.close("AIRLINE");
         DatabaseManager.close("BILLING");
 
         // Show the GUI after connecting to databases
-        
+
     }
 }

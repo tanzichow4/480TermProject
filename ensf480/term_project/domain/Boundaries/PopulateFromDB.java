@@ -109,16 +109,17 @@ public class PopulateFromDB {
 
                 int aircraftId = resultSet.getInt("aircraft_id");
                 BigDecimal basePrice = resultSet.getBigDecimal("base_price");
-    
-                Flight flight = new Flight(flightId, flightNumber, departureLocation, arrivalLocation, departureTime, arrivalTime, departureDate, arrivalDate, aircraftId, basePrice);
-    
+
+                Flight flight = new Flight(flightId, flightNumber, departureLocation, arrivalLocation, departureTime,
+                        arrivalTime, departureDate, arrivalDate, aircraftId, basePrice);
+
                 // Add Flight object to the list
                 flights.add(flight);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    
+
         flightList = flights;
         return flightList;
     }
@@ -131,11 +132,11 @@ public class PopulateFromDB {
             Connection connection = DatabaseManager.getConnection("AIRLINE");
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM Aircrafts");
-    
+
             while (resultSet.next()) {
                 int aircraftId = resultSet.getInt("aircraft_id");
                 String aircraftName = resultSet.getString("aircraft_name");
-    
+              
                 Aircraft aircraft = new Aircraft(aircraftId, aircraftName);
                 aircraftList.add(aircraft);
             }
@@ -171,35 +172,39 @@ public class PopulateFromDB {
     }
 
     /**
-     * Call this function whenever you go to update the flights in any way in the DB. 
+     * Call this function whenever you go to update the flights in any way in the
+     * DB.
      * Ensures the lists stay up to date with the current DB
      */
     // public static void updateFlights() {
-    //     flightList.clear(); // Clear the existing list
-    
-    //     try {
-    //         Connection connection = DatabaseManager.getConnection("AIRLINE");
-    //         Statement statement = connection.createStatement();
-    //         ResultSet resultSet = statement.executeQuery("SELECT * FROM Flights");
-    //         while (resultSet.next()) {
-    //             int flightId = resultSet.getInt("flight_id");
-    //             String flightNumber = resultSet.getString("flight_number");
-    //             String departureLocation = resultSet.getString("departure_location");
-    //             String arrivalLocation = resultSet.getString("arrival_location");
-    //             LocalDateTime departureTime = resultSet.getTimestamp("departure_time").toLocalDateTime();
-    //             LocalDateTime arrivalTime = resultSet.getTimestamp("arrival_time").toLocalDateTime();
-    //             int aircraftId = resultSet.getInt("aircraft_id");
-    //             BigDecimal basePrice = resultSet.getBigDecimal("base_price");
-    
-    //             // Assuming you have a Flight constructor that takes these parameters
-    //             Flight flight = new Flight(flightId, flightNumber, departureLocation, arrivalLocation, departureTime, arrivalTime, aircraftId, basePrice);
-    
-    //             // Add Flight object to the list
-    //             flightList.add(flight);
-    //         }
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //     }
+    // flightList.clear(); // Clear the existing list
+
+    // try {
+    // Connection connection = DatabaseManager.getConnection("AIRLINE");
+    // Statement statement = connection.createStatement();
+    // ResultSet resultSet = statement.executeQuery("SELECT * FROM Flights");
+    // while (resultSet.next()) {
+    // int flightId = resultSet.getInt("flight_id");
+    // String flightNumber = resultSet.getString("flight_number");
+    // String departureLocation = resultSet.getString("departure_location");
+    // String arrivalLocation = resultSet.getString("arrival_location");
+    // LocalDateTime departureTime =
+    // resultSet.getTimestamp("departure_time").toLocalDateTime();
+    // LocalDateTime arrivalTime =
+    // resultSet.getTimestamp("arrival_time").toLocalDateTime();
+    // int aircraftId = resultSet.getInt("aircraft_id");
+    // BigDecimal basePrice = resultSet.getBigDecimal("base_price");
+
+    // // Assuming you have a Flight constructor that takes these parameters
+    // Flight flight = new Flight(flightId, flightNumber, departureLocation,
+    // arrivalLocation, departureTime, arrivalTime, aircraftId, basePrice);
+
+    // // Add Flight object to the list
+    // flightList.add(flight);
+    // }
+    // } catch (SQLException e) {
+    // e.printStackTrace();
+    // }
     // }
 
     public static void updateSeats() {

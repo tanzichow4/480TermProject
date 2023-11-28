@@ -1,4 +1,5 @@
 package ensf480.term_project.domain.Flights;
+
 import ensf480.term_project.domain.Boundaries.*;
 import javax.swing.*;
 import java.awt.*;
@@ -73,8 +74,7 @@ public class BrowseFlights extends JPanel {
         filterBoxPanel.setLayout(new BoxLayout(filterBoxPanel, BoxLayout.Y_AXIS));
         filterBoxPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Filters"),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
         // From field
         JPanel fromPanel = createFilterRow("From:", new JTextField(10));
@@ -119,8 +119,7 @@ public class BrowseFlights extends JPanel {
         flightsListPanel.setLayout(new BoxLayout(flightsListPanel, BoxLayout.Y_AXIS));
         flightsListPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Available Flights"),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
         // Use the flightsData obtained from PopulateFromDB
         for (Flight flight : flightsData) {
