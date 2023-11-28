@@ -14,21 +14,38 @@ public class Login extends JPanel {
             char[] enteredPasswordChars = passwordField.getPassword();
             String enteredPassword = new String(enteredPasswordChars);
     
-            if (isValidLogin(enteredUsername, enteredPassword)) {
-                JOptionPane.showMessageDialog(null, "Login successful!");
-                // Add logic to open the main application or switch to another page
+            if (isValidLogin(enteredUsername, enteredPassword) == 0) {
+                JOptionPane.showMessageDialog(null, "Login as admin successful!");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "adminManage");
                 usernameField.setText("");
                 passwordField.setText("");
             } 
+            else if(isValidLogin(enteredUsername, enteredPassword) == 1){
+                JOptionPane.showMessageDialog(null, "Login as User Successful");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "browseFlights");
+                usernameField.setText("");
+                passwordField.setText("");
+            }
             else{
                 JOptionPane.showMessageDialog(null, "Invalid username or password. Please try again.");
+                usernameField.setText("");
+                passwordField.setText("");
             }
         }
     
-        private boolean isValidLogin(String username, String password) {
+        private int isValidLogin(String username, String password) {
             // Replace this with your actual authentication logic
             // For example, you might check against a database of user credentials
-            return username.equals("admin") && password.equals("admin123");
+            if(username.equals("admin") && password.equals("adminpass")){
+                return 0;
+            }else if(username.equals("user") && password.equals("userpass")){
+                return 1;
+            }
+            else{
+                return 2;
+            }
         }
 
     public Login() {

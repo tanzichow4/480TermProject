@@ -5,22 +5,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AdminManage extends JFrame {
+public class AdminManage extends JPanel {
 
     public AdminManage() {
-        // Set up the main frame
-        setTitle("Flight Management System");
-        setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Set up the main panel
+        setLayout(new BorderLayout());
 
         // Create components
         JPanel topBarPanel = createTopBarPanel();
         JPanel gridPanel = createGridPanel();
 
-        // Set layout manager
-        setLayout(new BorderLayout());
-
-        // Add components to the main frame
+        // Add components to the main panel
         add(topBarPanel, BorderLayout.NORTH);
         add(gridPanel, BorderLayout.CENTER);
     }
@@ -96,14 +91,4 @@ public class AdminManage extends JFrame {
 
         return gridPanel;
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new AdminManage().setVisible(true);
-            }
-        });
-    }
 }
-
