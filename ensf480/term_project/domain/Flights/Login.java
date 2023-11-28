@@ -2,13 +2,38 @@ package ensf480.term_project.domain.Flights;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class Login extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
 
+    private void handleLogin() {
+            // Check if the entered username and password are correct (replace with your authentication logic)
+            String enteredUsername = usernameField.getText();
+            char[] enteredPasswordChars = passwordField.getPassword();
+            String enteredPassword = new String(enteredPasswordChars);
+    
+            if (isValidLogin(enteredUsername, enteredPassword)) {
+                JOptionPane.showMessageDialog(null, "Login successful!");
+                // Add logic to open the main application or switch to another page
+                usernameField.setText("");
+                passwordField.setText("");
+            } 
+            else{
+                JOptionPane.showMessageDialog(null, "Invalid username or password. Please try again.");
+            }
+        }
+    
+        private boolean isValidLogin(String username, String password) {
+            // Replace this with your actual authentication logic
+            // For example, you might check against a database of user credentials
+            return username.equals("admin") && password.equals("admin123");
+        }
+
     public Login() {
         initializeUI();
+        
     }
 
     private void initializeUI() {
@@ -40,5 +65,10 @@ public class Login extends JPanel {
         add(titleLabel, BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
 
+        //Add login button event
+        loginButton.addActionListener((ActionEvent e) -> {
+            handleLogin();
+        });
+        
     }
 }
