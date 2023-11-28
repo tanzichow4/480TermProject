@@ -1,5 +1,7 @@
 package ensf480.term_project.domain.Flights;
 
+import ensf480.term_project.domain.Payments.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -63,9 +65,28 @@ public class PurchasePage extends JFrame {
 
                 if (validateCreditCardInfo(creditCardNumber, expiryDate, securityCode)) {
                     // If credit card info is valid, proceed with confirmation
-                    JOptionPane.showMessageDialog(PurchasePage.this, "Purchase confirmed!", "Confirmation",
-                            JOptionPane.INFORMATION_MESSAGE);
+
                     // Additional logic for promo code processing can be added here
+
+                    // Create a Payment object
+                    Payment payment = new Payment(Login.getLoggedInUser().getUserID(), flight.getFlightID(), seatPrice,
+                            creditCardNumber, securityCode, expiryDate);
+
+                    // Save the payment to the database
+                    if (payment.saveToDatabase()) {
+                        // Show a confirmation dialog
+                        JOptionPane.showMessageDialog(PurchasePage.this, "Purchase confirmed!", "Confirmation",
+                                JOptionPane.INFORMATION_MESSAGE);
+
+                        // You may also want to close the current PurchasePage or navigate to another
+                        // page
+                        // depending on your application flow
+                    } else {
+                        // If saving to the database fails, display an error message
+                        JOptionPane.showMessageDialog(PurchasePage.this,
+                                "Failed to save payment to the database. Please try again.", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
                     // If credit card info is not valid, display an error message
                     JOptionPane.showMessageDialog(PurchasePage.this,
