@@ -17,6 +17,7 @@ public class SeatSelector extends JFrame {
     private Seat selectedSeat;
     private JLabel selectedSeatLabel;
     private JLabel seatPriceLabel;
+    private JLabel selectedSeatTypeLabel; // Added for displaying seat type
 
     public SeatSelector(String flightId, BigDecimal basePrice) {
         this.flightId = flightId;
@@ -33,20 +34,29 @@ public class SeatSelector extends JFrame {
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        // Box on the left showing price and selected seat
+        // Box on the left showing price, selected seat, and seat type
         JPanel leftPanel = new JPanel();
         leftPanel.setPreferredSize(new Dimension(200, getHeight()));
         leftPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        selectedSeatLabel = new JLabel("Selected Seat: " + (selectedSeat != null ? selectedSeat.getSeatRow() + selectedSeat.getSeatNumber() : ""));
+        selectedSeatLabel = new JLabel("Selected Seat: "
+                + (selectedSeat != null ? selectedSeat.getSeatRow() + selectedSeat.getSeatNumber() : ""));
         selectedSeatLabel.setFont(new Font("Arial", Font.BOLD, 18));
 
         seatPriceLabel = new JLabel("Seat Price: $" + basePrice.setScale(2, BigDecimal.ROUND_HALF_UP));
         seatPriceLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 
+        JLabel seatTypeLabel = new JLabel("Seat Type: ");
+        seatTypeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        selectedSeatTypeLabel = new JLabel("");
+        selectedSeatTypeLabel.setFont(new Font("Arial", Font.BOLD, 18));
+
         JLabel flightIdLabel = new JLabel("Flight ID: " + flightId);
         leftPanel.add(selectedSeatLabel);
         leftPanel.add(seatPriceLabel);
+        leftPanel.add(seatTypeLabel);
+        leftPanel.add(selectedSeatTypeLabel);
         leftPanel.add(flightIdLabel);
 
         // Seat map on the right
@@ -99,7 +109,7 @@ public class SeatSelector extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (selectedSeat != null) {
-                    openPurchasePage(selectedSeat);
+                    openPurchasePage(selectedSeat, selectedSeatTypeLabel);
                 } else {
                     JOptionPane.showMessageDialog(SeatSelector.this, "Please select a seat.");
                 }
@@ -145,13 +155,17 @@ public class SeatSelector extends JFrame {
     private void handleSeatClick(Seat seat) {
         selectedSeat = seat;
         // Update the selected seat label
-        selectedSeatLabel.setText("Selected Seat: " + (selectedSeat != null ? selectedSeat.getSeatRow() + selectedSeat.getSeatNumber() : ""));
+        selectedSeatLabel.setText("Selected Seat: "
+                + (selectedSeat != null ? selectedSeat.getSeatRow() + selectedSeat.getSeatNumber() : ""));
 
-        // Update the seat price label (you can implement your logic to calculate the seat price)
+        // Update the seat type label
+        selectedSeatTypeLabel.setText("Seat Type: " + (selectedSeat != null ? selectedSeat.getSeatType() : ""));
+
+        // Update the seat price label (you can implement your logic to calculate the
+        // seat price)
         BigDecimal seatPrice = calculateSeatPrice(selectedSeat);
         seatPriceLabel.setText("Seat Price: $" + seatPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
     }
-    
 
     private BigDecimal calculateSeatPrice(Seat seat) {
         BigDecimal BASE_PRICE = BigDecimal.valueOf(50.00); // Assuming a constant base price for now
@@ -178,11 +192,10 @@ public class SeatSelector extends JFrame {
         return ticketPrice;
     }
 
-
-
-    private void openPurchasePage(Seat selectedSeat) {
+    private void openPurchasePage(Seat selectedSeat, JLabel selectedSeatTypeLabel) {
         // Create an instance of the PurchasePage class and pass relevant information
-        SwingUtilities.invokeLater(() -> new PurchasePage(flightId, selectedSeat, calculateSeatPrice(selectedSeat), basePrice));
+        SwingUtilities
+                .invokeLater(() -> new PurchasePage(flightId, selectedSeat, calculateSeatPrice(selectedSeat), flight));
         // Close the current SeatSelector page if needed
         dispose();
     }
