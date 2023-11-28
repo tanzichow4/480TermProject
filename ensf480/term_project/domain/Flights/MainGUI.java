@@ -33,6 +33,10 @@ public class MainGUI {
         AdminManage adminManage = new AdminManage();
         cardPanel.add(adminManage, "adminManage");
 
+        //Create Browse Passenger Page
+        BrowsePassenger browsePassenger = new BrowsePassenger();
+        cardPanel.add(browsePassenger, "browsePassenger");
+
         // frame.add(createTopBar(), BorderLayout.NORTH);
         frame.add(cardPanel, BorderLayout.CENTER);
 

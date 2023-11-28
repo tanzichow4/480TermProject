@@ -80,6 +80,8 @@ public class AdminManage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Add logic to handle "Browse Passengers" action
                 JOptionPane.showMessageDialog(null, "Browsing Passengers...");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "browsePassenger");
             }
         });
 
