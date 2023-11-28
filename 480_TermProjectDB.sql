@@ -139,7 +139,7 @@ USE BILLING;
 		payment_amount DECIMAL(10, 2) NOT NULL,
 		payment_date DATETIME NOT NULL,
 		credit_card_number VARCHAR(16) NOT NULL,
-		expiration_date DATE NOT NULL,
+		expiration_date VARCHAR(5) NOT NULL,
 		-- other payment-related columns
 		FOREIGN KEY (user_id) REFERENCES AIRLINE.RegisteredUsers(user_id),
 		FOREIGN KEY (flight_id) REFERENCES AIRLINE.Flights(flight_id)
