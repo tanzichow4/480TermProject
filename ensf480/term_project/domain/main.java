@@ -27,7 +27,7 @@ public class main {
         Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
 
         List<Flight> flights = PopulateFromDB.setFlights();
-
+        List<RegisteredUser> registeredUsers = PopulateFromDB.setRegisteredUsers();
         for (Flight element : flights) {
             System.out.println("Flight Number: " + element.getFlightNumber());
 
