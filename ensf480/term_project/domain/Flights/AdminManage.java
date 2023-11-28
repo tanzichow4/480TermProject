@@ -31,6 +31,8 @@ public class AdminManage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Perform sign-out actions
                 JOptionPane.showMessageDialog(null, "Signing out...");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "login");
                 // You can add more logic here as needed
             }
         });

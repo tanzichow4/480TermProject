@@ -12,6 +12,7 @@ public class Login extends JPanel {
     private JPasswordField passwordField;
 
 
+
     private void handleLogin() {
             // Check if the entered username and password are correct (replace with your authentication logic)
             String enteredUsername = usernameField.getText();
@@ -51,7 +52,7 @@ public class Login extends JPanel {
                 } 
                
             }
-            return 0; 
+            return 4; 
         }
     
     public Login() {

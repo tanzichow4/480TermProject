@@ -34,8 +34,8 @@ public class MainGUI {
         cardPanel.add(adminManage, "adminManage");
 
         //Create Browse Passenger Page
-        BrowsePassenger browsePassenger = new BrowsePassenger();
-        cardPanel.add(browsePassenger, "browsePassenger");
+        BrowsePassengerFlights browsePassengerFlights = new BrowsePassengerFlights();
+        cardPanel.add(browsePassengerFlights, "browsePassengerFlights");
 
         // frame.add(createTopBar(), BorderLayout.NORTH);
         frame.add(cardPanel, BorderLayout.CENTER);
