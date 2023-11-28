@@ -1,18 +1,28 @@
 package ensf480.term_project.domain.Flights;
 
-import ensf480.term_project.domain.Boundaries.*;
+import ensf480.term_project.domain.Boundaries.DatabaseManager;
+import ensf480.term_project.domain.Boundaries.PopulateFromDB;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BrowseFlights extends JPanel {
     private List<Flight> flightsData;
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
+
+    private JTextField fromField;
+    private JTextField destField;
+    private JTextField departureDateField;
+    private JTextField flightNumberField;
+
+    private JPanel flightsListPanel;
 
     public BrowseFlights() {
         setLayout(new BorderLayout());
@@ -32,20 +42,13 @@ public class BrowseFlights extends JPanel {
         add(filterBoxPanel, BorderLayout.WEST);
 
         // List of available flights on the right
-        JPanel flightsListPanel = createFlightsListPanel();
+        flightsListPanel = createFlightsListPanel();
         add(flightsListPanel, BorderLayout.CENTER);
     }
 
     private JPanel createTopBar() {
         JPanel topBar = new JPanel();
         topBar.setLayout(new BorderLayout());
-
-        // Menu bar on the left
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Manage Purchases");
-        JMenuItem menuItem = new JMenuItem("Item 1");
-        menu.add(menuItem);
-        menuBar.add(menu);
 
         // Title in the center
         JLabel titleLabel = new JLabel("Airline");
@@ -62,11 +65,83 @@ public class BrowseFlights extends JPanel {
             }
         });
 
-        topBar.add(menuBar, BorderLayout.WEST);
+        // Create a panel to hold the buttons
+        JPanel buttonPanel = new JPanel();
+
+        // Manage Purchases button
+        JButton managePurchasesButton = new JButton("Manage Purchases");
+        managePurchasesButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        managePurchasesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle Manage Purchases button click
+            }
+        });
+
+        // Manage Account button
+        JButton manageAccountButton = new JButton("Manage Account");
+        manageAccountButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        manageAccountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showManageAccountDialog();
+            }
+        });
+
+        // Add buttons to the panel
+        buttonPanel.add(managePurchasesButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(10, 0))); // Add some spacing between buttons
+        buttonPanel.add(manageAccountButton);
+
+        // Add components to the top bar
         topBar.add(titleLabel, BorderLayout.CENTER);
         topBar.add(logoutButton, BorderLayout.EAST);
+        topBar.add(buttonPanel, BorderLayout.WEST);
 
         return topBar;
+    }
+
+    private void showManageAccountDialog() {
+        // Create a dialog
+        JDialog manageAccountDialog = new JDialog();
+        manageAccountDialog.setTitle("Manage Account");
+        manageAccountDialog.setSize(300, 150);
+        manageAccountDialog.setResizable(false);
+        manageAccountDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        // Create a panel for the content
+        JPanel dialogPanel = new JPanel();
+        dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
+
+        // Add a checkbox for Promo news
+        JCheckBox promoCheckBox = new JCheckBox("Receive Promo News");
+        // Add your logic here to set the initial state of the checkbox based on user
+        // preferences
+
+        // Add a save button
+        JButton saveButton = new JButton("Save Changes");
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Add your logic here to save the changes
+                // For example, you can use promoCheckBox.isSelected() to get the state
+                // of the checkbox (checked or unchecked)
+                // After saving changes, you might want to close the dialog
+                manageAccountDialog.dispose();
+            }
+        });
+
+        // Add components to the panel
+        dialogPanel.add(promoCheckBox);
+        dialogPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add some spacing
+        dialogPanel.add(saveButton);
+
+        // Add the panel to the dialog
+        manageAccountDialog.add(dialogPanel);
+
+        // Set the dialog to be visible
+        manageAccountDialog.setLocationRelativeTo(null);
+        manageAccountDialog.setVisible(true);
     }
 
     private JPanel createFilterBoxPanel() {
@@ -76,20 +151,26 @@ public class BrowseFlights extends JPanel {
                 BorderFactory.createTitledBorder("Filters"),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
+        // Initialize filter text fields
+        fromField = new JTextField(10);
+        destField = new JTextField(10);
+        departureDateField = new JTextField(10);
+        flightNumberField = new JTextField(10);
+
         // From field
-        JPanel fromPanel = createFilterRow("From:", new JTextField(10));
+        JPanel fromPanel = createFilterRow("From:", fromField);
 
         // Destination field
-        JPanel destPanel = createFilterRow("Destination:", new JTextField(10));
+        JPanel destPanel = createFilterRow("Destination:", destField);
 
         // Departure Date field
-        JPanel departureDatePanel = createFilterRow("Departure Date:", new JTextField(10));
-        JPanel flightIDPanel = createFilterRow("Flight ID:", new JTextField(10));
+        JPanel departureDatePanel = createFilterRow("Departure Date:", departureDateField);
+        JPanel flightNumberPanel = createFilterRow("Flight Number:", flightNumberField);
 
         filterBoxPanel.add(fromPanel);
         filterBoxPanel.add(destPanel);
         filterBoxPanel.add(departureDatePanel);
-        filterBoxPanel.add(flightIDPanel);
+        filterBoxPanel.add(flightNumberPanel);
 
         // Add some spacing before the button
         filterBoxPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -97,6 +178,14 @@ public class BrowseFlights extends JPanel {
         // Search Flights button
         JButton searchButton = new JButton("Search Flights");
         searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Call a method to filter flights based on user input
+                filterFlights();
+            }
+        });
+
         filterBoxPanel.add(searchButton);
 
         // Set preferred and maximum size to control the height
@@ -146,6 +235,7 @@ public class BrowseFlights extends JPanel {
         JLabel departureLabel = createFlightInfoLabel(flight.getDepartureTime());
         departureLabel.setFont(new Font("Arial", Font.BOLD, 24));
         leftPanel.add(departureLabel);
+        leftPanel.add(createFlightInfoLabel(flight.getDepartureDate()));
 
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
@@ -156,6 +246,7 @@ public class BrowseFlights extends JPanel {
         JLabel arrivalLabel = createFlightInfoLabel(flight.getArrivalTime());
         arrivalLabel.setFont(new Font("Arial", Font.BOLD, 24));
         rightPanel.add(arrivalLabel);
+        rightPanel.add(createFlightInfoLabel(flight.getArrivalDate()));
 
         flightPanel.add(leftPanel);
         flightPanel.add(Box.createRigidArea(new Dimension(500, 75)));
@@ -188,5 +279,47 @@ public class BrowseFlights extends JPanel {
         JLabel label = new JLabel(text);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
+    }
+
+    private void filterFlights() {
+        String from = fromField.getText().trim().toLowerCase();
+        String dest = destField.getText().trim().toLowerCase();
+        String departureDate = departureDateField.getText().trim();
+        String flightNumber = flightNumberField.getText().trim().toLowerCase();
+
+        // Use these values to filter the flightsData list
+        // Implement your filtering logic here
+
+        // For example, you could create a new list to store filtered flights
+        List<Flight> filteredFlights = new ArrayList<>();
+
+        for (Flight flight : flightsData) {
+            // Add flights to the filtered list based on your criteria
+            if (flight.getDepartureLocation().toLowerCase().contains(from)
+                    && flight.getArrivalLocation().toLowerCase().contains(dest)
+                    && flight.getDepartureDate().contains(departureDate)
+                    && flight.getFlightNumber().toLowerCase().contains(flightNumber)) {
+                filteredFlights.add(flight);
+            }
+        }
+
+        // Clear the current flightsListPanel and populate it with filtered flights
+        updateFlightsListPanel(filteredFlights);
+    }
+
+    private void updateFlightsListPanel(List<Flight> filteredFlights) {
+        // Clear the current flightsListPanel
+        flightsListPanel.removeAll();
+
+        // Add filtered flights to the flightsListPanel
+        for (Flight flight : filteredFlights) {
+            JPanel flightPanel = createFlightPanel(flight);
+            flightsListPanel.add(flightPanel);
+            flightsListPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        }
+
+        // Repaint and revalidate the panel to reflect changes
+        flightsListPanel.repaint();
+        flightsListPanel.revalidate();
     }
 }
