@@ -1,11 +1,9 @@
 package ensf480.term_project.domain.Flights;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import ensf480.term_project.domain.Singleton.Signup;
 import ensf480.term_project.domain.Users.RegisteredUser;
 import ensf480.term_project.domain.Boundaries.*;
 
