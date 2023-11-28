@@ -47,14 +47,14 @@ public class Login extends JPanel {
         private int isValidLogin(String username, String password) {
             List<RegisteredUser> userList = PopulateFromDB.getRegisteredUserList();
             for (RegisteredUser user : userList) {
-                return 1;
-                /*if(user.getUsername().equals(username) && user.getPassword().equals(password)){
-                    return user.getUserType();*/
+                
+                if(user.getUsername().equals(username) && user.getPassword().equals(password)){
+                    return user.getUserType();
                 } 
-               return 0; 
+               
             }
-            
-
+            return 0; 
+        }
     
     public Login() {
         initializeUI();
