@@ -62,4 +62,39 @@ public class PromoDatabaseHandler {
             e.printStackTrace();
         }
     }
+
+    // Method to view promo codes for a specific user
+    public static void viewPromoCodes(int userID) {
+        List<Promo> promos = getPromosForUser(userID);
+        if (promos.isEmpty()) {
+            System.out.println("No promo codes available for the user.");
+        } else {
+            System.out.println("Promo codes for user " + userID + ":");
+            for (Promo promo : promos) {
+                System.out.println("Promo Code: " + promo.getPromoCode() +
+                        ", Discount Amount: " + promo.getDiscountAmount() +
+                        ", Used: " + promo.isUsed());
+            }
+        }
+    }
+
+    public static void markPromoCodeAsUsed(int userID, String promoCode) {
+        try {
+            Connection connection = DatabaseManager.getConnection("AIRLINE");
+            String query = "UPDATE Promos SET used = true WHERE user_id = ? AND promo_code = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, userID);
+                preparedStatement.setString(2, promoCode);
+                int rowsAffected = preparedStatement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    System.out.println("Promo code " + promoCode + " marked as used for user " + userID + ".");
+                } else {
+                    System.out.println("Promo code " + promoCode + " not found for user " + userID + ".");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
