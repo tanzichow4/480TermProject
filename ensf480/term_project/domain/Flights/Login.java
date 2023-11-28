@@ -36,13 +36,11 @@ public class Login extends JPanel {
                 usernameField.setText("");
                 passwordField.setText("");
             }
-            
             else{
                 JOptionPane.showMessageDialog(null, "Invalid username or password. Please try again.");
                 usernameField.setText("");
                 passwordField.setText("");
             }
-            
         }
         
 
