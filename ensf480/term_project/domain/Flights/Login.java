@@ -15,6 +15,9 @@ public class Login extends JPanel {
     private static RegisteredUser loggedInUser;
     private static Customer loggedInCustomer;
     private static SystemAdmin loggedInAdmin;
+    private static AirlineAgent loggedInAirlineAgent;
+    private static FlightAttendant loggedInFlightAttendant;
+
 
     private void handleLogin() {
         // Check if the entered username and password are correct (replace with your
@@ -60,6 +63,9 @@ public class Login extends JPanel {
         List<RegisteredUser> userList = PopulateFromDB.getRegisteredUserList();
         List<Customer> customerList = PopulateFromDB.getCustomers();
         List<SystemAdmin> adminList = PopulateFromDB.createSystemAdmins(userList);
+        List<AirlineAgent> agents = PopulateFromDB.createAirlineAgents(userList);
+        List<FlightAttendant> attendants = PopulateFromDB.createFlightAttendants(userList);
+
         for (RegisteredUser user : userList) {
 
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
@@ -77,6 +83,22 @@ public class Login extends JPanel {
                         if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
                             loggedInAdmin = admin;
                             return admin.getUserType();
+
+                        }
+                    }
+                } else if (user.getUserType() == 3) {
+                    for (AirlineAgent agent : agents) {
+                        if (agent.getUsername().equals(username) && agent.getPassword().equals(password)) {
+                            loggedInAirlineAgent = agent;
+                            return agent.getUserType();
+
+                        }
+                    }
+                } else if (user.getUserType() == 2) {
+                    for (FlightAttendant attendant : attendants) {
+                        if (attendant.getUsername().equals(username) && attendant.getPassword().equals(password)) {
+                            loggedInFlightAttendant = attendant;
+                            return attendant.getUserType();
 
                         }
                     }
@@ -138,5 +160,13 @@ public class Login extends JPanel {
 
     public static Customer getLoggedInCustomer() {
         return loggedInCustomer;
+    }
+
+    public static AirlineAgent getLoggedInAirlineAgent() {
+        return loggedInAirlineAgent;
+    }
+
+    public static FlightAttendant getLoggedInFlightAttendant() {
+        return loggedInFlightAttendant;
     }
 }

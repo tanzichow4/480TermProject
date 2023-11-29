@@ -202,9 +202,9 @@ public class PurchasePage extends JFrame {
         securityCodeField = new JTextField();
         promoCodeField = new JTextField(); // New promo code field
 
-        creditCardInfoPanel.add(new JLabel("Credit Card Number:")); // Updated label
+        creditCardInfoPanel.add(new JLabel("<html>Credit Card Number:<br>(16 digit number)</html>"));
         creditCardInfoPanel.add(creditCardNumberField); // Updated variable
-        creditCardInfoPanel.add(new JLabel("Expiry Date:"));
+        creditCardInfoPanel.add(new JLabel("<html>Expiry Date:<br>(in the format MM/YY)</html>"));
         creditCardInfoPanel.add(expiryDateField);
         creditCardInfoPanel.add(new JLabel("Security Code:"));
         creditCardInfoPanel.add(securityCodeField);
@@ -217,7 +217,13 @@ public class PurchasePage extends JFrame {
     private boolean validateCreditCardInfo(String creditCardNumber, String expiryDate, String securityCode) {
         // Implement your validation logic here
         // For simplicity, just check if the fields are not empty
-        return !creditCardNumber.trim().isEmpty() && !expiryDate.trim().isEmpty() && !securityCode.trim().isEmpty();
+        if (creditCardNumber.trim().isEmpty() || expiryDate.trim().isEmpty() || securityCode.trim().isEmpty()) {
+            return false;
+        }
+    
+        // Check if the credit card number is a 16-digit number
+        String strippedCreditCardNumber = creditCardNumber.replaceAll("[^0-9]", ""); // Remove non-digit characters
+        return strippedCreditCardNumber.length() == 16;
     }
 
     // Update seat status in the database

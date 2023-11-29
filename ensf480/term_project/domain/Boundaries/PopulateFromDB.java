@@ -15,6 +15,8 @@ public class PopulateFromDB {
     private static List<RegisteredUser> registeredUserList = new ArrayList<>();
     private static List<Aircraft> aircraftList = new ArrayList<>();
     private static List<Customer> customerList = new ArrayList<>();
+    private static List<AirlineAgent> airlineAgents = new ArrayList<>();
+    private static List<FlightAttendant> flightAttendants = new ArrayList<>();
 
     // Method to populate ArrayList from Users table
     // Gets all the RegisteredUsers currently in the DB table
@@ -87,6 +89,51 @@ public class PopulateFromDB {
         }
 
         return customerList;
+    }
+
+    // Method to create SystemAdmin instances for users with user_type = 1
+    public static List<AirlineAgent> createAirlineAgents(List<RegisteredUser> registeredUsers) {
+        
+        DatabaseManager.connect("AIRLINE");
+
+        // Clear the existing list before adding administrators
+        airlineAgents.clear();
+
+        for (RegisteredUser user : registeredUsers) {
+            if (user.getUserType() == 3) { // Check if user_type is 3 (AirlineAgent)
+                AirlineAgent airlineAgent = new AirlineAgent(
+                        user.getUserID(),
+                        user.getUsername(),
+                        user.getPassword(),
+                        user.getEmail(),
+                        user.getLoggedIN());
+                airlineAgents.add(airlineAgent);
+            }
+        }
+
+        return airlineAgents;
+    }
+
+    // Method to create SystemAdmin instances for users with user_type = 1
+    public static List<FlightAttendant> createFlightAttendants(List<RegisteredUser> registeredUsers) {
+
+        DatabaseManager.connect("AIRLINE");
+
+        // Clear the existing list before adding administrators
+        flightAttendants.clear();
+
+        for (RegisteredUser user : registeredUsers) {
+            if (user.getUserType() == 2) { // Check if user_type is 2 (Flight attendant)
+                FlightAttendant flightAttendant = new FlightAttendant(
+                        user.getUserID(),
+                        user.getUsername(),
+                        user.getPassword(),
+                        user.getEmail(),
+                        user.getLoggedIN());
+                flightAttendants.add(flightAttendant);
+            }
+        }
+        return flightAttendants;
     }
 
     // Method to populate ArrayList from Flights table
@@ -228,6 +275,14 @@ public class PopulateFromDB {
 
     public static List<Customer> getCustomers() {
         return customerList;
+    }
+
+    public static List<AirlineAgent> getAirlineAgentList() {
+        return airlineAgents;
+    }
+
+    public static List<FlightAttendant> getFlightAttendants() {
+        return flightAttendants;
     }
 
     public static int getNumberOfFlights() {

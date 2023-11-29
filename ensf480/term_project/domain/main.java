@@ -41,9 +41,16 @@ public class main {
         // Initialize the customers in the system
         List<Customer> customers = PopulateFromDB.createSystemCustomers(users);
 
-        for (RegisteredUser user : users) {
-            System.out.println("User: " + user.getUsername());
+        List<AirlineAgent> airlineAgents = PopulateFromDB.createAirlineAgents(users);
+
+        System.out.println("Printing the Airline Agents:");
+        for (AirlineAgent admin : airlineAgents) {
+            System.out.println("Admin name: " + admin.getUsername());
         }
+        
+        // for (RegisteredUser user : users) {
+        //     System.out.println("User: " + user.getEmail());
+        // }
 
         // Initialize the flights in the database
         List<Flight> flights = PopulateFromDB.setFlights();
