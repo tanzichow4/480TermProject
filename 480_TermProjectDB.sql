@@ -136,12 +136,15 @@ USE BILLING;
 	-- Create Payments table
 	CREATE TABLE Payments (
 		payment_id INT PRIMARY KEY AUTO_INCREMENT,
+        seat_id INT,
 		user_id INT,
 		flight_id INT,
-        seat_id INT,
 		payment_amount DECIMAL(10, 2) NOT NULL,
 		credit_card_number VARCHAR(16) NOT NULL,
+		expiration_date VARCHAR(5) NOT NULL,
+        CVV INT,
 		-- other payment-related columns
+        FOREIGN KEY (seat_id) REFERENCES AIRLINE.Seats(seat_id),
 		FOREIGN KEY (user_id) REFERENCES AIRLINE.RegisteredUsers(user_id),
 		FOREIGN KEY (flight_id) REFERENCES AIRLINE.Flights(flight_id)
 	);
