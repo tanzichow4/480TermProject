@@ -108,10 +108,16 @@ public class PurchasePage extends JFrame {
                         // Show a confirmation dialog
                         JOptionPane.showMessageDialog(PurchasePage.this, "Purchase confirmed!", "Confirmation",
                                 JOptionPane.INFORMATION_MESSAGE);
+
+                        dispose();
+                        // Open a new BrowseFlights page
+                        BrowseFlights browseFlights = new BrowseFlights();
+                        browseFlights.setVisible(true);
                         // Send purchase confirmation email
                         EmailSender.sendPurchaseConfirmationEmail(
                             user.getEmail(), flight.getFlightID(), selectedSeat.getSeatId()
                         );
+                        // Close the PurchasePage window
 
                         // You may also want to close the current PurchasePage or navigate to another
                         // page
