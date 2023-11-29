@@ -63,8 +63,26 @@ public class Customer extends RegisteredUser {
 
         return bookedSeats;
     }
+    public void cancelFlight(int flight_id) {
 
-    public void cancelFlight() {
+        
+        try (Connection connection = DatabaseManager.getConnection("BILLING")) {
+            String deleteQuery = "DELETE FROM Payments " +
+                    "WHERE flight_id = ? AND user_id = ?";
 
+            try (PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
+                deleteStatement.setInt(1, flight_id);
+                deleteStatement.setInt(2, this.getUserID());
+
+                int rowsAffected = deleteStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Flight canceled successfully.");
+                } else {
+                    System.out.println("Failed to cancel the flight or no payment found.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
