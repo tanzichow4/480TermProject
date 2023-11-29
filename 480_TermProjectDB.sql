@@ -33,10 +33,10 @@ CREATE TABLE RegisteredUsers (
 );
 
 INSERT INTO RegisteredUsers (username, pass, email, user_type, is_logged_in) VALUES
-    ('Alice123', '1234', 'alice@example.com', 0, FALSE),
-    ('Bob456', '1234', 'bob@example.com', 0, FALSE),
-    ('Charlie789', '1234', 'charlie@example.com', 0, FALSE),
-    ('David010', '1234', 'david@example.com', 1, FALSE),
+    ('Ryan123', '1234', 'ryankhryss@gmail.com', 0, FALSE),
+    ('Raina123', '1234', 'rjugdev@gmail.com', 0, FALSE),
+    ('Abe123', '1234', 'coolibey@gmail.com', 0, FALSE),
+    ('Tanzi123', '1234', 'tanzic01@gmail.com', 1, FALSE),
     ('Eve112', '1234', 'eve@example.com', 1, FALSE);
 
 
