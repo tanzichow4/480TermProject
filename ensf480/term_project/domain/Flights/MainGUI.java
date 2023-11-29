@@ -38,8 +38,8 @@ public class MainGUI {
         cardPanel.add(browsePassengerFlights, "browsePassengerFlights");
 
         //Create Manage Flight Page
-        /*FlightManager flightManager = new FlightManager();
-        cardPanel.add(flightManager, "flightManager");*/
+        FlightManager flightManager = new FlightManager();
+        cardPanel.add(flightManager, "flightManager");
 
         // frame.add(createTopBar(), BorderLayout.NORTH);
         frame.add(cardPanel, BorderLayout.CENTER);
