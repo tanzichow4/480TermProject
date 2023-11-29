@@ -58,6 +58,8 @@ public class AdminManage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Add logic to handle "Manage Flight" action
                 JOptionPane.showMessageDialog(null, "Managing Flight...");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "flightManager");
             }
         });
 
