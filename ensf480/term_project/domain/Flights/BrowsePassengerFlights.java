@@ -75,6 +75,7 @@ public class BrowsePassengerFlights extends JPanel {
 
         return topBar;
     }
+
     private JPanel createFilterBoxPanel() {
         JPanel filterBoxPanel = new JPanel();
         filterBoxPanel.setLayout(new BoxLayout(filterBoxPanel, BoxLayout.Y_AXIS));
@@ -183,7 +184,6 @@ public class BrowsePassengerFlights extends JPanel {
         flightPanel.add(Box.createRigidArea(new Dimension(500, 75)));
         flightPanel.add(rightPanel);
 
-
         JButton selectButton = new JButton("Select");
         selectButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         rightPanel.add(selectButton);
@@ -192,14 +192,13 @@ public class BrowsePassengerFlights extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Assuming SeatSelector is the class for Seat Selector page
                 JOptionPane.showMessageDialog(null, "Something happening");
-                
+
                 // Close the current BrowsePassengerFlights page
             }
         });
 
         return flightPanel;
     }
-
 
     private JLabel createFlightInfoLabel(String text) {
         JLabel label = new JLabel(text);

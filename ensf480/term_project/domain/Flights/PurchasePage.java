@@ -4,7 +4,6 @@ import javax.swing.*;
 
 import ensf480.term_project.domain.Controllers.EmailSender;
 import ensf480.term_project.domain.Users.*;
-import ensf480.term_project.domain.Boundaries.PromoDatabaseHandler;
 import ensf480.term_project.domain.Payments.*;
 import ensf480.term_project.domain.Boundaries.*;
 
@@ -39,6 +38,10 @@ public class PurchasePage extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    public BigDecimal getTotalPrice() {
+        return seatPrice.add(seatPrice.multiply(new BigDecimal("0.05")));
     }
 
     private void initComponents() {
@@ -89,7 +92,8 @@ public class PurchasePage extends JFrame {
                                     "Promo code '" + promoCode + "' applied successfully!", "Promo Code Applied",
                                     JOptionPane.INFORMATION_MESSAGE);
 
-                            // Update the system to mark the promo code as used (you need to implement this logic)
+                            // Update the system to mark the promo code as used (you need to implement this
+                            // logic)
                             PromoDatabaseHandler.markPromoCodeAsUsed(customer.getUserID(), promoCode);
                         } else {
                             // Notify the user that the promo code is invalid
@@ -100,9 +104,10 @@ public class PurchasePage extends JFrame {
                         }
                     }
 
+                    BigDecimal total = seatPrice.multiply(new BigDecimal(1.05));
 
                     // Create a Payment object
-                    Payment payment = new Payment(Login.getLoggedInCustomer().getUserID(), flight.getFlightID(), seatPrice,
+                    Payment payment = new Payment(Login.getLoggedInCustomer().getUserID(), flight.getFlightID(), total,
                             creditCardNumber, securityCode, expiryDate, selectedSeat.getSeatId());
 
                     // Save the payment to the database
@@ -118,8 +123,7 @@ public class PurchasePage extends JFrame {
                         browseFlights.setVisible(true);
                         // Send purchase confirmation email
                         EmailSender.sendPurchaseConfirmationEmail(
-                            customer.getEmail(), flight.getFlightID(), selectedSeat.getSeatId()
-                        );
+                                customer.getEmail(), flight.getFlightID(), selectedSeat.getSeatId());
 
                         // Close the PurchasePage window
 
@@ -216,31 +220,31 @@ public class PurchasePage extends JFrame {
     }
 
     // Update seat status in the database
-private void updateSeatStatus(Seat selectedSeat) {
-    try {
-        DatabaseManager.connect("AIRLINE");
-        Connection connection = DatabaseManager.getConnection("AIRLINE");
+    private void updateSeatStatus(Seat selectedSeat) {
+        try {
+            DatabaseManager.connect("AIRLINE");
+            Connection connection = DatabaseManager.getConnection("AIRLINE");
 
-        // Prepare the SQL query for updating the seat's booked status
-        String updateQuery = "UPDATE Seats SET booked = ? WHERE seat_id = ?";
+            // Prepare the SQL query for updating the seat's booked status
+            String updateQuery = "UPDATE Seats SET booked = ? WHERE seat_id = ?";
 
-        try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
-            // Set parameters for the update statement
-            updateStatement.setBoolean(1, true);
-            updateStatement.setInt(2, selectedSeat.getSeatId());
+            try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                // Set parameters for the update statement
+                updateStatement.setBoolean(1, true);
+                updateStatement.setInt(2, selectedSeat.getSeatId());
 
-            // Execute the update statement
-            int affectedRows = updateStatement.executeUpdate();
+                // Execute the update statement
+                int affectedRows = updateStatement.executeUpdate();
 
-            // Check if the update was successful
-            if (affectedRows > 0) {
-                System.out.println("Seat status updated in the database.");
-            } else {
-                System.err.println("Failed to update seat status in the database.");
+                // Check if the update was successful
+                if (affectedRows > 0) {
+                    System.out.println("Seat status updated in the database.");
+                } else {
+                    System.err.println("Failed to update seat status in the database.");
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
     }
-}
 }

@@ -4,7 +4,7 @@ import ensf480.term_project.domain.Boundaries.*;
 
 import java.util.List;
 import java.util.ArrayList;
-
+import java.math.BigDecimal;
 import java.sql.*;
 
 public class Seat {
@@ -77,5 +77,29 @@ public class Seat {
         }
 
         return bookedSeats;
+    }
+
+    public BigDecimal getPaymentAmount() {
+        // Use the seat_id to fetch the payment_amount from the Payments table in the
+        // BILLING database
+        DatabaseManager.connect("BILLING");
+        try (Connection connection = DatabaseManager.getConnection("BILLING")) {
+            String query = "SELECT payment_amount FROM Payments WHERE seat_id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, this.getSeatId());
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return (resultSet.getBigDecimal("payment_amount")).setScale(2,
+                                BigDecimal.ROUND_HALF_UP);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // If no payment record is found, return a default value (you can adjust this
+        // accordingly)
+        return BigDecimal.ZERO;
     }
 }
