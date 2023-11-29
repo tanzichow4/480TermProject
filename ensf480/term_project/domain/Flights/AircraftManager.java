@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import ensf480.term_project.domain.Users.*;
 
 public class AircraftManager extends JPanel {
 
@@ -54,19 +55,6 @@ public class AircraftManager extends JPanel {
         }
     }
 
-    // Example method (you may need to modify it based on your actual implementation)
-    private static class SystemAdmin {
-        public void insertAircraft(String aircraftName) {
-            
-        }
-    }
-
-    private static class Login {
-        // This method is just a placeholder; you should replace it with your actual login logic
-        public static SystemAdmin getLoggedInAdmin() {
-            return new SystemAdmin();
-        }
-    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Aircraft Manager");
