@@ -41,8 +41,12 @@ public class MainGUI {
         FlightManager flightManager = new FlightManager();
         cardPanel.add(flightManager, "flightManager");
 
-        //Create Flight Attendant Page
+        //Create Manage Aircraft Page
+        AircraftManager aircraftManager = new AircraftManager();
+        cardPanel.add(aircraftManager, "aircraftManager");
         
+        //Create Flight Attendant Page
+
 
         //Create Airline Agent Page
 
