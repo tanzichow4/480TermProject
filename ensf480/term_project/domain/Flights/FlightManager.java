@@ -1,19 +1,30 @@
 package ensf480.term_project.domain.Flights;
-
-//Inputs : FlightID(ctor nly)(Double)Price, Flight Number, Departure Location, Time, Date, Arrival Location, Time, Date, (int)Aircraft ID
-
 import javax.swing.*;
+import java.util.List;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 
+import ensf480.term_project.domain.Boundaries.PopulateFromDB;
 import ensf480.term_project.domain.Users.*;
 
 public class FlightManager extends JPanel {
 
+    private JTextArea flightTextArea;
+
+
     public FlightManager() {
-        setLayout(new FlowLayout(FlowLayout.CENTER));
+        setLayout(new BorderLayout());
+
+        List<Flight> displayingFlightList = PopulateFromDB.getFlightList();
+
+        // Create a JTextArea to display the list of flights
+        flightTextArea = new JTextArea();
+        flightTextArea.setEditable(false); // Make it non-editable
+        updateFlightTextArea(displayingFlightList); // Update the text area with the initial list
+
+
 
         JButton addFlightButton = new JButton("Add Flight");
         addFlightButton.addActionListener(new ActionListener() {
@@ -78,7 +89,13 @@ public class FlightManager extends JPanel {
         }
     }
 
-
+    private void updateFlightTextArea(List<Flight> flights) {
+        flightTextArea.setText(""); // Clear the text area
+        for (Flight flight : flights) {
+            // Append flight information to the text area
+            flightTextArea.append(flight.toString() + "\n");
+        }
+    }
     public static void main(String[] args) {
         JFrame frame = new JFrame("Flight Manager");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
