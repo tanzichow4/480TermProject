@@ -3,7 +3,9 @@ package ensf480.term_project.domain.Promos;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
@@ -92,5 +94,29 @@ public class Promo {
         return flightPromo;
     }
 
-    // Other methods...
-}
+    public static List<Promo> getPromosForUser(int userID) {
+            List<Promo> promoList = new ArrayList<>();
+
+            try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
+                String query = "SELECT * FROM Promos WHERE user_id = ?";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                    preparedStatement.setInt(1, userID);
+
+                    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                        while (resultSet.next()) {
+                            int promoID = resultSet.getInt("promo_id"); // Assuming you have a column named "promo_id"
+                            String promoCode = resultSet.getString("promo_code");
+                            int discountAmount = resultSet.getInt("discount_amount");
+                            boolean used = resultSet.getBoolean("used");
+
+                            Promo promo = new Promo(userID, promoCode, discountAmount, used);
+                            promoList.add(promo);
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return promoList;
+        }}

@@ -31,7 +31,7 @@ public class Signup {
         user.setLoggedIN(true);
     }
 
-    private void generateAndSavePromos(int userID) {
+    public void generateAndSavePromos(int userID) {
         // Generate seat promo
         Promo seatPromo = Promo.generateSeatPromo(userID);
         seatPromo.saveToDatabase();
@@ -68,5 +68,9 @@ public class Signup {
 
     public void logout() {
         user.setLoggedIN(false); // Set the user as not logged in
+    }
+    
+    public boolean isUserLoggedIn() {
+        return user.isLoggedIN();
     }
 }
