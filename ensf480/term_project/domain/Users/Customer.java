@@ -9,4 +9,8 @@ public class Customer extends RegisteredUser {
     public Customer() {
         super();
     }
+
+    public boolean isLoggedIN() {
+        return this.getLoggedIN();
+    }
 }
