@@ -12,7 +12,7 @@ public class Signup {
     // Private constructor to prevent instantiation outside of the class
     private Signup() {
         // Create a new registered user instance
-       // user = new Customer();
+        // user = new Customer();
     }
 
     public void sign_up(String username, String password, String email) {
@@ -69,8 +69,5 @@ public class Signup {
     public void logout() {
         user.setLoggedIN(false); // Set the user as not logged in
     }
-    
-    public boolean isUserLoggedIn() {
-        return user.isLoggedIN();
-    }
+
 }
