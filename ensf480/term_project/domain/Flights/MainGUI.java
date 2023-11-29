@@ -25,32 +25,29 @@ public class MainGUI {
         BrowseFlights browseFlights = new BrowseFlights(); // Use the BrowseFlights component
         cardPanel.add(browseFlights, "browseFlights");
 
-        //Create Login Page
+        // Create Login Page
         Login login = new Login();
         cardPanel.add(login, "login");
 
-        //Create Admin Page
+        // Create Admin Page
         AdminManage adminManage = new AdminManage();
         cardPanel.add(adminManage, "adminManage");
 
-        //Create Browse Passenger Page
+        // Create Browse Passenger Page
         BrowsePassengerFlights browsePassengerFlights = new BrowsePassengerFlights();
         cardPanel.add(browsePassengerFlights, "browsePassengerFlights");
 
-        //Create Manage Flight Page
+        // Create Manage Flight Page
         FlightManager flightManager = new FlightManager();
         cardPanel.add(flightManager, "flightManager");
 
-        //Create Manage Aircraft Page
+        // Create Manage Aircraft Page
         AircraftManager aircraftManager = new AircraftManager();
         cardPanel.add(aircraftManager, "aircraftManager");
-        
-        //Create Flight Attendant Page
 
+        // Create Flight Attendant Page
 
-        //Create Airline Agent Page
-
-
+        // Create Airline Agent Page
 
         // frame.add(createTopBar(), BorderLayout.NORTH);
         frame.add(cardPanel, BorderLayout.CENTER);
@@ -82,7 +79,7 @@ public class MainGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Handle login button click
-            }  
+            }
         });
 
         topBar.add(menuBar, BorderLayout.WEST);
@@ -99,7 +96,8 @@ public class MainGUI {
                 super.paintComponent(g);
                 // ImageIcon imageIcon = new
                 // ImageIcon("/Users/ibrahimwani/eclipse-workspace/AirlineProject/src/images/airplane-image.png");
-                ImageIcon imageIcon = new ImageIcon("/Users/ibrahimwani/eclipse-workspace/480TermProject/images/airplane-image.png");
+                ImageIcon imageIcon = new ImageIcon(
+                        "/Users/ibrahimwani/eclipse-workspace/480TermProject/images/airplane-image.png");
                 Image image = imageIcon.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }

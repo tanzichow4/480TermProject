@@ -156,7 +156,7 @@ public class Flight {
     // Method to get flight by seat ID
     public static Flight getFlightBySeatID(int seatID) {
         Flight flight = null;
-
+        DatabaseManager.connect("AIRLINE");
         try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
             String query = "SELECT * FROM Flights f " +
                     "JOIN Seats s ON f.flight_id = s.flight_id " +

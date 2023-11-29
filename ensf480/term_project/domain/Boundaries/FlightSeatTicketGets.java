@@ -32,7 +32,8 @@ public class FlightSeatTicketGets {
                     int aircraftId = resultSet.getInt("aircraft_id");
                     BigDecimal basePrice = resultSet.getBigDecimal("base_price");
 
-                    flight = new Flight(flightId, flightNumber, departureLocation, arrivalLocation, departureTime, arrivalTime, departureDate, arrivalDate, aircraftId, basePrice);
+                    flight = new Flight(flightId, flightNumber, departureLocation, arrivalLocation, departureTime,
+                            arrivalTime, departureDate, arrivalDate, aircraftId, basePrice);
                 }
             }
         } catch (SQLException e) {
