@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
 
-
 public class PopulateFromDB {
 
     private static List<Flight> flightList = new ArrayList<>();
@@ -23,10 +22,12 @@ public class PopulateFromDB {
     // Gets all the RegisteredUsers currently in the DB table
     public static List<RegisteredUser> setRegisteredUsers() {
         List<RegisteredUser> userList = new ArrayList<>();
+        DatabaseManager.connect("AIRLINE");
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE"); // Use the connection from DatabaseManager
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT user_id, username, pass, email, user_type, is_logged_in FROM RegisteredUsers");
+            ResultSet resultSet = statement.executeQuery(
+                    "SELECT user_id, username, pass, email, user_type, is_logged_in FROM RegisteredUsers");
             while (resultSet.next()) {
                 int userId = resultSet.getInt("user_id");
                 String username = resultSet.getString("username");
@@ -49,6 +50,7 @@ public class PopulateFromDB {
     // Method to create SystemAdmin instances for users with user_type = 1
     public static List<SystemAdmin> createSystemAdmins(List<RegisteredUser> registeredUsers) {
         List<SystemAdmin> systemAdminList = new ArrayList<>();
+        DatabaseManager.connect("AIRLINE");
 
         // Clear the existing list before adding administrators
         systemAdminList.clear();
@@ -60,8 +62,7 @@ public class PopulateFromDB {
                         user.getUsername(),
                         user.getPassword(),
                         user.getEmail(),
-                        user.getLoggedIN()
-                );
+                        user.getLoggedIN());
                 systemAdminList.add(systemAdmin);
             }
         }
@@ -72,16 +73,15 @@ public class PopulateFromDB {
     public static List<Customer> createSystemCustomers(List<RegisteredUser> registeredUsers) {
 
         customerList.clear();
-
+        DatabaseManager.connect("AIRLINE");
         for (RegisteredUser user : registeredUsers) {
             if (user.getUserType() == 0) { // Check if user_type is 1 (System Admin)
-                Customer customer = new Customer (
+                Customer customer = new Customer(
                         user.getUserID(),
                         user.getUsername(),
                         user.getPassword(),
                         user.getEmail(),
-                        user.getLoggedIN()
-                );
+                        user.getLoggedIN());
                 customerList.add(customer);
             }
         }
@@ -93,6 +93,7 @@ public class PopulateFromDB {
     // Call set flights every time the system admin adds a flight
     public static List<Flight> setFlights() {
         List<Flight> flights = new ArrayList<>();
+        DatabaseManager.connect("AIRLINE");
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE");
             Statement statement = connection.createStatement();
@@ -136,7 +137,7 @@ public class PopulateFromDB {
             while (resultSet.next()) {
                 int aircraftId = resultSet.getInt("aircraft_id");
                 String aircraftName = resultSet.getString("aircraft_name");
-              
+
                 Aircraft aircraft = new Aircraft(aircraftId, aircraftName);
                 aircraftList.add(aircraft);
             }
@@ -145,11 +146,11 @@ public class PopulateFromDB {
         }
         return aircraftList;
     }
-    
 
     // Method to update ArrayList from Users table
     public static void updateRegisteredUsers() {
         registeredUserList.clear(); // Clear the existing list
+        DatabaseManager.connect("AIRLINE");
 
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE"); // Use the connection from DatabaseManager
@@ -230,6 +231,7 @@ public class PopulateFromDB {
     }
 
     public static int getNumberOfFlights() {
+        DatabaseManager.connect("AIRLINE");
         int numberOfFlights = 0;
 
         try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {

@@ -2,6 +2,8 @@ package ensf480.term_project.domain.Users;
 
 import ensf480.term_project.domain.Boundaries.*;
 import ensf480.term_project.domain.Flights.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import java.sql.*;
@@ -16,33 +18,51 @@ public class Customer extends RegisteredUser {
         super();
     }
 
-    public void displayFlights() {
-        // Fetch booked seats associated with the user
-        List<Seat> bookedSeats = Seat.getSeatsByUserID(this.getUserID());
+    public static List<Seat> getSeatsByUserID(int userID) {
+        List<Seat> bookedSeats = new ArrayList<>();
+        DatabaseManager.connect("BILLING");
+        try (Connection billingConnection = DatabaseManager.getConnection("BILLING")) {
+            String billingQuery = "SELECT * FROM Payments WHERE user_id = ?";
+            try (PreparedStatement billingStatement = billingConnection.prepareStatement(billingQuery)) {
+                billingStatement.setInt(1, userID);
+                try (ResultSet billingResultSet = billingStatement.executeQuery()) {
+                    while (billingResultSet.next()) {
+                        int seatId = billingResultSet.getInt("seat_id");
 
-        if (bookedSeats.isEmpty()) {
-            System.out.println("You have no booked flights.");
-        } else {
-            System.out.println("Your booked flights:");
+                        // Now, query the AIRLINE database for seat details
+                        DatabaseManager.connect("AIRLINE");
+                        try (Connection airlineConnection = DatabaseManager.getConnection("AIRLINE")) {
+                            String airlineQuery = "SELECT * FROM Seats WHERE seat_id = ?";
+                            try (PreparedStatement airlineStatement = airlineConnection
+                                    .prepareStatement(airlineQuery)) {
+                                airlineStatement.setInt(1, seatId);
+                                try (ResultSet airlineResultSet = airlineStatement.executeQuery()) {
+                                    if (airlineResultSet.next()) {
+                                        String seatRow = airlineResultSet.getString("seat_row");
+                                        String seatNumber = airlineResultSet.getString("seat_number");
+                                        String seatType = airlineResultSet.getString("seat_type");
+                                        boolean booked = airlineResultSet.getBoolean("booked");
+                                        int flightId = airlineResultSet.getInt("flight_id");
 
-            for (Seat seat : bookedSeats) {
-                Flight flight = Flight.getFlightBySeatID(seat.getSeatId());
-
-                if (flight != null) {
-                    System.out.println("Flight ID: " + flight.getFlightID());
-                    System.out.println("Flight Number: " + flight.getFlightNumber());
-                    System.out.println("Departure Location: " + flight.getDepartureLocation());
-                    System.out.println("Arrival Location: " + flight.getArrivalLocation());
-                    System.out.println("Departure Time: " + flight.getDepartureTime());
-                    System.out.println("Arrival Time: " + flight.getArrivalTime());
-                    System.out.println("Aircraft ID: " + flight.getAircraftID());
-                    System.out.println("Base Price: " + flight.getBasePrice());
-                    System.out.println("--------------------------");
+                                        Seat seat = new Seat(seatId, seatRow, seatNumber, seatType, booked, flightId);
+                                        bookedSeats.add(seat);
+                                    }
+                                }
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        DatabaseManager.close("AIRLINE");
+                    }
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    }
+        DatabaseManager.close("BILLING");
 
+        return bookedSeats;
+    }
     public void cancelFlight(int flight_id) {
 
         

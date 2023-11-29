@@ -3,7 +3,16 @@ package ensf480.term_project.domain.Flights;
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 import ensf480.term_project.domain.Boundaries.PopulateFromDB;
 
+import ensf480.term_project.domain.Users.Customer;
+
+import ensf480.term_project.domain.Boundaries.PromoDatabaseHandler;
+import ensf480.term_project.domain.Controllers.EmailSender;
+import ensf480.term_project.domain.Promos.Promo;
+import ensf480.term_project.domain.Users.RegisteredUser;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +20,6 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JScrollPane;
 
 public class BrowseFlights extends JPanel {
     private List<Flight> flightsData;
@@ -20,6 +28,7 @@ public class BrowseFlights extends JPanel {
 
     // Create a filtered list to store the filtered flights
     private List<Flight> filteredFlights;
+    private static RegisteredUser user = Login.getLoggedInUser();
 
     public BrowseFlights() {
         setLayout(new BorderLayout());
@@ -79,7 +88,50 @@ public class BrowseFlights extends JPanel {
         managePurchasesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Handle Manage Purchases button click
+                Customer loggedInCustomer = Login.getLoggedInCustomer();
+                List<Seat> bookedSeats = Customer.getSeatsByUserID(loggedInCustomer.getUserID());
+
+                if (bookedSeats.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "You have no booked seats.");
+                } else {
+                    // Create a new JFrame to display the booked seats
+                    JFrame bookedSeatsFrame = new JFrame("Booked Seats");
+                    bookedSeatsFrame.setSize(600, 400);
+                    bookedSeatsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                    // Create a DefaultTableModel to make cells non-editable
+                    DefaultTableModel model = new DefaultTableModel() {
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                            return false;
+                        }
+                    };
+
+                    // Add columns to the model (including concatenated "Seat" column and Total
+                    // Price)
+                    String[] columnNames = { "Seat", "Seat Type", "Flight Number", "Total Price" };
+                    model.setColumnIdentifiers(columnNames);
+
+                    // Add rows to the model
+                    for (Seat seat : bookedSeats) {
+                        Flight flight = Flight.getFlightBySeatID(seat.getSeatId());
+                        String seatInfo = seat.getSeatRow() + seat.getSeatNumber();
+                        BigDecimal totalPrice = seat.getPaymentAmount();// Replace with your method to get seat price
+                        Object[] rowData = { seatInfo, seat.getSeatType(), flight.getFlightNumber(), totalPrice };
+                        model.addRow(rowData);
+                    }
+
+                    // Create a JTable with the non-editable model
+                    JTable table = new JTable(model);
+                    JScrollPane scrollPane = new JScrollPane(table);
+
+                    // Add the table to the frame
+                    bookedSeatsFrame.add(scrollPane);
+
+                    // Set the frame to be visible
+                    bookedSeatsFrame.setLocationRelativeTo(null);
+                    bookedSeatsFrame.setVisible(true);
+                }
             }
         });
 
@@ -206,9 +258,20 @@ public class BrowseFlights extends JPanel {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add your logic here to save the changes
-                // For example, you can use promoCheckBox.isSelected() to get the state
-                // of the checkbox (checked or unchecked)
+                // Check if the "Receive Promo News" checkbox is selected
+                if (promoCheckBox.isSelected()) {
+                    // Get the user's email address (replace "getUserEmail()" with the actual method
+                    // to get the email)
+                    String userEmail = user.getEmail();
+                    // Generate a promo code (replace with your actual logic)
+                    // List<Promo> promolList =
+                    // PromoDatabaseHandler.getPromosForUser(user.getUserID());
+                    // Send the promo code email to the user
+                    // EmailSender.sendPromoCodeEmail(userEmail, promolList);
+                }
+                // Add your logic here to save other changes
+                // For example, you can use promoCheckBox.isSelected() to get the state of the
+                // checkbox (checked or unchecked)
                 // After saving changes, you might want to close the dialog
                 manageAccountDialog.dispose();
             }
@@ -225,6 +288,16 @@ public class BrowseFlights extends JPanel {
         // Set the dialog to be visible
         manageAccountDialog.setLocationRelativeTo(null);
         manageAccountDialog.setVisible(true);
+    }
+
+    private List<Promo> fetchPromoObjects() {
+        List<Promo> promoList = new ArrayList<>();
+
+        // Fetch promo objects from the database (replace with your actual database
+        // logic)
+        // Add the fetched promo objects to promoList
+
+        return promoList;
     }
 
     private JPanel createFilterRow(String label, JComponent component) {
