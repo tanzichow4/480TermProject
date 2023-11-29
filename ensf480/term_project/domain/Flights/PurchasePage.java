@@ -100,9 +100,10 @@ public class PurchasePage extends JFrame {
                         }
                     }
 
+                    BigDecimal total = seatPrice.multiply(new BigDecimal(1.05));
 
                     // Create a Payment object
-                    Payment payment = new Payment(Login.getLoggedInCustomer().getUserID(), flight.getFlightID(), seatPrice,
+                    Payment payment = new Payment(Login.getLoggedInCustomer().getUserID(), flight.getFlightID(), total,
                             creditCardNumber, securityCode, expiryDate, selectedSeat.getSeatId());
 
                     // Save the payment to the database

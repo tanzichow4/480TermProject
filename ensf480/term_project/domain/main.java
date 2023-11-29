@@ -70,6 +70,10 @@ public class main {
 
         admins.getFirst().insertAircraft("Dreamliner");
 
+        // System admin browsing passengers:
+
+        
+
 
         for (Flight element : flights) {
             System.out.println("Flight Number: " + element.getFlightNumber());
@@ -87,6 +91,13 @@ public class main {
 
         SwingUtilities.invokeLater(() -> MainGUI.createAndShowGUI());
         // Close connections
+
+        // List<Customer> browse = admins.getFirst().browsePassengers(flights.getFirst());
+
+        // for (Customer elem : browse) {
+        //     System.out.println("Customer on flight " + flights.getFirst().getFlightNumber() + ": " + elem.getUsername());
+        // }
+
         DatabaseManager.close("AIRLINE");
         DatabaseManager.close("BILLING");
 
