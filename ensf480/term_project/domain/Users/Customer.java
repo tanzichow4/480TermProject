@@ -16,6 +16,7 @@ public class Customer extends RegisteredUser {
         super();
     }
 
+
     public void displayFlights() {
         // Fetch booked seats associated with the user
         List<Seat> bookedSeats = Seat.getSeatsByUserID(this.getUserID());
@@ -44,6 +45,5 @@ public class Customer extends RegisteredUser {
     }
 
     public void cancelFlight() {
-        
     }
 }

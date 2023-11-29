@@ -2,6 +2,10 @@ package ensf480.term_project.domain.Flights;
 
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 import ensf480.term_project.domain.Boundaries.PopulateFromDB;
+import ensf480.term_project.domain.Boundaries.PromoDatabaseHandler;
+import ensf480.term_project.domain.Controllers.EmailSender;
+import ensf480.term_project.domain.Promos.Promo;
+import ensf480.term_project.domain.Users.RegisteredUser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +15,6 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JScrollPane;
 
 public class BrowseFlights extends JPanel {
     private List<Flight> flightsData;
@@ -20,6 +23,7 @@ public class BrowseFlights extends JPanel {
 
     // Create a filtered list to store the filtered flights
     private List<Flight> filteredFlights;
+    private static RegisteredUser user = Login.getLoggedInUser();
 
     public BrowseFlights() {
         setLayout(new BorderLayout());
@@ -206,9 +210,17 @@ public class BrowseFlights extends JPanel {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add your logic here to save the changes
-                // For example, you can use promoCheckBox.isSelected() to get the state
-                // of the checkbox (checked or unchecked)
+                // Check if the "Receive Promo News" checkbox is selected
+                if (promoCheckBox.isSelected()) {
+                    // Get the user's email address (replace "getUserEmail()" with the actual method to get the email)
+                    String userEmail = user.getEmail();
+                    // Generate a promo code (replace with your actual logic)
+                    List<Promo> promolList = PromoDatabaseHandler.getPromosForUser(user.getUserID());
+                    // Send the promo code email to the user
+                    EmailSender.sendPromoCodeEmail(userEmail, promolList);
+                }
+                // Add your logic here to save other changes
+                // For example, you can use promoCheckBox.isSelected() to get the state of the checkbox (checked or unchecked)
                 // After saving changes, you might want to close the dialog
                 manageAccountDialog.dispose();
             }
@@ -225,6 +237,15 @@ public class BrowseFlights extends JPanel {
         // Set the dialog to be visible
         manageAccountDialog.setLocationRelativeTo(null);
         manageAccountDialog.setVisible(true);
+    }
+
+    private List<Promo> fetchPromoObjects() {
+        List<Promo> promoList = new ArrayList<>();
+
+        // Fetch promo objects from the database (replace with your actual database logic)
+        // Add the fetched promo objects to promoList
+
+        return promoList;
     }
 
     private JPanel createFilterRow(String label, JComponent component) {

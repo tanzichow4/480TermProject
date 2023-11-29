@@ -82,6 +82,7 @@ public class PurchasePage extends JFrame {
 
                         if (isValidPromoCode) {
                             // Send promo code confirmation email
+                            EmailSender.sendPromoStatusEmail(user.getEmail(), promoCode);
                             EmailSender.sendPromoCodeEmail(customer.getEmail(), promoCode);
 
                             // Notify the user about promo code status
