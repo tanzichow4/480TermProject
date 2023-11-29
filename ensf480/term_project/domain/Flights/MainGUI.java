@@ -49,7 +49,8 @@ public class MainGUI {
 
 
         //Create Airline Agent Page
-
+        AirlineAgentPortal airlineAgentPortal = new AirlineAgentPortal();
+        cardPanel.add(airlineAgentPortal, "airlineAgentPortal");
 
 
         // frame.add(createTopBar(), BorderLayout.NORTH);
