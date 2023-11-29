@@ -2,8 +2,7 @@ package ensf480.term_project.domain.Flights;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
