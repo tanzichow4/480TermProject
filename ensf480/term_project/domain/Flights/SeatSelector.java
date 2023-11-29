@@ -179,7 +179,6 @@ public class SeatSelector extends JFrame {
     }
 
     private BigDecimal calculateSeatPrice(Seat seat) {
-        BigDecimal BASE_PRICE = BigDecimal.valueOf(50.00); // Assuming a constant base price for now
         BigDecimal flightBasePrice = flight.getBasePrice();
         BigDecimal ticketPrice;
 
@@ -187,17 +186,17 @@ public class SeatSelector extends JFrame {
 
         switch (seatType) {
             case "Ordinary":
-                ticketPrice = BASE_PRICE.add(flightBasePrice);
+                ticketPrice = flightBasePrice;
                 break;
             case "Comfort":
-                ticketPrice = BASE_PRICE.add(flightBasePrice).multiply(new BigDecimal("1.5"));
+                ticketPrice = flightBasePrice.multiply(new BigDecimal("1.5"));
                 break;
             case "Business":
-                ticketPrice = BASE_PRICE.add(flightBasePrice).multiply(new BigDecimal("2.0"));
+                ticketPrice = flightBasePrice.multiply(new BigDecimal("2.0"));
                 break;
             default:
                 // Handle unknown seat type, you can set a default price or throw an exception
-                ticketPrice = BASE_PRICE.add(flightBasePrice);
+                ticketPrice = flightBasePrice;
         }
 
         return ticketPrice;

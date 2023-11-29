@@ -33,10 +33,10 @@ CREATE TABLE RegisteredUsers (
 );
 
 INSERT INTO RegisteredUsers (username, pass, email, user_type, is_logged_in) VALUES
-    ('Alice123', '1234', 'alice@example.com', 0, FALSE),
-    ('Bob456', '1234', 'bob@example.com', 0, FALSE),
-    ('Charlie789', '1234', 'charlie@example.com', 0, FALSE),
-    ('David010', '1234', 'david@example.com', 1, FALSE),
+    ('Ryan123', '1234', 'ryankhryss@gmail.com', 0, FALSE),
+    ('Raina123', '1234', 'rjugdev@gmail.com', 0, FALSE),
+    ('Abe123', '1234', 'coolibey@gmail.com', 0, FALSE),
+    ('Tanzi123', '1234', 'tanzic01@gmail.com', 1, FALSE),
     ('Eve112', '1234', 'eve@example.com', 1, FALSE);
 
 
@@ -136,12 +136,15 @@ USE BILLING;
 	-- Create Payments table
 	CREATE TABLE Payments (
 		payment_id INT PRIMARY KEY AUTO_INCREMENT,
+        seat_id INT,
 		user_id INT,
 		flight_id INT,
-        seat_id INT,
 		payment_amount DECIMAL(10, 2) NOT NULL,
 		credit_card_number VARCHAR(16) NOT NULL,
+		expiration_date VARCHAR(5) NOT NULL,
+        CVV INT,
 		-- other payment-related columns
+        FOREIGN KEY (seat_id) REFERENCES AIRLINE.Seats(seat_id),
 		FOREIGN KEY (user_id) REFERENCES AIRLINE.RegisteredUsers(user_id),
 		FOREIGN KEY (flight_id) REFERENCES AIRLINE.Flights(flight_id)
 	);

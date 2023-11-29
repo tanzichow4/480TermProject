@@ -53,15 +53,26 @@ public class SystemAdmin extends RegisteredUser {
     
             try (PreparedStatement seatStatement = connection.prepareStatement(seatQuery)) {
                 int totalSeatsToAdd = 12;  // Change this value if you want to add a different number of seats
-    
+
                 int seatsPerRow = totalSeatsToAdd / 6;  // 2 rows each for A, B, C, D, E, F
                 char[] rows = new char[]{'A', 'B', 'C', 'D', 'E', 'F'};
-                
+    
                 for (char row : rows) {
+                    String seatType = "x";
+                    if (row == 'A' || row == 'B') {
+                        seatType = "Business";
+                    }
+                    else if (row == 'C' || row == 'D') 
+                        {seatType = "Comfort";
+                    }
+                    else if (row == 'E' || row == 'F') 
+                        {seatType = "Ordinary";
+                    }
+
                     for (int seatNumber = 1; seatNumber <= seatsPerRow; seatNumber++) {
                         seatStatement.setString(1, Character.toString(row));
                         seatStatement.setString(2, Integer.toString(seatNumber));
-                        seatStatement.setString(3, determineSeatType(seatNumber));
+                        seatStatement.setString(3, seatType);
                         seatStatement.setInt(4, flight.getFlightID());
     
                         seatStatement.addBatch();
@@ -77,14 +88,16 @@ public class SystemAdmin extends RegisteredUser {
     }
     
     private String determineSeatType(int seatNumber) {
-        // Assign the first 2 seats as "Business," the next 2 seats as "Comfort," and the last 2 seats as "Ordinary" for each row
-        if (seatNumber % 2 == 1) {
+        // Assign the first 4 seats as "Business," the next 4 seats as "Comfort," and the last 4 seats as "Ordinary" for each row
+        if (seatNumber <= 4) {
             return "Business";
+        } else if (seatNumber <= 8) {
+            return "Comfort";
         } else {
-            return seatNumber <= 4 ? "Comfort" : "Ordinary";
+            return "Ordinary";
         }
     }
-
+    
     public void insertAircraft(String aircraftName) {
         DatabaseManager.connect("AIRLINE");
         try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {

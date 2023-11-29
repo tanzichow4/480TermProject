@@ -8,23 +8,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class Payment {
     private int paymentID;
     private int userID;
     private int flightID;
     private BigDecimal paymentAmount;
-    private LocalDateTime paymentDate;
-    private PaymentCard paymentCard;
+    private String paymentCardNumber;
+    private String cardCVV;
+    private String expiryDate;
+    private int seatID;
 
-    public Payment(int paymentID, int userID, int flightID, BigDecimal paymentAmount, LocalDateTime paymentDate, PaymentCard paymentCard) {
-        this.paymentID = paymentID;
+    public Payment(int userID, int flightID, BigDecimal paymentAmount, String paymentCardNumber, String cardCVV,
+            String expiryDate, int seatID) {
         this.userID = userID;
         this.flightID = flightID;
         this.paymentAmount = paymentAmount;
-        this.paymentDate = paymentDate;
-        this.paymentCard = paymentCard;
+        this.paymentCardNumber = paymentCardNumber;
+        this.cardCVV = cardCVV;
+        this.expiryDate = expiryDate;
+        this.seatID = seatID;
     }
 
     // Getter methods for retrieving information about the payment
@@ -44,30 +47,30 @@ public class Payment {
         return paymentAmount;
     }
 
-    public LocalDateTime getPaymentDate() {
-        return paymentDate;
+    public String getPaymentCard() {
+        return paymentCardNumber;
     }
 
-    public PaymentCard getPaymentCard() {
-        return paymentCard;
-    }
-
-    public void saveToDatabase() {
+    public boolean saveToDatabase() {
         try {
-            Connection connection = DatabaseManager.getConnection("AIRLINE");
+            DatabaseManager.connect("BILLING");
+            Connection connection = DatabaseManager.getConnection("BILLING");
 
             // Prepare the SQL query for inserting a new payment
-            String query = "INSERT INTO Payments (user_id, flight_id, payment_amount, payment_date, credit_card_number, expiration_date) " +
-                           "VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Payments (seat_id, user_id, flight_id, payment_amount, credit_card_number, expiration_date, CVV) "
+                    +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query,
+                    Statement.RETURN_GENERATED_KEYS)) {
                 // Set parameters for the prepared statement
-                preparedStatement.setInt(1, userID);
-                preparedStatement.setInt(2, flightID);
-                preparedStatement.setBigDecimal(3, paymentAmount);
-                preparedStatement.setObject(4, paymentDate);
-                preparedStatement.setString(5, paymentCard.getCardNumber());
-                preparedStatement.setString(6, paymentCard.getExpirationDate());
+                preparedStatement.setInt(1, seatID);
+                preparedStatement.setInt(2, userID);
+                preparedStatement.setInt(3, flightID);
+                preparedStatement.setBigDecimal(4, paymentAmount);
+                preparedStatement.setString(5, paymentCardNumber);
+                preparedStatement.setString(6, expiryDate);
+                preparedStatement.setString(7, cardCVV);
 
                 // Execute the insert statement
                 int affectedRows = preparedStatement.executeUpdate();
@@ -82,6 +85,8 @@ public class Payment {
                             paymentID = generatedKeys.getInt(1);
                         }
                     }
+
+                    return true; // Return true if the save operation was successful
                 } else {
                     System.err.println("Failed to save payment to the database.");
                 }
@@ -89,11 +94,13 @@ public class Payment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return false; // Return false if the save operation failed
     }
 
     public boolean existsInDatabase() {
         try {
-            Connection connection = DatabaseManager.getConnection("AIRLINE");
+            Connection connection = DatabaseManager.getConnection("BILLING");
 
             // Prepare the SQL query to check if the payment exists
             String query = "SELECT COUNT(*) FROM Payments WHERE payment_id = ?";

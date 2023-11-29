@@ -28,6 +28,9 @@ public class main {
         DatabaseManager.connect("AIRLINE");
         Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
 
+        DatabaseManager.connect("BILLING");
+        Connection billingConnection = DatabaseManager.getConnection("BILLING");
+
         // Initialize the list of system users existing in the database
         List<RegisteredUser> users = PopulateFromDB.setRegisteredUsers();
 
@@ -80,8 +83,7 @@ public class main {
 
 
         // Connect to BILLING database
-        DatabaseManager.connect("BILLING");
-        Connection billingConnection = DatabaseManager.getConnection("BILLING");
+
 
         SwingUtilities.invokeLater(() -> MainGUI.createAndShowGUI());
         // Close connections

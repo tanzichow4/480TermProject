@@ -4,12 +4,17 @@ import javax.swing.*;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import ensf480.term_project.domain.Users.RegisteredUser;
+
+import ensf480.term_project.domain.Users.*;
 import ensf480.term_project.domain.Boundaries.*;
 
 public class Login extends JPanel {
+
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private static RegisteredUser loggedInUser;
+    private static Customer loggedInCustomer;
+    private static SystemAdmin loggedInAdmin;
 
 
 
@@ -55,14 +60,34 @@ public class Login extends JPanel {
                 passwordField.setText("");
             }
         }
-        
 
         private int isValidLogin(String username, String password) {
             List<RegisteredUser> userList = PopulateFromDB.getRegisteredUserList();
+            List<Customer> customerList = PopulateFromDB.getCustomers();
+            List<SystemAdmin> adminList = PopulateFromDB.createSystemAdmins(userList);
             for (RegisteredUser user : userList) {
                 
                 if(user.getUsername().equals(username) && user.getPassword().equals(password)){
-                    return user.getUserType();
+                    //loggedInUser = user;
+                    if (user.getUserType() == 0) {
+                        for (Customer customer : customerList) {
+                            if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
+                                loggedInCustomer = customer;
+                                return customer.getUserType();
+                                
+                            }
+                        }
+                    }
+                    else if (user.getUserType() == 1) {
+                        for (SystemAdmin admin : adminList) {
+                            if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
+                                loggedInAdmin = admin;
+                                return admin.getUserType();
+                                
+                            }
+                        }
+                    }
+                    
                 } 
                
             }
@@ -106,7 +131,18 @@ public class Login extends JPanel {
         //Add login button event
         loginButton.addActionListener((ActionEvent e) -> {
             handleLogin();
-        });
-        
+        }); 
+    }
+
+    public static RegisteredUser getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public static SystemAdmin getLoggedInAdmin() {
+        return loggedInAdmin;
+    }
+
+    public static Customer getLoggedInCustomer() {
+        return loggedInCustomer;
     }
 }
