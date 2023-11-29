@@ -3,7 +3,7 @@ package ensf480.term_project.domain.Flights;
 import javax.swing.*;
 
 import ensf480.term_project.domain.Controllers.EmailSender;
-import ensf480.term_project.domain.Users.RegisteredUser;
+import ensf480.term_project.domain.Users.*;
 import ensf480.term_project.domain.Boundaries.PromoDatabaseHandler;
 import ensf480.term_project.domain.Payments.*;
 import ensf480.term_project.domain.Boundaries.*;
@@ -24,7 +24,7 @@ public class PurchasePage extends JFrame {
     private JTextField expiryDateField;
     private JTextField securityCodeField;
     private JTextField promoCodeField; // New promo code field
-    private RegisteredUser user = Login.getLoggedInUser();
+    private Customer customer = Login.getLoggedInCustomer();
 
     public PurchasePage(String flightNumber, Seat selectedSeat, BigDecimal seatPrice, Flight flight) {
         this.selectedSeat = selectedSeat;
@@ -82,7 +82,7 @@ public class PurchasePage extends JFrame {
 
                         if (isValidPromoCode) {
                             // Send promo code confirmation email
-                            EmailSender.sendPromoCodeEmail(user.getEmail(), promoCode);
+                            EmailSender.sendPromoCodeEmail(customer.getEmail(), promoCode);
 
                             // Notify the user about promo code status
                             JOptionPane.showMessageDialog(PurchasePage.this,
@@ -90,7 +90,7 @@ public class PurchasePage extends JFrame {
                                     JOptionPane.INFORMATION_MESSAGE);
 
                             // Update the system to mark the promo code as used (you need to implement this logic)
-                            PromoDatabaseHandler.markPromoCodeAsUsed(user.getUserID(), promoCode);
+                            PromoDatabaseHandler.markPromoCodeAsUsed(customer.getUserID(), promoCode);
                         } else {
                             // Notify the user that the promo code is invalid
                             JOptionPane.showMessageDialog(PurchasePage.this,
@@ -102,7 +102,7 @@ public class PurchasePage extends JFrame {
 
 
                     // Create a Payment object
-                    Payment payment = new Payment(Login.getLoggedInUser().getUserID(), flight.getFlightID(), seatPrice,
+                    Payment payment = new Payment(Login.getLoggedInCustomer().getUserID(), flight.getFlightID(), seatPrice,
                             creditCardNumber, securityCode, expiryDate, selectedSeat.getSeatId());
 
                     // Save the payment to the database
@@ -118,7 +118,7 @@ public class PurchasePage extends JFrame {
                         browseFlights.setVisible(true);
                         // Send purchase confirmation email
                         EmailSender.sendPurchaseConfirmationEmail(
-                            user.getEmail(), flight.getFlightID(), selectedSeat.getSeatId()
+                            customer.getEmail(), flight.getFlightID(), selectedSeat.getSeatId()
                         );
 
                         // Close the PurchasePage window
