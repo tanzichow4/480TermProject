@@ -17,7 +17,6 @@ public class FlightManager extends JPanel{
         addFlightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Action to be performed when the button is clicked
                 System.out.println("Add Flight button clicked!");
                 // Add your logic here for adding a flight
             }

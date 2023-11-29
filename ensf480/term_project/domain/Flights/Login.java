@@ -35,6 +35,20 @@ public class Login extends JPanel {
                 usernameField.setText("");
                 passwordField.setText("");
             }
+            else if(redirectValue == 2){
+                JOptionPane.showMessageDialog(null, "Login as Flight Attendant Successful");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "browseFlights");
+                usernameField.setText("");
+                passwordField.setText("");
+            }
+            else if(redirectValue == 3){
+                JOptionPane.showMessageDialog(null, "Login as Airline Agent Successful");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "browseFlights");
+                usernameField.setText("");
+                passwordField.setText("");
+            }
             else{
                 JOptionPane.showMessageDialog(null, "Invalid username or password. Please try again.");
                 usernameField.setText("");
