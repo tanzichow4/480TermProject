@@ -3,14 +3,16 @@ package ensf480.term_project.domain.Flights;
 import javax.swing.*;
 
 import ensf480.term_project.domain.Controllers.EmailSender;
-import ensf480.term_project.domain.Users.RegisteredUser;
+import ensf480.term_project.domain.Users.*;
 import ensf480.term_project.domain.Boundaries.PromoDatabaseHandler;
 import ensf480.term_project.domain.Payments.*;
+import ensf480.term_project.domain.Boundaries.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.sql.*;
 
 public class PurchasePage extends JFrame {
     private Flight flight;
@@ -22,7 +24,7 @@ public class PurchasePage extends JFrame {
     private JTextField expiryDateField;
     private JTextField securityCodeField;
     private JTextField promoCodeField; // New promo code field
-    private RegisteredUser user = Login.getLoggedInUser();
+    private Customer customer = Login.getLoggedInCustomer();
 
     public PurchasePage(String flightNumber, Seat selectedSeat, BigDecimal seatPrice, Flight flight) {
         this.selectedSeat = selectedSeat;
@@ -81,6 +83,7 @@ public class PurchasePage extends JFrame {
                         if (isValidPromoCode) {
                             // Send promo code confirmation email
                             EmailSender.sendPromoStatusEmail(user.getEmail(), promoCode);
+                            EmailSender.sendPromoCodeEmail(customer.getEmail(), promoCode);
 
                             // Notify the user about promo code status
                             JOptionPane.showMessageDialog(PurchasePage.this,
@@ -88,7 +91,7 @@ public class PurchasePage extends JFrame {
                                     JOptionPane.INFORMATION_MESSAGE);
 
                             // Update the system to mark the promo code as used (you need to implement this logic)
-                            PromoDatabaseHandler.markPromoCodeAsUsed(user.getUserID(), promoCode);
+                            PromoDatabaseHandler.markPromoCodeAsUsed(customer.getUserID(), promoCode);
                         } else {
                             // Notify the user that the promo code is invalid
                             JOptionPane.showMessageDialog(PurchasePage.this,
@@ -100,12 +103,13 @@ public class PurchasePage extends JFrame {
 
 
                     // Create a Payment object
-                    Payment payment = new Payment(Login.getLoggedInUser().getUserID(), flight.getFlightID(), seatPrice,
+                    Payment payment = new Payment(Login.getLoggedInCustomer().getUserID(), flight.getFlightID(), seatPrice,
                             creditCardNumber, securityCode, expiryDate, selectedSeat.getSeatId());
 
                     // Save the payment to the database
                     if (payment.saveToDatabase()) {
                         // Show a confirmation dialog
+                        updateSeatStatus(selectedSeat);
                         JOptionPane.showMessageDialog(PurchasePage.this, "Purchase confirmed!", "Confirmation",
                                 JOptionPane.INFORMATION_MESSAGE);
 
@@ -115,8 +119,9 @@ public class PurchasePage extends JFrame {
                         browseFlights.setVisible(true);
                         // Send purchase confirmation email
                         EmailSender.sendPurchaseConfirmationEmail(
-                            user.getEmail(), flight.getFlightID(), selectedSeat.getSeatId()
+                            customer.getEmail(), flight.getFlightID(), selectedSeat.getSeatId()
                         );
+
                         // Close the PurchasePage window
 
                         // You may also want to close the current PurchasePage or navigate to another
@@ -210,4 +215,33 @@ public class PurchasePage extends JFrame {
         // For simplicity, just check if the fields are not empty
         return !creditCardNumber.trim().isEmpty() && !expiryDate.trim().isEmpty() && !securityCode.trim().isEmpty();
     }
+
+    // Update seat status in the database
+private void updateSeatStatus(Seat selectedSeat) {
+    try {
+        DatabaseManager.connect("AIRLINE");
+        Connection connection = DatabaseManager.getConnection("AIRLINE");
+
+        // Prepare the SQL query for updating the seat's booked status
+        String updateQuery = "UPDATE Seats SET booked = ? WHERE seat_id = ?";
+
+        try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+            // Set parameters for the update statement
+            updateStatement.setBoolean(1, true);
+            updateStatement.setInt(2, selectedSeat.getSeatId());
+
+            // Execute the update statement
+            int affectedRows = updateStatement.executeUpdate();
+
+            // Check if the update was successful
+            if (affectedRows > 0) {
+                System.out.println("Seat status updated in the database.");
+            } else {
+                System.err.println("Failed to update seat status in the database.");
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
 }

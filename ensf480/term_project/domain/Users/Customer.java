@@ -1,5 +1,11 @@
 package ensf480.term_project.domain.Users;
 
+import ensf480.term_project.domain.Boundaries.*;
+import ensf480.term_project.domain.Flights.*;
+import java.util.List;
+
+import java.sql.*;
+
 public class Customer extends RegisteredUser {
 
     public Customer(int userID, String username, String password, String email, boolean isloggedin) {
@@ -10,7 +16,34 @@ public class Customer extends RegisteredUser {
         super();
     }
 
-    public boolean isLoggedIN() {
-        return this.getLoggedIN();
+
+    public void displayFlights() {
+        // Fetch booked seats associated with the user
+        List<Seat> bookedSeats = Seat.getSeatsByUserID(this.getUserID());
+
+        if (bookedSeats.isEmpty()) {
+            System.out.println("You have no booked flights.");
+        } else {
+            System.out.println("Your booked flights:");
+
+            for (Seat seat : bookedSeats) {
+                Flight flight = Flight.getFlightBySeatID(seat.getSeatId());
+
+                if (flight != null) {
+                    System.out.println("Flight ID: " + flight.getFlightID());
+                    System.out.println("Flight Number: " + flight.getFlightNumber());
+                    System.out.println("Departure Location: " + flight.getDepartureLocation());
+                    System.out.println("Arrival Location: " + flight.getArrivalLocation());
+                    System.out.println("Departure Time: " + flight.getDepartureTime());
+                    System.out.println("Arrival Time: " + flight.getArrivalTime());
+                    System.out.println("Aircraft ID: " + flight.getAircraftID());
+                    System.out.println("Base Price: " + flight.getBasePrice());
+                    System.out.println("--------------------------");
+                }
+            }
+        }
+    }
+
+    public void cancelFlight() {
     }
 }
