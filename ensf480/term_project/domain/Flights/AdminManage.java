@@ -31,6 +31,8 @@ public class AdminManage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Perform sign-out actions
                 JOptionPane.showMessageDialog(null, "Signing out...");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "login");
                 // You can add more logic here as needed
             }
         });
@@ -56,6 +58,8 @@ public class AdminManage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Add logic to handle "Manage Flight" action
                 JOptionPane.showMessageDialog(null, "Managing Flight...");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "flightManager");
             }
         });
 
@@ -64,6 +68,8 @@ public class AdminManage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Add logic to handle "Manage Aircraft" action
                 JOptionPane.showMessageDialog(null, "Managing Aircraft...");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "aircraftManager");
             }
         });
 
@@ -80,6 +86,8 @@ public class AdminManage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Add logic to handle "Browse Passengers" action
                 JOptionPane.showMessageDialog(null, "Browsing Passengers...");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "browsePassenger");
             }
         });
 

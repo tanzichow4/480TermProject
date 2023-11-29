@@ -33,6 +33,25 @@ public class MainGUI {
         AdminManage adminManage = new AdminManage();
         cardPanel.add(adminManage, "adminManage");
 
+        //Create Browse Passenger Page
+        BrowsePassengerFlights browsePassengerFlights = new BrowsePassengerFlights();
+        cardPanel.add(browsePassengerFlights, "browsePassengerFlights");
+
+        //Create Manage Flight Page
+        FlightManager flightManager = new FlightManager();
+        cardPanel.add(flightManager, "flightManager");
+
+        //Create Manage Aircraft Page
+        AircraftManager aircraftManager = new AircraftManager();
+        cardPanel.add(aircraftManager, "aircraftManager");
+        
+        //Create Flight Attendant Page
+
+
+        //Create Airline Agent Page
+
+
+
         // frame.add(createTopBar(), BorderLayout.NORTH);
         frame.add(cardPanel, BorderLayout.CENTER);
 

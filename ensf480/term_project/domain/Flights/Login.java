@@ -1,11 +1,10 @@
 package ensf480.term_project.domain.Flights;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import ensf480.term_project.domain.Singleton.Signup;
+
 import ensf480.term_project.domain.Users.*;
 import ensf480.term_project.domain.Boundaries.*;
 
@@ -16,6 +15,7 @@ public class Login extends JPanel {
     private static RegisteredUser loggedInUser;
     private static Customer loggedInCustomer;
     private static SystemAdmin loggedInAdmin;
+
 
 
     private void handleLogin() {
@@ -35,6 +35,20 @@ public class Login extends JPanel {
             } 
             else if(redirectValue == 0){
                 JOptionPane.showMessageDialog(null, "Login as User Successful");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "browseFlights");
+                usernameField.setText("");
+                passwordField.setText("");
+            }
+            else if(redirectValue == 2){
+                JOptionPane.showMessageDialog(null, "Login as Flight Attendant Successful");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "browseFlights");
+                usernameField.setText("");
+                passwordField.setText("");
+            }
+            else if(redirectValue == 3){
+                JOptionPane.showMessageDialog(null, "Login as Airline Agent Successful");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
                 cardLayout.show(getParent(), "browseFlights");
                 usernameField.setText("");
