@@ -2,6 +2,9 @@
  * TO RUN THIS MAIN CLASS
  * command: java -cp .:lib/mysql-connector-java-8.0.23.jar ensf480.term_project.domain.main
  * Compile first !!!! javac ensf480/term_project/domain/main.java
+ * if you want email compile: 
+ * javac -cp "C:\Fall 2023\ENSF480\480TermProject\lib\activation.jar;C:\Fall 2023\ENSF480\480TermProject\lib\javax.mail.jar" ensf480/term_project/domain/*.java
+
  * ** delete your class files **
  */
 

@@ -1,6 +1,11 @@
 package ensf480.term_project.domain.Flights;
 
 import javax.swing.*;
+
+import ensf480.term_project.domain.Controllers.EmailSender;
+import ensf480.term_project.domain.Users.RegisteredUser;
+import ensf480.term_project.domain.Boundaries.PromoDatabaseHandler;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +21,7 @@ public class PurchasePage extends JFrame {
     private JTextField expiryDateField;
     private JTextField securityCodeField;
     private JTextField promoCodeField; // New promo code field
+    private RegisteredUser user = Login.getLoggedInUser();
 
     public PurchasePage(String flightNumber, Seat selectedSeat, BigDecimal seatPrice, Flight flight) {
         this.selectedSeat = selectedSeat;
@@ -56,15 +62,48 @@ public class PurchasePage extends JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String creditCardNumber = creditCardNumberField.getText(); // Updated variable
+                String creditCardNumber = creditCardNumberField.getText();
                 String expiryDate = expiryDateField.getText();
                 String securityCode = securityCodeField.getText();
-                String promoCode = promoCodeField.getText(); // Get promo code
+                String promoCode = promoCodeField.getText();
 
                 if (validateCreditCardInfo(creditCardNumber, expiryDate, securityCode)) {
                     // If credit card info is valid, proceed with confirmation
+
+                    // Check if a promo code is provided
+                    if (!promoCode.isEmpty()) {
+                        // Check if the promo code is valid (you need to implement this logic)
+                        boolean isValidPromoCode = PromoDatabaseHandler.isPromoCodeValid(promoCode);
+
+                        if (isValidPromoCode) {
+                            // Send promo code confirmation email
+                            EmailSender.sendPromoCodeEmail(user.getEmail(), promoCode);
+
+                            // Notify the user about promo code status
+                            JOptionPane.showMessageDialog(PurchasePage.this,
+                                    "Promo code '" + promoCode + "' applied successfully!", "Promo Code Applied",
+                                    JOptionPane.INFORMATION_MESSAGE);
+
+                            // Update the system to mark the promo code as used (you need to implement this logic)
+                            PromoDatabaseHandler.markPromoCodeAsUsed(user.getUserID(), promoCode);
+                        } else {
+                            // Notify the user that the promo code is invalid
+                            JOptionPane.showMessageDialog(PurchasePage.this,
+                                    "Invalid promo code. Please check and try again.", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return; // Do not proceed with the purchase if the promo code is invalid
+                        }
+                    }
+
+                    // Send purchase confirmation email
+                    EmailSender.sendPurchaseConfirmationEmail(
+                        user.getEmail(), flight.getFlightID(), selectedSeat.getSeatId()
+                    );
+
+                    // Display confirmation message
                     JOptionPane.showMessageDialog(PurchasePage.this, "Purchase confirmed!", "Confirmation",
                             JOptionPane.INFORMATION_MESSAGE);
+
                     // Additional logic for promo code processing can be added here
                 } else {
                     // If credit card info is not valid, display an error message
