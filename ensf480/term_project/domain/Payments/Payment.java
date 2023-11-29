@@ -17,15 +17,17 @@ public class Payment {
     private String paymentCardNumber;
     private String cardCVV;
     private String expiryDate;
+    private int seatID;
 
     public Payment(int userID, int flightID, BigDecimal paymentAmount, String paymentCardNumber, String cardCVV,
-            String expiryDate) {
+            String expiryDate, int seatID) {
         this.userID = userID;
         this.flightID = flightID;
         this.paymentAmount = paymentAmount;
         this.paymentCardNumber = paymentCardNumber;
         this.cardCVV = cardCVV;
         this.expiryDate = expiryDate;
+        this.seatID = seatID;
     }
 
     // Getter methods for retrieving information about the payment
@@ -55,19 +57,20 @@ public class Payment {
             Connection connection = DatabaseManager.getConnection("BILLING");
 
             // Prepare the SQL query for inserting a new payment
-            String query = "INSERT INTO Payments (user_id, flight_id, payment_amount, credit_card_number, expiration_date, CVV) "
+            String query = "INSERT INTO Payments (seat_id, user_id, flight_id, payment_amount, credit_card_number, expiration_date, CVV) "
                     +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(query,
                     Statement.RETURN_GENERATED_KEYS)) {
                 // Set parameters for the prepared statement
-                preparedStatement.setInt(1, userID);
-                preparedStatement.setInt(2, flightID);
-                preparedStatement.setBigDecimal(3, paymentAmount);
-                preparedStatement.setString(4, paymentCardNumber);
-                preparedStatement.setString(5, expiryDate);
-                preparedStatement.setString(6, cardCVV);
+                preparedStatement.setInt(1, seatID);
+                preparedStatement.setInt(2, userID);
+                preparedStatement.setInt(3, flightID);
+                preparedStatement.setBigDecimal(4, paymentAmount);
+                preparedStatement.setString(5, paymentCardNumber);
+                preparedStatement.setString(6, expiryDate);
+                preparedStatement.setString(7, cardCVV);
 
                 // Execute the insert statement
                 int affectedRows = preparedStatement.executeUpdate();

@@ -70,7 +70,7 @@ public class PurchasePage extends JFrame {
 
                     // Create a Payment object
                     Payment payment = new Payment(Login.getLoggedInUser().getUserID(), flight.getFlightID(), seatPrice,
-                            creditCardNumber, securityCode, expiryDate);
+                            creditCardNumber, securityCode, expiryDate, selectedSeat.getSeatId());
 
                     // Save the payment to the database
                     if (payment.saveToDatabase()) {
