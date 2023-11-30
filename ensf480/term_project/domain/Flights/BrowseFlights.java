@@ -28,7 +28,6 @@ public class BrowseFlights extends JPanel {
 
     // Create a filtered list to store the filtered flights
     private List<Flight> filteredFlights;
-    private static RegisteredUser user = Login.getLoggedInUser();
 
     public BrowseFlights() {
         setLayout(new BorderLayout());
@@ -89,6 +88,7 @@ public class BrowseFlights extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Customer loggedInCustomer = Login.getLoggedInCustomer();
+                
                 List<Seat> bookedSeats = Customer.getSeatsByUserID(loggedInCustomer.getUserID());
 
                 if (bookedSeats.isEmpty()) {
@@ -262,17 +262,12 @@ public class BrowseFlights extends JPanel {
                 if (promoCheckBox.isSelected()) {
                     // Get the user's email address (replace "getUserEmail()" with the actual method
                     // to get the email)
-                    String userEmail = user.getEmail();
-                    // Generate a promo code (replace with your actual logic)
-                    // List<Promo> promolList =
-                    // PromoDatabaseHandler.getPromosForUser(user.getUserID());
-                    // Send the promo code email to the user
-                    // EmailSender.sendPromoCodeEmail(userEmail, promolList);
+                    List<Promo> promoList = PromoDatabaseHandler.getAllPromos();
+                    Customer customer = Login.getLoggedInCustomer();
+
+
+                    EmailSender.sendPromoCodeEmail(customer.getEmail(), promoList);
                 }
-                // Add your logic here to save other changes
-                // For example, you can use promoCheckBox.isSelected() to get the state of the
-                // checkbox (checked or unchecked)
-                // After saving changes, you might want to close the dialog
                 manageAccountDialog.dispose();
             }
         });
@@ -288,16 +283,6 @@ public class BrowseFlights extends JPanel {
         // Set the dialog to be visible
         manageAccountDialog.setLocationRelativeTo(null);
         manageAccountDialog.setVisible(true);
-    }
-
-    private List<Promo> fetchPromoObjects() {
-        List<Promo> promoList = new ArrayList<>();
-
-        // Fetch promo objects from the database (replace with your actual database
-        // logic)
-        // Add the fetched promo objects to promoList
-
-        return promoList;
     }
 
     private JPanel createFilterRow(String label, JComponent component) {

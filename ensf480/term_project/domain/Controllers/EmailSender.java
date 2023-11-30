@@ -2,11 +2,14 @@ package ensf480.term_project.domain.Controllers;
 
 import ensf480.term_project.domain.Flights.Flight;
 import ensf480.term_project.domain.Flights.Seat;
+import ensf480.term_project.domain.Promos.Promo;
 import ensf480.term_project.domain.Boundaries.FlightSeatTicketGets;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import java.util.List;
 import java.util.Properties;
 
 public class EmailSender {
@@ -86,7 +89,7 @@ public class EmailSender {
         return content.toString();
     }
 
-    public static void sendPromoCodeEmail(String userEmail, String promoCode) {
+    public static void sendPromoCodeEmail(String userEmail, List<Promo> promoList) {
         // Set up properties for the email server
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com"); // Replace with your email server host
@@ -115,7 +118,7 @@ public class EmailSender {
             message.setSubject("Promo Code Notification");
 
             // Build the email content with promo code details
-            String emailContent = buildPromoCodeEmailContent(promoCode);
+            String emailContent = buildPromoCodeEmailContent(promoList);
 
             message.setText(emailContent);
 
@@ -129,17 +132,25 @@ public class EmailSender {
         }
     }
 
-    private static String buildPromoCodeEmailContent(String promoCode) {
+    private static String buildPromoCodeEmailContent(List<Promo> promoList) {
         StringBuilder content = new StringBuilder();
-
+    
         content.append("Dear Passenger,\n\n");
-        content.append("Congratulations! You have received a promo code.\n\n");
-        content.append("Promo Code: ").append(promoCode).append("\n");
-        content.append("This code can be used to avail discounts on your future bookings.\n\n");
+        content.append("Congratulations! You have received promo codes:\n\n");
+    
+        // Loop through the promo list and add each promo code to the email content
+        for (Promo promo : promoList) {
+            content.append("Promo Name: ").append(promo.getPromoName()).append("\n");
+            content.append("Promo Code: ").append(promo.getPromoCode()).append("\n");
+            content.append("Discount Amount: ").append(promo.getDiscountAmount()).append("\n\n");
+        }
+    
+        content.append("These codes can be used to avail discounts on your future bookings.\n\n");
         content.append("Thank you for choosing our airline. Enjoy your journey!\n\n");
         content.append("Best regards,\nThe Airline Team");
-
+    
         return content.toString();
     }
+    
 
 }

@@ -41,13 +41,17 @@ INSERT INTO RegisteredUsers (username, pass, email, user_type, is_logged_in) VAL
 
 
 CREATE TABLE Promos (
-    user_id INT,
-    promo_code VARCHAR(8) NOT NULL,
-    discount_ammount INT,
-    used BOOLEAN,
-    FOREIGN KEY (user_id) REFERENCES RegisteredUsers(user_id),
-    PRIMARY KEY (user_id)
+    promoName VARCHAR(50) NOT NULL,
+    promo_code VARCHAR(20) NOT NULL,
+    discount_amount INT NOT NULL
 );
+
+-- Insert sample data into Promos table
+INSERT INTO Promos (promoName, promo_code, discount_amount) VALUES
+    ('Winter Discount', 'WINTERBURRRR', 10),
+    ('Seat Promo', 'SEATPROMO123', 15),
+    ('Flight Promo', 'FLIGHTPROMO123', 20);
+
 
 -- Create Flights table
 CREATE TABLE Flights (
