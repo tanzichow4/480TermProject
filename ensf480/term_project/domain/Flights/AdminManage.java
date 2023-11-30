@@ -49,7 +49,7 @@ public class AdminManage extends JPanel {
         // Create buttons for each option
         JButton manageFlightButton = new JButton("Manage Flight");
         JButton manageAircraftButton = new JButton("Manage Aircraft");
-        JButton printPassengerListButton = new JButton("Print List of Passengers");
+        JButton manageCrewButton = new JButton("Manage Crews");
         JButton browsePassengersButton = new JButton("Browse Passengers");
 
         // Add action listeners to the buttons
@@ -73,11 +73,10 @@ public class AdminManage extends JPanel {
             }
         });
 
-        printPassengerListButton.addActionListener(new ActionListener() {
+        manageCrewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add logic to handle "Print List of Passengers" action
-                JOptionPane.showMessageDialog(null, "Saved printed list");
+                //Redirect to Manage Crew page
             }
         });
 
@@ -87,14 +86,14 @@ public class AdminManage extends JPanel {
                 // Add logic to handle "Browse Passengers" action
                 JOptionPane.showMessageDialog(null, "Browsing Passengers...");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "browsePassenger");
+                cardLayout.show(getParent(), "browsePassengerFlights");
             }
         });
 
         // Add buttons to the grid panel
         gridPanel.add(manageFlightButton);
         gridPanel.add(manageAircraftButton);
-        gridPanel.add(printPassengerListButton);
+        gridPanel.add(manageCrewButton);
         gridPanel.add(browsePassengersButton);
 
         return gridPanel;

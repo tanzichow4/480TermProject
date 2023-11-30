@@ -226,7 +226,7 @@ public class BrowsePassengerFlights extends JPanel {
         selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Assuming SeatSelector is the class for Seat Selector page
+                //Implement the browse passenger thing
                 
             }
         });
