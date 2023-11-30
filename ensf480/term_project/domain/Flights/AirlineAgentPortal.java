@@ -6,9 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class AdminManage extends JPanel {
+public class AirlineAgentPortal extends JPanel {
 
-    public AdminManage() {
+    public AirlineAgentPortal() {
         // Set up the main panel
         setLayout(new BorderLayout());
 
@@ -48,55 +48,36 @@ public class AdminManage extends JPanel {
         gridPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Create buttons for each option
-        JButton manageFlightButton = new JButton("Manage Flight");
-        JButton manageAircraftButton = new JButton("Manage Aircraft");
-        JButton printPassengerListButton = new JButton("Print List of Passengers");
-        JButton browsePassengersButton = new JButton("Browse Passengers");
+        JButton bookFlightButton = new JButton("Book a Flight");
+        JButton browsePassengersButton = new JButton("Browse List of Passengers");
+
 
         // Add action listeners to the buttons
-        manageFlightButton.addActionListener(new ActionListener() {
+        bookFlightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Add logic to handle "Manage Flight" action
-                JOptionPane.showMessageDialog(null, "Managing Flight...");
+                JOptionPane.showMessageDialog(null, "Displaying flights...");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "flightManager");
-            }
-        });
-
-        manageAircraftButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Add logic to handle "Manage Aircraft" action
-                JOptionPane.showMessageDialog(null, "Managing Aircraft...");
-                CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "aircraftManager");
-            }
-        });
-
-        printPassengerListButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Add logic to handle "Print List of Passengers" action
-                JOptionPane.showMessageDialog(null, "Saved printed list");
+                cardLayout.show(getParent(), "browseFlight");
             }
         });
 
         browsePassengersButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add logic to handle "Browse Passengers" action
-                JOptionPane.showMessageDialog(null, "Browsing Passengers...");
+                // Add logic to handle "Manage Aircraft" action
+                JOptionPane.showMessageDialog(null, "Browsing flights...");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "browsePassenger");
+                
             }
         });
 
+       
         // Add buttons to the grid panel
-        gridPanel.add(manageFlightButton);
-        gridPanel.add(manageAircraftButton);
-        gridPanel.add(printPassengerListButton);
+        gridPanel.add(bookFlightButton);
         gridPanel.add(browsePassengersButton);
+
 
         return gridPanel;
     }

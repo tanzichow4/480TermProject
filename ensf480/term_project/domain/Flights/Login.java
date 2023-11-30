@@ -26,38 +26,42 @@ public class Login extends JPanel {
         char[] enteredPasswordChars = passwordField.getPassword();
         String enteredPassword = new String(enteredPasswordChars);
 
-        int redirectValue = isValidLogin(enteredUsername, enteredPassword);
-
-        if (redirectValue == 1) {
-            JOptionPane.showMessageDialog(null, "Login as admin successful!");
-            CardLayout cardLayout = (CardLayout) getParent().getLayout();
-            cardLayout.show(getParent(), "adminManage");
-            usernameField.setText("");
-            passwordField.setText("");
-        } else if (redirectValue == 0) {
-            JOptionPane.showMessageDialog(null, "Login as User Successful");
-            CardLayout cardLayout = (CardLayout) getParent().getLayout();
-            cardLayout.show(getParent(), "browseFlights");
-            usernameField.setText("");
-            passwordField.setText("");
-        } else if (redirectValue == 2) {
-            JOptionPane.showMessageDialog(null, "Login as Flight Attendant Successful");
-            CardLayout cardLayout = (CardLayout) getParent().getLayout();
-            cardLayout.show(getParent(), "browseFlights");
-            usernameField.setText("");
-            passwordField.setText("");
-        } else if (redirectValue == 3) {
-            JOptionPane.showMessageDialog(null, "Login as Airline Agent Successful");
-            CardLayout cardLayout = (CardLayout) getParent().getLayout();
-            cardLayout.show(getParent(), "browseFlights");
-            usernameField.setText("");
-            passwordField.setText("");
-        } else {
-            JOptionPane.showMessageDialog(null, "Invalid username or password. Please try again.");
-            usernameField.setText("");
-            passwordField.setText("");
+            int redirectValue = isValidLogin(enteredUsername, enteredPassword);
+    
+            if (redirectValue == 1) {
+                JOptionPane.showMessageDialog(null, "Login as admin successful!");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "adminManage");
+                usernameField.setText("");
+                passwordField.setText("");
+            } 
+            else if(redirectValue == 0){
+                JOptionPane.showMessageDialog(null, "Login as User Successful");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "browseFlights");
+                usernameField.setText("");
+                passwordField.setText("");
+            }
+            else if(redirectValue == 2){
+                JOptionPane.showMessageDialog(null, "Login as Flight Attendant Successful");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "browseFlights");
+                usernameField.setText("");
+                passwordField.setText("");
+            }
+            else if(redirectValue == 3){
+                JOptionPane.showMessageDialog(null, "Login as Airline Agent Successful");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "browsePassengerFlights");
+                usernameField.setText("");
+                passwordField.setText("");
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Invalid username or password. Please try again.");
+                usernameField.setText("");
+                passwordField.setText("");
+            }
         }
-    }
 
     private int isValidLogin(String username, String password) {
         List<RegisteredUser> userList = PopulateFromDB.getRegisteredUserList();
