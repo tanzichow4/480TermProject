@@ -52,7 +52,7 @@ public class Login extends JPanel {
             else if(redirectValue == 3){
                 JOptionPane.showMessageDialog(null, "Login as Airline Agent Successful");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "browsePassengerFlights");
+                cardLayout.show(getParent(), "airlineAgentBrowseFlights");
                 usernameField.setText("");
                 passwordField.setText("");
             }
