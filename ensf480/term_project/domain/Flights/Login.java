@@ -52,7 +52,7 @@ public class Login extends JPanel {
             else if(redirectValue == 3){
                 JOptionPane.showMessageDialog(null, "Login as Airline Agent Successful");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "browsePassengerFlights");
+                cardLayout.show(getParent(), "airlineAgentPortal");
                 usernameField.setText("");
                 passwordField.setText("");
             }
@@ -67,7 +67,7 @@ public class Login extends JPanel {
         List<RegisteredUser> userList = PopulateFromDB.getRegisteredUserList();
         List<Customer> customerList = PopulateFromDB.getCustomers();
         List<SystemAdmin> adminList = PopulateFromDB.createSystemAdmins(userList);
-        List<AirlineAgent> agents = PopulateFromDB.createAirlineAgents(userList);
+        List<AirlineAgent> agents = PopulateFromDB.getAirlineAgentList();
         List<FlightAttendant> attendants = PopulateFromDB.createFlightAttendants(userList);
 
         for (RegisteredUser user : userList) {
@@ -86,6 +86,7 @@ public class Login extends JPanel {
                     for (SystemAdmin admin : adminList) {
                         if (admin.getUsername().equals(username) && admin.getPassword().equals(password)) {
                             loggedInAdmin = admin;
+                            
                             return admin.getUserType();
 
                         }
@@ -94,6 +95,7 @@ public class Login extends JPanel {
                     for (AirlineAgent agent : agents) {
                         if (agent.getUsername().equals(username) && agent.getPassword().equals(password)) {
                             loggedInAirlineAgent = agent;
+                            System.out.println("logged in admin: " + loggedInAirlineAgent.getUsername());
                             return agent.getUserType();
 
                         }

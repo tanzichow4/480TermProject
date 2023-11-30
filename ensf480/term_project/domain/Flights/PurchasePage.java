@@ -24,6 +24,7 @@ public class PurchasePage extends JFrame {
     private JTextField securityCodeField;
     private JTextField promoCodeField; // New promo code field
     private Customer customer = Login.getLoggedInCustomer();
+    private AirlineAgent agent = Login.getLoggedInAirlineAgent();
 
     public PurchasePage(String flightNumber, Seat selectedSeat, BigDecimal seatPrice, Flight flight) {
         this.selectedSeat = selectedSeat;
@@ -97,10 +98,17 @@ public class PurchasePage extends JFrame {
 
                    
                     BigDecimal total = seatPrice.multiply(new BigDecimal(1.05)).subtract(promoDiscountPrice);
-
+                    Payment payment;
                     // Create a Payment object
-                    Payment payment = new Payment(Login.getLoggedInCustomer().getUserID(), flight.getFlightID(), total,
+                    if (agent == null) {
+                        payment = new Payment(customer.getUserID(), flight.getFlightID(), total,
                             creditCardNumber, securityCode, expiryDate, selectedSeat.getSeatId());
+                    } else {
+                        payment = new Payment(agent.getUserID(), flight.getFlightID(), total,
+                            creditCardNumber, securityCode, expiryDate, selectedSeat.getSeatId());
+                    }
+                    // payment = new Payment(agent.getUserID(), flight.getFlightID(), total,
+                    //          creditCardNumber, securityCode, expiryDate, selectedSeat.getSeatId());
 
                     // Save the payment to the database
                     if (payment.saveToDatabase()) {
@@ -114,8 +122,14 @@ public class PurchasePage extends JFrame {
                         BrowseFlights browseFlights = new BrowseFlights();
                         browseFlights.setVisible(true);
                         // Send purchase confirmation email
-                        EmailSender.sendPurchaseConfirmationEmail(
+
+                        if (agent == null) {
+                            EmailSender.sendPurchaseConfirmationEmail(
                                 customer.getEmail(), flight.getFlightID(), selectedSeat.getSeatId());
+                        } else {
+                            EmailSender.sendPurchaseConfirmationEmail(
+                                agent.getEmail(), flight.getFlightID(), selectedSeat.getSeatId());
+                        }
 
                         // Close the PurchasePage window
 

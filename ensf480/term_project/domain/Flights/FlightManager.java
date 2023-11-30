@@ -24,8 +24,6 @@ public class FlightManager extends JPanel {
         flightTextArea.setEditable(false); // Make it non-editable
         updateFlightTextArea(displayingFlightList); // Update the text area with the initial list
 
-
-
         JButton addFlightButton = new JButton("Add Flight");
         addFlightButton.addActionListener(new ActionListener() {
             @Override

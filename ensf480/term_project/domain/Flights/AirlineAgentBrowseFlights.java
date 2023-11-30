@@ -16,7 +16,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrowsePassengerFlights extends JPanel {
+public class AirlineAgentBrowseFlights extends JPanel {
     private List<Flight> flightsData;
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
@@ -24,7 +24,7 @@ public class BrowsePassengerFlights extends JPanel {
     // Create a filtered list to store the filtered flights
     private List<Flight> filteredFlights;
 
-    public BrowsePassengerFlights() {
+    public AirlineAgentBrowseFlights() {
         setLayout(new BorderLayout());
         DatabaseManager.connect("AIRLINE");
         Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
@@ -226,8 +226,9 @@ public class BrowsePassengerFlights extends JPanel {
         selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Implement the browse passenger thing
-                
+                // Assuming SeatSelector is the class for Seat Selector page
+                SeatSelector seatSelector = new SeatSelector(flight.getFlightNumber(), flight.getBasePrice());
+                // Close the current AirlineAgentBrowseFlights page
             }
         });
 

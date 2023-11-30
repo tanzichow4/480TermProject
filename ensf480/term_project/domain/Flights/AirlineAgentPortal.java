@@ -34,7 +34,6 @@ public class AirlineAgentPortal extends JPanel {
                 JOptionPane.showMessageDialog(null, "Signing out...");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
                 cardLayout.show(getParent(), "login");
-                // You can add more logic here as needed
             }
         });
 
@@ -59,7 +58,7 @@ public class AirlineAgentPortal extends JPanel {
                 // Add logic to handle "Manage Flight" action
                 JOptionPane.showMessageDialog(null, "Displaying flights...");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "browseFlight");
+                cardLayout.show(getParent(), "airlineAgentBrowseFlights");
             }
         });
 
@@ -69,7 +68,7 @@ public class AirlineAgentPortal extends JPanel {
                 // Add logic to handle "Manage Aircraft" action
                 JOptionPane.showMessageDialog(null, "Browsing flights...");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                
+                cardLayout.show(getParent(), "browsePassengerFlights");
             }
         });
 
