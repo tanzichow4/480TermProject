@@ -45,8 +45,6 @@ public class MainGUI {
         AircraftManager aircraftManager = new AircraftManager();
         cardPanel.add(aircraftManager, "aircraftManager");
 
-
-
         // Create Airline Agent Browse Flight Page
         AirlineAgentBrowseFlights airlineAgentBrowseFlights = new AirlineAgentBrowseFlights();
         cardPanel.add(airlineAgentBrowseFlights, "airlineAgentBrowseFlights");
@@ -54,6 +52,7 @@ public class MainGUI {
         // Create Airline Agent Portal Page
         AirlineAgentPortal airlineAgentPortal = new AirlineAgentPortal();
         cardPanel.add(airlineAgentPortal, "airlineAgentPortal");
+
 
 
         // frame.add(createTopBar(), BorderLayout.NORTH);
