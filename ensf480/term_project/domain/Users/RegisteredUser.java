@@ -145,8 +145,5 @@ public class RegisteredUser {
             e.printStackTrace();
         }
     }
-    
-    public void cancelFlight() {
 
-    }
 }

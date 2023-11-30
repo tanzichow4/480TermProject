@@ -7,6 +7,7 @@ import ensf480.term_project.domain.Flights.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
+
 import java.sql.*;
 
 public class Customer extends RegisteredUser {
@@ -153,5 +154,6 @@ public class Customer extends RegisteredUser {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    }         
+             
 }
