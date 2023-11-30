@@ -127,7 +127,7 @@ public class main {
     // if (!signup.login(testUsername, testPassword)) {
     // System.out.println("Test Passed: User does not exist before signing up");
     // } else {
-    // System.out.println("Test Failed: User exists before signing up");
+    // System.    out.println("Test Failed: User exists before signing up");
     // }
 
     // // Sign up the user

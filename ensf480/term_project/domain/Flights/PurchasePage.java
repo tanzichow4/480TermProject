@@ -72,30 +72,19 @@ public class PurchasePage extends JFrame {
                 String expiryDate = expiryDateField.getText();
                 String securityCode = securityCodeField.getText();
                 String promoCode = promoCodeField.getText();
+                BigDecimal promoDiscountPrice = new BigDecimal(0);
 
                 if (validateCreditCardInfo(creditCardNumber, expiryDate, securityCode)) {
                     // If credit card info is valid, proceed with confirmation
 
                     // Additional logic for promo code processing can be added here
-
                     // Check if a promo code is provided
                     if (!promoCode.isEmpty()) {
                         // Check if the promo code is valid (you need to implement this logic)
-                        boolean isValidPromoCode = PromoDatabaseHandler.isPromoCodeValid(promoCode);
-
-                        if (isValidPromoCode) {
-                            // Send promo code confirmation email
-                            // EmailSender.sendPromoStatusEmail(user.getEmail(), promoCode);
-                            // EmailSender.sendPromoCodeEmail(customer.getEmail(), promoCode);
-
-                            // Notify the user about promo code status
-                            JOptionPane.showMessageDialog(PurchasePage.this,
-                                    "Promo code '" + promoCode + "' applied successfully!", "Promo Code Applied",
-                                    JOptionPane.INFORMATION_MESSAGE);
-
-                            // Update the system to mark the promo code as used (you need to implement this
-                            // logic)
-                            PromoDatabaseHandler.markPromoCodeAsUsed(customer.getUserID(), promoCode);
+                        if (PromoDatabaseHandler.isPromoCodeValid(promoCode)) {
+                            promoDiscountPrice = PromoDatabaseHandler.getPromoAmount(promoCode);
+                            System.out.println("Promo Discount Price: " + promoDiscountPrice);
+                            System.out.println(PromoDatabaseHandler.isPromoCodeValid(promoCode));
                         } else {
                             // Notify the user that the promo code is invalid
                             JOptionPane.showMessageDialog(PurchasePage.this,
@@ -103,9 +92,11 @@ public class PurchasePage extends JFrame {
                                     JOptionPane.ERROR_MESSAGE);
                             return; // Do not proceed with the purchase if the promo code is invalid
                         }
+                        
                     }
 
-                    BigDecimal total = seatPrice.multiply(new BigDecimal(1.05));
+                   
+                    BigDecimal total = seatPrice.multiply(new BigDecimal(1.05)).subtract(promoDiscountPrice);
 
                     // Create a Payment object
                     Payment payment = new Payment(Login.getLoggedInCustomer().getUserID(), flight.getFlightID(), total,
@@ -228,21 +219,19 @@ public class PurchasePage extends JFrame {
 
     // Update seat status in the database
     private void updateSeatStatus(Seat selectedSeat) {
-        try {
-            DatabaseManager.connect("AIRLINE");
-            Connection connection = DatabaseManager.getConnection("AIRLINE");
-
+        DatabaseManager.connect("AIRLINE");
+        try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
             // Prepare the SQL query for updating the seat's booked status
             String updateQuery = "UPDATE Seats SET booked = ? WHERE seat_id = ?";
-
+    
             try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
                 // Set parameters for the update statement
                 updateStatement.setBoolean(1, true);
                 updateStatement.setInt(2, selectedSeat.getSeatId());
-
+    
                 // Execute the update statement
                 int affectedRows = updateStatement.executeUpdate();
-
+    
                 // Check if the update was successful
                 if (affectedRows > 0) {
                     System.out.println("Seat status updated in the database.");
@@ -254,4 +243,5 @@ public class PurchasePage extends JFrame {
             e.printStackTrace();
         }
     }
+    
 }
