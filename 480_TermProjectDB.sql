@@ -56,7 +56,6 @@ INSERT INTO Promos (promoName, promo_code, discount_amount) VALUES
     ('Seat Promo', 'SEATPROMO123', 15),
     ('Flight Promo', 'FLIGHTPROMO123', 20);
 
-
 -- Create Flights table
 CREATE TABLE Flights (
     flight_id INT PRIMARY KEY AUTO_INCREMENT,
