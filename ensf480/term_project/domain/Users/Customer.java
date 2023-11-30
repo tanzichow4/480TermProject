@@ -1,6 +1,7 @@
 package ensf480.term_project.domain.Users;
 
 import ensf480.term_project.domain.Boundaries.*;
+import ensf480.term_project.domain.Controllers.EmailSender;
 import ensf480.term_project.domain.Flights.*;
 
 import java.util.ArrayList;
@@ -101,7 +102,7 @@ public class Customer extends RegisteredUser {
             String paymentQuery = "SELECT payment_id, payment_amount FROM Payments WHERE seat_id = ?";
             try (PreparedStatement paymentStatement = connection.prepareStatement(paymentQuery)) {
                 paymentStatement.setInt(1, seat_id);
-
+                DatabaseManager.connect("BILLING");
                 try (ResultSet paymentResult = paymentStatement.executeQuery()) {
                     if (paymentResult.next()) {
                         int payment_id = paymentResult.getInt("payment_id");
@@ -115,7 +116,11 @@ public class Customer extends RegisteredUser {
                             int rowsAffected = deletePaymentStatement.executeUpdate();
 
                             if (rowsAffected > 0) {
+                                // RYAN WORK ON THIS:
                                 System.out.println("Payment canceled successfully.");
+
+                                // String userEmail = getEmail();
+                                // EmailSender.sendCancelledFlight(userEmail, seat_id, flight_id);
 
                                 // Update the seat "booked" status
                                 DatabaseManager.connect("AIRLINE");

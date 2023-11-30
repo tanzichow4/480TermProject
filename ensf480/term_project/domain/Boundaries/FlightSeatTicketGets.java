@@ -14,7 +14,9 @@ public class FlightSeatTicketGets {
 
     public static Flight getFlightDetails(int flightID) {
         Flight flight = null;
+        DatabaseManager.connect("AIRLINE");
         try {
+
             Connection connection = DatabaseManager.getConnection("AIRLINE");
             String query = "SELECT * FROM Flights WHERE flight_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -44,7 +46,9 @@ public class FlightSeatTicketGets {
 
     public static Seat getSeatDetails(int seatID) {
         Seat seat = null;
+        DatabaseManager.connect("AIRLINE");
         try {
+
             Connection connection = DatabaseManager.getConnection("AIRLINE");
             String query = "SELECT * FROM Seats WHERE seat_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {

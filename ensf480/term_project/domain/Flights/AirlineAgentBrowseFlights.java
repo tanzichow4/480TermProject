@@ -3,9 +3,11 @@ package ensf480.term_project.domain.Flights;
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 import ensf480.term_project.domain.Boundaries.PopulateFromDB;
 
-import ensf480.term_project.domain.Users.Customer;
+import ensf480.term_project.domain.Users.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
@@ -69,16 +71,137 @@ public class AirlineAgentBrowseFlights extends JPanel {
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Handle logout button click
+                JOptionPane.showMessageDialog(null, "Signing out...");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "login");
             }
         });
 
         // Create a panel to hold the buttons
-    
+        JPanel buttonPanel = new JPanel();
+
+        // Manage Purchases button
+        JButton managePurchasesButton = new JButton("Manage Purchases");
+        managePurchasesButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        managePurchasesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AirlineAgent loggedInAA = Login.getLoggedInAirlineAgent();
+                List<Seat> bookedSeats = Customer.getSeatsByUserID(loggedInAA.getUserID());
+
+                if (bookedSeats.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "You have no booked seats.");
+                } else {
+                    // Create a new JFrame to display the booked seats
+                    JFrame bookedSeatsFrame = new JFrame("Booked Seats");
+                    bookedSeatsFrame.setSize(600, 400);
+                    bookedSeatsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                    // Create a DefaultTableModel to make cells non-editable
+                    DefaultTableModel model = new DefaultTableModel() {
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                            return false;
+                        }
+                    };
+
+                    // Add columns to the model (including Flight ID, concatenated "Seat" column,
+                    // Seat Type, and Total Price)
+                    String[] columnNames = { "Flight ID", "Seat ID", "Seat", "Seat Type", "Flight Number",
+                            "Total Price" };
+                    model.setColumnIdentifiers(columnNames);
+
+                    // Modify the rowData array to include Seat ID
+                    for (Seat seat : bookedSeats) {
+                        Flight flight = Flight.getFlightBySeatID(seat.getSeatId());
+                        String seatInfo = seat.getSeatRow() + seat.getSeatNumber();
+                        BigDecimal totalPrice = seat.getPaymentAmount(); // Replace with your method to get seat price
+                        Object[] rowData = { flight.getFlightID(), seat.getSeatId(), seatInfo, seat.getSeatType(),
+                                flight.getFlightNumber(), totalPrice };
+                        model.addRow(rowData);
+                    }
+
+                    // Create a JTable with the non-editable model
+                    JTable table = new JTable(model);
+
+                    // Add a ListSelectionListener to detect row selection
+                    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                        @Override
+                        public void valueChanged(ListSelectionEvent e) {
+                            if (!e.getValueIsAdjusting()) {
+                                // Get the selected row and retrieve flight ID and seat information
+                                int selectedRow = table.getSelectedRow();
+                                if (selectedRow != -1) {
+                                    // Assuming the flight ID is in the first column (index 0)
+                                    int flightId = (int) model.getValueAt(selectedRow, 0);
+                                    int seatID = (int) model.getValueAt(selectedRow, 1);
+
+                                    // Prompt the user for confirmation
+                                    int confirm = JOptionPane.showConfirmDialog(null,
+                                            "Are you sure you want to cancel this flight?", "Confirm Cancellation",
+                                            JOptionPane.YES_NO_OPTION);
+
+                                    if (confirm == JOptionPane.YES_OPTION) {
+                                        // Call the cancelFlight method to remove the selected flight
+                                        loggedInAA.cancelFlight(flightId, seatID);
+
+                                        // Update the table to reflect the changes
+                                        AirlineAgent loggedInAA = Login.getLoggedInAirlineAgent();
+                                        List<Seat> bookedSeats = Customer
+                                                .getSeatsByUserID(loggedInAA.getUserID());
+
+                                        DefaultTableModel model = (DefaultTableModel) table.getModel();
+                                        model.setRowCount(0); // Clear existing rows
+
+                                        for (Seat seat : bookedSeats) {
+                                            Flight flight = Flight.getFlightBySeatID(seat.getSeatId());
+                                            String seatInfo = seat.getSeatRow() + seat.getSeatNumber();
+                                            BigDecimal totalPrice = seat.getPaymentAmount(); // Replace with your method
+                                                                                             // to get seat price
+                                            Object[] rowData = { flight.getFlightID(), seatInfo, seat.getSeatType(),
+                                                    flight.getFlightNumber(), totalPrice };
+                                            model.addRow(rowData);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    JScrollPane scrollPane = new JScrollPane(table);
+
+                    // Add the table to the frame (at BorderLayout.CENTER)
+                    bookedSeatsFrame.add(scrollPane, BorderLayout.CENTER);
+
+                    // Create a panel for the Cancel button
+                    JPanel buttonPanel = new JPanel();
+                    JButton closeButton = new JButton("Close");
+                    closeButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            bookedSeatsFrame.dispose();
+                        }
+                    });
+                    buttonPanel.add(closeButton);
+
+                    // Add the button panel to the frame (at BorderLayout.SOUTH)
+                    bookedSeatsFrame.add(buttonPanel, BorderLayout.SOUTH);
+
+                    // Set the frame to be visible
+                    bookedSeatsFrame.setLocationRelativeTo(null);
+                    bookedSeatsFrame.setVisible(true);
+                }
+            }
+        });
+
+        // Add buttons to the panel
+        buttonPanel.add(managePurchasesButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(10, 0))); // Add some spacing between buttons
 
         // Add components to the top bar
         topBar.add(titleLabel, BorderLayout.CENTER);
         topBar.add(logoutButton, BorderLayout.EAST);
+        topBar.add(buttonPanel, BorderLayout.WEST);
 
         return topBar;
     }
