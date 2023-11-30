@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class AdminManage extends JPanel {
 
     public AdminManage() {
@@ -76,7 +75,7 @@ public class AdminManage extends JPanel {
         manageCrewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Redirect to Manage Crew page
+                // Redirect to Manage Crew page
             }
         });
 

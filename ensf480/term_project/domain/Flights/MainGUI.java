@@ -131,19 +131,19 @@ public class MainGUI {
             public void actionPerformed(ActionEvent e) {
                 // Create the sign-up screen dynamically
                 JPanel signUpPanel = new JPanel(new GridLayout(4, 2));
-        
+
                 signUpPanel.add(new JLabel("Email:"));
                 JTextField emailField = new JTextField();
                 signUpPanel.add(emailField);
-        
+
                 signUpPanel.add(new JLabel("Username:"));
                 JTextField usernameField = new JTextField();
                 signUpPanel.add(usernameField);
-        
+
                 signUpPanel.add(new JLabel("Password:"));
                 JPasswordField passwordField = new JPasswordField();
                 signUpPanel.add(passwordField);
-        
+
                 JButton signUpButton = new JButton("Sign Up");
                 signUpButton.addActionListener(new ActionListener() {
                     @Override
@@ -153,29 +153,29 @@ public class MainGUI {
                         String username = usernameField.getText();
                         char[] passwordChars = passwordField.getPassword();
                         String password = new String(passwordChars); // Convert char array to String
-        
+
                         // Implement your sign-up logic here using email, username, and password
                         Login.setLoggedInCustomer(new Customer(username, password, email, true));
                         // For now, just print the entered values
                         // System.out.println("Email: " + email);
                         // System.out.println("Username: " + username);
                         // System.out.println("Password: " + password);
-        
+
                         // Assuming successful signup, navigate to the next screen
                         cardLayout.show(cardPanel, "browseFlights");
                     }
                 });
-        
+
                 signUpPanel.add(new JLabel()); // Empty label for layout purposes
                 signUpPanel.add(signUpButton);
-        
+
                 // Add the sign-up screen to your cardPanel
                 cardPanel.add(signUpPanel, "signUp");
-        
+
                 // Show the sign-up screen
                 cardLayout.show(cardPanel, "signUp");
             }
-        });    
+        });
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -196,5 +196,4 @@ public class MainGUI {
         return landingPanel;
     }
 
-    
 }

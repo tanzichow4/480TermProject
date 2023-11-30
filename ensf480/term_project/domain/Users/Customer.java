@@ -1,6 +1,7 @@
 package ensf480.term_project.domain.Users;
 
 import ensf480.term_project.domain.Boundaries.*;
+import ensf480.term_project.domain.Controllers.EmailSender;
 import ensf480.term_project.domain.Flights.*;
 
 import java.util.ArrayList;
@@ -69,39 +70,68 @@ public class Customer extends RegisteredUser {
         return bookedSeats;
     }
 
+    // public void cancelFlight(int flight_id) {
+
+    // try (Connection connection = DatabaseManager.getConnection("BILLING")) {
+    // String deleteQuery = "DELETE FROM Payments " +
+    // "WHERE flight_id = ? AND user_id = ?";
+
+    // try (PreparedStatement deleteStatement =
+    // connection.prepareStatement(deleteQuery)) {
+    // deleteStatement.setInt(1, flight_id);
+    // deleteStatement.setInt(2, this.getUserID());
+
+    // int rowsAffected = deleteStatement.executeUpdate();
+    // if (rowsAffected > 0) {
+    // System.out.println("Flight canceled successfully.");
+    // } else {
+    // System.out.println("Failed to cancel the flight or no payment found.");
+    // }
+    // }
+    // } catch (SQLException e) {
+    // e.printStackTrace();
+    // }
+    // }
+
     public void cancelFlight(int flight_id, int seat_id) {
 
         DatabaseManager.connect("BILLING");
         try (Connection connection = DatabaseManager.getConnection("BILLING")) {
             connection.setAutoCommit(false);
-    
+
             // Find the payment with the matching seat_id
             String paymentQuery = "SELECT payment_id, payment_amount FROM Payments WHERE seat_id = ?";
             try (PreparedStatement paymentStatement = connection.prepareStatement(paymentQuery)) {
                 paymentStatement.setInt(1, seat_id);
-    
+                DatabaseManager.connect("BILLING");
                 try (ResultSet paymentResult = paymentStatement.executeQuery()) {
                     if (paymentResult.next()) {
                         int payment_id = paymentResult.getInt("payment_id");
                         BigDecimal paymentAmount = paymentResult.getBigDecimal("payment_amount");
-    
+
                         // Delete the payment
                         String deletePaymentQuery = "DELETE FROM Payments WHERE payment_id = ?";
-                        try (PreparedStatement deletePaymentStatement = connection.prepareStatement(deletePaymentQuery)) {
+                        try (PreparedStatement deletePaymentStatement = connection
+                                .prepareStatement(deletePaymentQuery)) {
                             deletePaymentStatement.setInt(1, payment_id);
                             int rowsAffected = deletePaymentStatement.executeUpdate();
-    
+
                             if (rowsAffected > 0) {
+                                // RYAN WORK ON THIS:
                                 System.out.println("Payment canceled successfully.");
-    
+
+                                // String userEmail = getEmail();
+                                // EmailSender.sendCancelledFlight(userEmail, seat_id, flight_id);
+
                                 // Update the seat "booked" status
                                 DatabaseManager.connect("AIRLINE");
                                 String updateSeatQuery = "UPDATE Seats SET booked = FALSE WHERE seat_id = ?";
                                 try (Connection connectionA = DatabaseManager.getConnection("AIRLINE");
-                                    PreparedStatement updateSeatStatement = connectionA.prepareStatement(updateSeatQuery)) {
+                                        PreparedStatement updateSeatStatement = connectionA
+                                                .prepareStatement(updateSeatQuery)) {
                                     updateSeatStatement.setInt(1, seat_id);
                                     int seatUpdateRows = updateSeatStatement.executeUpdate();
-    
+
                                     if (seatUpdateRows > 0) {
                                         System.out.println("Seat status updated successfully.");
                                     } else {
@@ -117,12 +147,13 @@ public class Customer extends RegisteredUser {
                     }
                 }
             }
-    
+
             connection.commit();
             connection.setAutoCommit(true);
-    
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    }         
+             
 }
