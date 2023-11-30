@@ -7,10 +7,15 @@ import java.awt.event.ActionListener;
 
 
 public class AdminManage extends JPanel {
+    private static JPanel cardPanel;
 
     public AdminManage() {
         // Set up the main panel
         setLayout(new BorderLayout());
+
+        AdminManage adminManage = new AdminManage();
+        cardPanel.add(adminManage, "adminManage");
+
 
         // Create components
         JPanel topBarPanel = createTopBarPanel();
@@ -34,7 +39,6 @@ public class AdminManage extends JPanel {
                 JOptionPane.showMessageDialog(null, "Signing out...");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
                 cardLayout.show(getParent(), "login");
-                // You can add more logic here as needed
             }
         });
 
