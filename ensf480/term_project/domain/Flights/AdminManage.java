@@ -7,15 +7,10 @@ import java.awt.event.ActionListener;
 
 
 public class AdminManage extends JPanel {
-    private static JPanel cardPanel;
 
     public AdminManage() {
         // Set up the main panel
         setLayout(new BorderLayout());
-
-        AdminManage adminManage = new AdminManage();
-        cardPanel.add(adminManage, "adminManage");
-
 
         // Create components
         JPanel topBarPanel = createTopBarPanel();

@@ -24,15 +24,6 @@ public class FlightManager extends JPanel {
         flightTextArea.setEditable(false); // Make it non-editable
         updateFlightTextArea(displayingFlightList); // Update the text area with the initial list
 
-        JButton backButton = new JButton("Go Back");
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Going Back...");
-                CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "adminManager");
-            }
-        });
         JButton addFlightButton = new JButton("Add Flight");
         addFlightButton.addActionListener(new ActionListener() {
             @Override
@@ -70,7 +61,6 @@ public class FlightManager extends JPanel {
         });
 
         // Add components to the panel
-        add(backButton, BorderLayout.SOUTH);
         add(addFlightButton, BorderLayout.NORTH);
     }
 
