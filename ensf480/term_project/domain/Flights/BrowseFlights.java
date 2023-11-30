@@ -74,7 +74,9 @@ public class BrowseFlights extends JPanel {
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Handle logout button click
+                JOptionPane.showMessageDialog(null, "Signing out...");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "login");
             }
         });
 

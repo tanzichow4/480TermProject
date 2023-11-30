@@ -5,11 +5,6 @@ import ensf480.term_project.domain.Boundaries.PopulateFromDB;
 
 import ensf480.term_project.domain.Users.Customer;
 
-import ensf480.term_project.domain.Boundaries.PromoDatabaseHandler;
-import ensf480.term_project.domain.Controllers.EmailSender;
-import ensf480.term_project.domain.Promos.Promo;
-import ensf480.term_project.domain.Users.RegisteredUser;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
