@@ -92,10 +92,9 @@ public class PurchasePage extends JFrame {
                                     JOptionPane.ERROR_MESSAGE);
                             return; // Do not proceed with the purchase if the promo code is invalid
                         }
-                        
+
                     }
 
-                   
                     BigDecimal total = seatPrice.multiply(new BigDecimal(1.05)).subtract(promoDiscountPrice);
 
                     // Create a Payment object
@@ -211,7 +210,7 @@ public class PurchasePage extends JFrame {
         if (creditCardNumber.trim().isEmpty() || expiryDate.trim().isEmpty() || securityCode.trim().isEmpty()) {
             return false;
         }
-    
+
         // Check if the credit card number is a 16-digit number
         String strippedCreditCardNumber = creditCardNumber.replaceAll("[^0-9]", ""); // Remove non-digit characters
         return strippedCreditCardNumber.length() == 16;
@@ -223,15 +222,15 @@ public class PurchasePage extends JFrame {
         try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
             // Prepare the SQL query for updating the seat's booked status
             String updateQuery = "UPDATE Seats SET booked = ? WHERE seat_id = ?";
-    
+
             try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
                 // Set parameters for the update statement
                 updateStatement.setBoolean(1, true);
                 updateStatement.setInt(2, selectedSeat.getSeatId());
-    
+
                 // Execute the update statement
                 int affectedRows = updateStatement.executeUpdate();
-    
+
                 // Check if the update was successful
                 if (affectedRows > 0) {
                     System.out.println("Seat status updated in the database.");
@@ -243,5 +242,5 @@ public class PurchasePage extends JFrame {
             e.printStackTrace();
         }
     }
-    
+
 }
