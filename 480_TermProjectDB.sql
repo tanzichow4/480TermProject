@@ -38,10 +38,10 @@ INSERT INTO RegisteredUsers (username, pass, email, user_type, is_logged_in) VAL
     ('Abe123', '1234', 'coolibey@gmail.com', 0, FALSE),
     ('Tanzi123', '1234', 'tanzic01@gmail.com', 1, FALSE),
     ('Eve112', '1234', 'eve@example.com', 1, FALSE),
-	('AAbob', '1234', 'eve@example.com', 2, FALSE),
-	('AAbill', '1234', 'eve@example.com', 2, FALSE),
-	('Fbob', '1234', 'eve@example.com', 3, FALSE),
-	('Fbill', '1234', 'eve@example.com', 3, FALSE);
+	('AAbob', '1234', 'eve@example.com', 3, FALSE),
+	('AAbill', '1234', 'eve@example.com', 3, FALSE),
+	('Fbob', '1234', 'eve@example.com', 2, FALSE),
+	('Fbill', '1234', 'eve@example.com', 2, FALSE);
 
 
 CREATE TABLE Promos (
@@ -55,7 +55,6 @@ INSERT INTO Promos (promoName, promo_code, discount_amount) VALUES
     ('Winter Discount', 'WINTERBURRRR', 10),
     ('Seat Promo', 'SEATPROMO123', 15),
     ('Flight Promo', 'FLIGHTPROMO123', 20);
-
 
 -- Create Flights table
 CREATE TABLE Flights (
