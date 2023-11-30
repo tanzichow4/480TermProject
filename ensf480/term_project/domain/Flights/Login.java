@@ -169,4 +169,8 @@ public class Login extends JPanel {
     public static FlightAttendant getLoggedInFlightAttendant() {
         return loggedInFlightAttendant;
     }
+
+    public static void setLoggedInCustomer(Customer customer) {
+        loggedInCustomer = customer;
+    }
 }
