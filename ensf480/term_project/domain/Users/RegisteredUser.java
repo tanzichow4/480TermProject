@@ -35,6 +35,17 @@ public class RegisteredUser {
         
     }
 
+    public RegisteredUser(String username, String password, String email, boolean isloggedin, int userType) {
+
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.isloggedin = isloggedin;
+        this.userType = userType;
+        saveUserInfoToDB();
+
+    }
+
     // Getter and setter methods
     public int getUserID() {
         return userID;

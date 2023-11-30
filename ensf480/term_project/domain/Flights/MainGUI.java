@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import ensf480.term_project.domain.Users.*;
+
 public class MainGUI {
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
@@ -109,7 +111,7 @@ public class MainGUI {
         welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         welcomeLabel.setForeground(Color.WHITE); // Set text color to white
 
-        JButton continueAsGuestButton = new JButton("Continue as Guest");
+        JButton continueAsGuestButton = new JButton("Register");
         continueAsGuestButton.setFont(new Font("Arial", Font.PLAIN, 20));
         continueAsGuestButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         continueAsGuestButton.setBackground(new Color(0, 0, 102));
@@ -121,10 +123,53 @@ public class MainGUI {
         continueAsGuestButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Add logic for "Continue as Guest" button click if needed
-                cardLayout.show(cardPanel, "browseFlights");
+                // Create the sign-up screen dynamically
+                JPanel signUpPanel = new JPanel(new GridLayout(4, 2));
+        
+                signUpPanel.add(new JLabel("Email:"));
+                JTextField emailField = new JTextField();
+                signUpPanel.add(emailField);
+        
+                signUpPanel.add(new JLabel("Username:"));
+                JTextField usernameField = new JTextField();
+                signUpPanel.add(usernameField);
+        
+                signUpPanel.add(new JLabel("Password:"));
+                JPasswordField passwordField = new JPasswordField();
+                signUpPanel.add(passwordField);
+        
+                JButton signUpButton = new JButton("Sign Up");
+                signUpButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Add logic for the "Sign Up" button click
+                        String email = emailField.getText();
+                        String username = usernameField.getText();
+                        char[] passwordChars = passwordField.getPassword();
+                        String password = new String(passwordChars); // Convert char array to String
+        
+                        // Implement your sign-up logic here using email, username, and password
+                        Login.setLoggedInCustomer(new Customer(username, password, email, true));
+                        // For now, just print the entered values
+                        // System.out.println("Email: " + email);
+                        // System.out.println("Username: " + username);
+                        // System.out.println("Password: " + password);
+        
+                        // Assuming successful signup, navigate to the next screen
+                        cardLayout.show(cardPanel, "browseFlights");
+                    }
+                });
+        
+                signUpPanel.add(new JLabel()); // Empty label for layout purposes
+                signUpPanel.add(signUpButton);
+        
+                // Add the sign-up screen to your cardPanel
+                cardPanel.add(signUpPanel, "signUp");
+        
+                // Show the sign-up screen
+                cardLayout.show(cardPanel, "signUp");
             }
-        });
+        });    
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -144,4 +189,6 @@ public class MainGUI {
 
         return landingPanel;
     }
+
+    
 }

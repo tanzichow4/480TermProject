@@ -14,6 +14,10 @@ public class Customer extends RegisteredUser {
         super(userID, username, password, email, isloggedin, 0); // Set user type to 0 for Customer
     }
 
+    public Customer(String username, String password, String email, boolean isloggedin) {
+        super(username, password, email, isloggedin, 0);
+    }
+
     public Customer() {
         super();
     }
