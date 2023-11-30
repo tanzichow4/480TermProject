@@ -59,7 +59,7 @@ public class AirlineAgentPortal extends JPanel {
                 // Add logic to handle "Manage Flight" action
                 JOptionPane.showMessageDialog(null, "Displaying flights...");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "browseFlight");
+                cardLayout.show(getParent(), "airlineAgentBrowseFlights");
             }
         });
 
