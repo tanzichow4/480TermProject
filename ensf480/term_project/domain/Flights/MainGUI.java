@@ -50,8 +50,10 @@ public class MainGUI {
         cardPanel.add(airlineAgentBrowseFlights, "airlineAgentBrowseFlights");
 
         //Create Browse Passenger Page
+        /*
         BrowsePassenger browsePassenger = new BrowsePassenger();
         cardPanel.add(browsePassenger, "browsePassenger");
+        */
 
         // Create Airline Agent Portal Page
         AirlineAgentPortal airlineAgentPortal = new AirlineAgentPortal();

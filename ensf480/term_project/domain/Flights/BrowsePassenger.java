@@ -1,39 +1,39 @@
 package ensf480.term_project.domain.Flights;
 
 import javax.swing.*;
+
+import ensf480.term_project.domain.Boundaries.DatabaseManager;
+import ensf480.term_project.domain.Boundaries.PopulateFromDB;
+import ensf480.term_project.domain.Payments.Payment;
+import ensf480.term_project.domain.Users.RegisteredUser;
+
 import java.awt.*;
-import java.util.ArrayList;
+import java.sql.Connection;
 import java.util.List;
-import java.util.Random;
 
 public class BrowsePassenger extends JPanel {
-    private List<String> passengers;
+/*    private List<RegisteredUser> registeredUsers;
+    private List<Payment> payments;
+    private List<Seat> seats;
+    private List<String> passengerNames;
+    private List<String> seatNumbers;
 
     public BrowsePassenger() {
-        // Fill the list with some random passenger information
-        passengers = generateRandomPassengerList();
+        DatabaseManager.connect("BILLING");
+        Connection billingConnection = DatabaseManager.getConnection("BILLING");
+        DatabaseManager.connect("AIRLINE");
+        Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
+
+        registeredUsers = PopulateFromDB.setRegisteredUsers();
+        
+
+
 
         setLayout(new BorderLayout());
 
         // Create a panel to hold the list of passengers
         JPanel passengerListPanel = createPassengerListPanel();
         add(passengerListPanel, BorderLayout.CENTER);
-    }
-
-    private List<String> generateRandomPassengerList() {
-        List<String> passengerList = new ArrayList<>();
-        Random random = new Random();
-
-        for (int i = 1; i <= 10; i++) {
-            String name = "Passenger " + i;
-            int age = 20 + random.nextInt(30); // Random age between 20 and 49
-            String seatNumber = "Seat " + (i * 2); // Assuming even seat numbers
-
-            String passengerInfo = "Name: " + name + ", Age: " + age + ", Seat: " + seatNumber;
-            passengerList.add(passengerInfo);
-        }
-
-        return passengerList;
     }
 
     private JPanel createPassengerListPanel() {
@@ -43,8 +43,12 @@ public class BrowsePassenger extends JPanel {
                 BorderFactory.createTitledBorder("Passenger List"),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
-        // Use the list of passengers
-        for (String passengerInfo : passengers) {
+        // Use the lists of passengerNames and seat numbers
+        for (int i = 0; i < passengerNames.size(); i++) {
+            String name = passengerNames.get(i);
+            String seatNumber = seatNumbers.get(i);
+
+            String passengerInfo = "Name: " + name + ", Seat: " + seatNumber;
             JPanel passengerPanel = createPassengerPanel(passengerInfo);
             passengerListPanel.add(passengerPanel);
 
@@ -67,4 +71,6 @@ public class BrowsePassenger extends JPanel {
 
         return passengerPanel;
     }
+
+     */
 }
