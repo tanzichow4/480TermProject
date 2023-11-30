@@ -102,4 +102,30 @@ public class Seat {
         // accordingly)
         return BigDecimal.ZERO;
     }
+
+    public boolean unbookSeat() {
+        if (!booked) {
+            // Seat is not booked, no need to unbook
+            return false;
+        }
+        DatabaseManager.connect("AIRLINE");
+        try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
+            String updateQuery = "UPDATE Seats SET booked = false, user_id = NULL WHERE seat_id = ?";
+            try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                updateStatement.setInt(1, seatId);
+                int rowsUpdated = updateStatement.executeUpdate();
+
+                // If the update was successful, set the booked status to false
+                if (rowsUpdated > 0) {
+                    booked = false;
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // If the update was not successful, return false
+        return false;
+    }
 }
