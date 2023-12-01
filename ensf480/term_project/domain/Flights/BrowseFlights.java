@@ -27,8 +27,12 @@ public class BrowseFlights extends JPanel {
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
 
-    // Create a filtered list to store the filtered flights
-    private List<Flight> filteredFlights;
+    private JTextField fromField;
+    private JTextField destField;
+    private JTextField departureDateField;
+    private JTextField flightNumberField;
+
+    private JPanel flightsListPanel;
 
     public BrowseFlights() {
         setLayout(new BorderLayout());
@@ -37,8 +41,6 @@ public class BrowseFlights extends JPanel {
 
         // Retrieve flight data from PopulateFromDB
         flightsData = PopulateFromDB.setFlights();
-        filteredFlights = new ArrayList<>(flightsData); // Initialize filteredFlights with all flights
-
         System.out.println("Flights Data: " + flightsData);
 
         // Create top bar
@@ -50,14 +52,185 @@ public class BrowseFlights extends JPanel {
         add(filterBoxPanel, BorderLayout.WEST);
 
         // List of available flights on the right
-        cardPanel = new JPanel();
-        cardLayout = new CardLayout();
-        cardPanel.setLayout(cardLayout);
+        flightsListPanel = createFlightsListPanel();
+        add(flightsListPanel, BorderLayout.CENTER);
+    }
 
-        JPanel flightsListPanel = createFlightsListPanel();
-        cardPanel.add(flightsListPanel, "flightsList");
+    private JPanel createFilterBoxPanel() {
+        JPanel filterBoxPanel = new JPanel();
+        filterBoxPanel.setLayout(new BoxLayout(filterBoxPanel, BoxLayout.Y_AXIS));
+        filterBoxPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Filters"),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
-        add(cardPanel, BorderLayout.CENTER);
+        // Initialize filter text fields
+        fromField = new JTextField(10);
+        destField = new JTextField(10);
+        departureDateField = new JTextField(10);
+        flightNumberField = new JTextField(10);
+
+        // From field
+        JPanel fromPanel = createFilterRow("From:", fromField);
+
+        // Destination field
+        JPanel destPanel = createFilterRow("Destination:", destField);
+
+        // Departure Date field
+        JPanel departureDatePanel = createFilterRow("Departure Date:", departureDateField);
+        JPanel flightNumberPanel = createFilterRow("Flight Number:", flightNumberField);
+
+        filterBoxPanel.add(fromPanel);
+        filterBoxPanel.add(destPanel);
+        filterBoxPanel.add(departureDatePanel);
+        filterBoxPanel.add(flightNumberPanel);
+
+        // Add some spacing before the button
+        filterBoxPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        // Search Flights button
+        JButton searchButton = new JButton("Search Flights");
+        searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Call a method to filter flights based on user input
+                filterFlights();
+            }
+        });
+
+        filterBoxPanel.add(searchButton);
+
+        // Set preferred and maximum size to control the height
+        filterBoxPanel.setPreferredSize(new Dimension(280, 260));
+        filterBoxPanel.setMaximumSize(new Dimension(280, 260));
+
+        return filterBoxPanel;
+    }
+
+    private JPanel createFilterRow(String label, JComponent component) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel labelComponent = new JLabel(label);
+        panel.add(labelComponent);
+        panel.add(component);
+        return panel;
+    }
+
+    private JPanel createFlightsListPanel() {
+        JPanel flightsListPanel = new JPanel();
+        flightsListPanel.setLayout(new BoxLayout(flightsListPanel, BoxLayout.Y_AXIS));
+        flightsListPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Available Flights"),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+
+        // Use the flightsData obtained from PopulateFromDB
+        for (Flight flight : flightsData) {
+            JPanel flightPanel = createFlightPanel(flight);
+            flightsListPanel.add(flightPanel);
+
+            // Add some spacing between flight panels
+            flightsListPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        }
+
+        return flightsListPanel;
+    }
+
+    private JPanel createFlightPanel(Flight flight) {
+        JPanel flightPanel = new JPanel();
+        flightPanel.setLayout(new BoxLayout(flightPanel, BoxLayout.X_AXIS));
+        flightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.add(createFlightInfoLabel("Flight: " + flight.getFlightNumber()));
+        leftPanel.add(createFlightInfoLabel("From: " + flight.getDepartureLocation()));
+
+        JLabel departureLabel = createFlightInfoLabel(flight.getDepartureTime());
+        departureLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        leftPanel.add(departureLabel);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+
+        rightPanel.add(createFlightInfoLabel("Aircraft: " + flight.getAircraftID()));
+        rightPanel.add(createFlightInfoLabel("To: " + flight.getArrivalLocation()));
+
+        JLabel arrivalLabel = createFlightInfoLabel(flight.getArrivalTime());
+        arrivalLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        rightPanel.add(arrivalLabel);
+
+        flightPanel.add(leftPanel);
+        flightPanel.add(Box.createRigidArea(new Dimension(500, 75)));
+        flightPanel.add(rightPanel);
+
+        leftPanel.add(createPriceLabel(flight.getBasePrice()));
+
+        JButton selectButton = new JButton("Select");
+        selectButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        rightPanel.add(selectButton);
+        selectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Assuming SeatSelector is the class for Seat Selector page
+                SeatSelector seatSelector = new SeatSelector(flight.getFlightNumber(), flight.getBasePrice());
+                // Close the current BrowseFlights page
+            }
+        });
+
+        return flightPanel;
+    }
+
+    private JLabel createPriceLabel(BigDecimal price) {
+        JLabel priceLabel = new JLabel("Starting at: $" + price.setScale(2, BigDecimal.ROUND_HALF_UP));
+        priceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return priceLabel;
+    }
+
+    private JLabel createFlightInfoLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return label;
+    }
+
+    private void filterFlights() {
+        String from = fromField.getText().trim().toLowerCase();
+        String dest = destField.getText().trim().toLowerCase();
+        String departureDate = departureDateField.getText().trim();
+        String flightNumber = flightNumberField.getText().trim().toLowerCase();
+
+        // Use these values to filter the flightsData list
+        // Implement your filtering logic here
+
+        // For example, you could create a new list to store filtered flights
+        List<Flight> filteredFlights = new ArrayList<>();
+
+        for (Flight flight : flightsData) {
+            // Add flights to the filtered list based on your criteria
+            if (flight.getDepartureLocation().toLowerCase().contains(from)
+                    && flight.getArrivalLocation().toLowerCase().contains(dest)
+                    && flight.getDepartureDate().contains(departureDate)
+                    && flight.getFlightNumber().toLowerCase().contains(flightNumber)) {
+                filteredFlights.add(flight);
+            }
+        }
+
+        // Clear the current flightsListPanel and populate it with filtered flights
+        updateFlightsListPanel(filteredFlights);
+    }
+
+    private void updateFlightsListPanel(List<Flight> filteredFlights) {
+        // Clear the current flightsListPanel
+        flightsListPanel.removeAll();
+
+        // Add filtered flights to the flightsListPanel
+        for (Flight flight : filteredFlights) {
+            JPanel flightPanel = createFlightPanel(flight);
+            flightsListPanel.add(flightPanel);
+            flightsListPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        }
+
+        // Repaint and revalidate the panel to reflect changes
+        flightsListPanel.repaint();
+        flightsListPanel.revalidate();
     }
 
     private JPanel createTopBar() {
@@ -224,84 +397,6 @@ public class BrowseFlights extends JPanel {
         return topBar;
     }
 
-    private JPanel createFilterBoxPanel() {
-        JPanel filterBoxPanel = new JPanel();
-        filterBoxPanel.setLayout(new BoxLayout(filterBoxPanel, BoxLayout.Y_AXIS));
-        filterBoxPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Filters"),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-
-        // From field
-        JTextField fromField = new JTextField(10);
-        JPanel fromPanel = createFilterRow("From:", fromField);
-
-        // Destination field
-        JTextField destField = new JTextField(10);
-        JPanel destPanel = createFilterRow("Destination:", destField);
-
-        // Departure Date field
-        JTextField departureDateField = new JTextField(10);
-        JPanel departureDatePanel = createFilterRow("Departure Date:", departureDateField);
-
-        JTextField flightIDField = new JTextField(10);
-        JPanel flightIDPanel = createFilterRow("Flight ID:", flightIDField);
-
-        filterBoxPanel.add(fromPanel);
-        filterBoxPanel.add(destPanel);
-        filterBoxPanel.add(departureDatePanel);
-        filterBoxPanel.add(flightIDPanel);
-
-        // Add some spacing before the button
-        filterBoxPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-
-        // Search Flights button
-        JButton searchButton = new JButton("Search Flights");
-        searchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Update the filtered flights based on the user input
-                filteredFlights = filterFlights(fromField.getText(), destField.getText(),
-                        departureDateField.getText(), flightIDField.getText());
-                // Update the flights list panel with the filtered flights
-                updateFlightsListPanel();
-            }
-        });
-        filterBoxPanel.add(searchButton);
-
-        // Set preferred and maximum size to control the height
-        filterBoxPanel.setPreferredSize(new Dimension(280, 260));
-        filterBoxPanel.setMaximumSize(new Dimension(280, 260));
-
-        return filterBoxPanel;
-    }
-
-    // Method to filter flights based on user input
-    private List<Flight> filterFlights(String from, String dest, String departureDate, String flightID) {
-        List<Flight> filteredList = new ArrayList<>();
-
-        for (Flight flight : flightsData) {
-            if ((from.isEmpty() || flight.getDepartureLocation().equalsIgnoreCase(from))
-                    && (dest.isEmpty() || flight.getArrivalLocation().equalsIgnoreCase(dest))
-                    && (departureDate.isEmpty() || flight.getDepartureDate().equalsIgnoreCase(departureDate))
-                    && (flightID.isEmpty() || flight.getFlightNumber().equalsIgnoreCase(flightID))) {
-                filteredList.add(flight);
-            }
-        }
-
-        return filteredList;
-    }
-
-    // Method to update the flights list panel with the filtered flights
-    private void updateFlightsListPanel() {
-        cardPanel.removeAll();
-        JPanel flightsListPanel = createFlightsListPanel();
-        cardPanel.add(flightsListPanel, "flightsList");
-        cardLayout.show(cardPanel, "flightsList");
-        revalidate();
-        repaint();
-    }
-
     private void showManageAccountDialog() {
         // Create a dialog
         JDialog manageAccountDialog = new JDialog();
@@ -350,89 +445,4 @@ public class BrowseFlights extends JPanel {
         manageAccountDialog.setVisible(true);
     }
 
-    private JPanel createFilterRow(String label, JComponent component) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel labelComponent = new JLabel(label);
-        panel.add(labelComponent);
-        panel.add(component);
-        return panel;
-    }
-
-    private JPanel createFlightsListPanel() {
-        JPanel flightsListPanel = new JPanel();
-        flightsListPanel.setLayout(new BoxLayout(flightsListPanel, BoxLayout.Y_AXIS));
-        flightsListPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Available Flights"),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-
-        // Use the filteredFlights obtained from filterFlights
-        for (Flight flight : filteredFlights) {
-            JPanel flightPanel = createFlightPanel(flight);
-            flightsListPanel.add(flightPanel);
-
-            // Add some spacing between flight panels
-            flightsListPanel.add(Box.createRigidArea(new Dimension(0, 40)));
-        }
-
-        return flightsListPanel;
-    }
-
-    private JPanel createFlightPanel(Flight flight) {
-        JPanel flightPanel = new JPanel();
-        flightPanel.setLayout(new BoxLayout(flightPanel, BoxLayout.X_AXIS));
-        flightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.add(createFlightInfoLabel("Flight: " + flight.getFlightNumber()));
-        leftPanel.add(createFlightInfoLabel("From: " + flight.getDepartureLocation()));
-
-        JLabel departureLabel = createFlightInfoLabel(flight.getDepartureTime());
-        departureLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        leftPanel.add(departureLabel);
-        leftPanel.add(createFlightInfoLabel(flight.getDepartureDate()));
-
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-
-        rightPanel.add(createFlightInfoLabel("Aircraft: " + flight.getAircraftID()));
-        rightPanel.add(createFlightInfoLabel("To: " + flight.getArrivalLocation()));
-
-        JLabel arrivalLabel = createFlightInfoLabel(flight.getArrivalTime());
-        arrivalLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        rightPanel.add(arrivalLabel);
-        rightPanel.add(createFlightInfoLabel(flight.getArrivalDate()));
-
-        flightPanel.add(leftPanel);
-        flightPanel.add(Box.createRigidArea(new Dimension(500, 75)));
-        flightPanel.add(rightPanel);
-
-        leftPanel.add(createPriceLabel(flight.getBasePrice()));
-
-        JButton selectButton = new JButton("Select");
-        selectButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-        rightPanel.add(selectButton);
-        selectButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Assuming SeatSelector is the class for Seat Selector page
-                SeatSelector seatSelector = new SeatSelector(flight.getFlightNumber(), flight.getBasePrice());
-                // Close the current BrowseFlights page
-            }
-        });
-
-        return flightPanel;
-    }
-
-    private JLabel createPriceLabel(BigDecimal price) {
-        JLabel priceLabel = new JLabel("Starting at: $" + price.setScale(2, BigDecimal.ROUND_HALF_UP));
-        priceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return priceLabel;
-    }
-
-    private JLabel createFlightInfoLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return label;
-    }
 }
