@@ -1,9 +1,15 @@
 package ensf480.term_project.domain.Flights;
 
 import javax.swing.*;
+
+import ensf480.term_project.domain.Boundaries.PopulateFromDB;
+import ensf480.term_project.domain.Users.RegisteredUser;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminManage extends JPanel {
 
@@ -48,7 +54,7 @@ public class AdminManage extends JPanel {
         // Create buttons for each option
         JButton manageFlightButton = new JButton("Manage Flight");
         JButton manageAircraftButton = new JButton("Manage Aircraft");
-        JButton manageCrewButton = new JButton("Manage Crews");
+        JButton printUserButton = new JButton("Print Users");
         JButton browsePassengersButton = new JButton("Browse Passengers");
 
         // Add action listeners to the buttons
@@ -72,12 +78,31 @@ public class AdminManage extends JPanel {
             }
         });
 
-        manageCrewButton.addActionListener(new ActionListener() {
+        printUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Redirect to Manage Crew page
+                List<RegisteredUser> users = Login.getLoggedInAdmin().printUsers();
+                List<String> usernames = new ArrayList<>();
+
+                // Extract usernames from RegisteredUser objects and add them to the list
+                for (RegisteredUser user : users) {
+                    usernames.add(user.getUsername());
+                }
+
+                JList<String> userList = new JList<>(usernames.toArray(new String[0]));
+
+                // Create a scroll pane for the JList
+                JScrollPane scrollPane = new JScrollPane(userList);
+
+                JFrame popupFrame = new JFrame("All Users");
+                popupFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                popupFrame.getContentPane().add(scrollPane);
+                popupFrame.setSize(300, 200);
+                popupFrame.setLocationRelativeTo(null); // Center the frame on the screen
+                popupFrame.setVisible(true);
             }
         });
+
 
         browsePassengersButton.addActionListener(new ActionListener() {
             @Override
@@ -92,7 +117,7 @@ public class AdminManage extends JPanel {
         // Add buttons to the grid panel
         gridPanel.add(manageFlightButton);
         gridPanel.add(manageAircraftButton);
-        gridPanel.add(manageCrewButton);
+        gridPanel.add(printUserButton);
         gridPanel.add(browsePassengersButton);
 
         return gridPanel;

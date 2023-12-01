@@ -163,13 +163,13 @@ public class SystemAdmin extends RegisteredUser {
         return passengers;
     }
 
-    public void printUsers() {
-        List<RegisteredUser> users = PopulateFromDB.setRegisteredUsers();
+    public List<RegisteredUser> printUsers() {
+        return PopulateFromDB.setRegisteredUsers();
 
-        System.out.println("Regsitered Users in System:\n");
-        for (RegisteredUser user : users) {
-            System.out.println("User " + user.getUserID()+ ": Username: " + user.getUsername() + ", Email: " + user.getEmail());
-        }
+        // System.out.println("Regsitered Users in System:\n");
+        // for (RegisteredUser user : users) {
+        //     System.out.println("User " + user.getUserID()+ ": Username: " + user.getUsername() + ", Email: " + user.getEmail());
+        // }
     }
 }
 
