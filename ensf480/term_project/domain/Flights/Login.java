@@ -45,7 +45,7 @@ public class Login extends JPanel {
             else if(redirectValue == 2){
                 JOptionPane.showMessageDialog(null, "Login as Flight Attendant Successful");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "browseFlights");
+                cardLayout.show(getParent(), "browsePassengerFlights");
                 usernameField.setText("");
                 passwordField.setText("");
             }

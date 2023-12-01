@@ -12,19 +12,20 @@ import java.util.List;
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 
 public class BrowsePassenger extends JPanel {
-    private String flightNumber;
+    private int flightId; // Change the data type to int for flight_id
     List<String> passengerNames = new ArrayList<>();
     List<String> seatRow = new ArrayList<>();
     List<String> seatNumbers = new ArrayList<>();
-    
+
     Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
     Connection billingConnection = DatabaseManager.getConnection("BILLING");
 
-    public BrowsePassenger(String flightNumber) {
-        this.flightNumber = flightNumber;
-        // Retrieve passenger information for the selected flight (assuming you have lists for passengers)
+    public BrowsePassenger(int flightId) { // Change the parameter type to int for flight_id
+        this.flightId = flightId;
 
-        initList(flightNumber, passengerNames, seatRow, seatNumbers);
+        // Retrieve passenger information for the selected flight (assuming you have lists for passengers)
+        initList(flightId, passengerNames, seatRow, seatNumbers);
+
         // Create a JList to display passenger information
         JList<String> passengerList = new JList<>(getPassengerInfoArray(passengerNames, seatRow, seatNumbers));
 
@@ -32,7 +33,7 @@ public class BrowsePassenger extends JPanel {
         JScrollPane scrollPane = new JScrollPane(passengerList);
 
         // Create a popup frame and add the scroll pane
-        JFrame popupFrame = new JFrame("Passenger List - Flight " + flightNumber);
+        JFrame popupFrame = new JFrame("Passenger List - Flight ID " + flightId); // Change the title
         popupFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         popupFrame.getContentPane().add(scrollPane);
         popupFrame.setSize(300, 200);
@@ -50,32 +51,32 @@ public class BrowsePassenger extends JPanel {
         return passengerInfoArray;
     }
 
-    //Inserting all data into the three lists
-    private void initList(String flightNumber, List<String> passengerNames, List<String> seatRow, List<String> seatNumbers) {
+    // Inserting all data into the three lists
+    private void initList(int flightId, List<String> passengerNames, List<String> seatRow, List<String> seatNumbers) {
         // Clear lists
         passengerNames.clear();
         seatRow.clear();
         seatNumbers.clear();
-    
+
         // Initialize Proxy List
-        List<String> userIDList = new ArrayList<>();
-        List<String> seatIDList = new ArrayList<>();
-    
+        List<Integer> userIDList = new ArrayList<>();
+        List<Integer> seatIDList = new ArrayList<>();
+
         try {
             // BILLING connection
             DatabaseManager.connect("BILLING");
             Connection billingConnection = DatabaseManager.getConnection("BILLING");
-    
+
             // Filling userIDList
             try (Connection connection = billingConnection) {
                 String sqlQueryUserID = "SELECT user_id FROM Payments WHERE flight_id = ?";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQueryUserID)) {
-                    preparedStatement.setString(1, flightNumber);
-    
+                    preparedStatement.setInt(1, flightId); // Use setInt for flight_id
+
                     try (ResultSet resultSetUserID = preparedStatement.executeQuery()) {
                         while (resultSetUserID.next()) {
                             int userID = resultSetUserID.getInt("user_id");
-                            userIDList.add(Integer.toString(userID));
+                            userIDList.add(userID);
                         }
                     }
                 }
@@ -88,12 +89,12 @@ public class BrowsePassenger extends JPanel {
             try (Connection connection = billingConnection) {
                 String sqlQuerySeatID = "SELECT DISTINCT seat_id FROM Payments WHERE flight_id = ?";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuerySeatID)) {
-                    preparedStatement.setString(1, flightNumber);
+                    preparedStatement.setInt(1, flightId);
     
                     try (ResultSet resultSetSeatID = preparedStatement.executeQuery()) {
                         while (resultSetSeatID.next()) {
                             int seatID = resultSetSeatID.getInt("seat_id");
-                            seatIDList.add(Integer.toString(seatID));
+                            seatIDList.add(seatID);
                         }
                     }
                 }
@@ -105,11 +106,11 @@ public class BrowsePassenger extends JPanel {
     
             // Filling PassengerName list
             try (Connection connection = airlineConnection) {
-                for (String id : userIDList) {
+                for (Integer id : userIDList) {
                     String username = null;
                     String sqlQueryPassengerName = "SELECT username FROM RegisteredUsers WHERE user_id = ?";
                     try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQueryPassengerName)) {
-                        preparedStatement.setString(1, id);
+                        preparedStatement.setInt(1, id);
     
                         try (ResultSet resultSetPassengerName = preparedStatement.executeQuery()) {
                             if (resultSetPassengerName.next()) {
@@ -126,12 +127,12 @@ public class BrowsePassenger extends JPanel {
 
             // Filling Seat Row and Number
             try (Connection connection = airlineConnection) {
-                for (String id : seatIDList) {
+                for (Integer id : seatIDList) {
                     String row = null;
                     String number = null;
                     String sqlQuerySeatRow = "SELECT seat_row FROM Seats WHERE seat_id = ?";
                     try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuerySeatRow)) {
-                        preparedStatement.setString(1, id);
+                        preparedStatement.setInt(1, id);
     
                         try (ResultSet resultSetSeatRow = preparedStatement.executeQuery()) {
                             if (resultSetSeatRow.next()) {
@@ -143,7 +144,7 @@ public class BrowsePassenger extends JPanel {
     
                     String sqlQuerySeatNumber = "SELECT seat_number FROM Seats WHERE seat_id = ?";
                     try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuerySeatNumber)) {
-                        preparedStatement.setString(1, id);
+                        preparedStatement.setInt(1, id);
     
                         try (ResultSet resultSetSeatNumber = preparedStatement.executeQuery()) {
                             if (resultSetSeatNumber.next()) {
