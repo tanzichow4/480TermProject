@@ -75,8 +75,9 @@ CREATE TABLE Flights (
 -- Insert sample data into Flights table
 INSERT INTO Flights (flight_number, departure_location, arrival_location, departure_time, arrival_time, departure_date, arrival_date, aircraft_id, base_price)
 VALUES
-    ('FL123', 'Chicago', 'New York', '08:00:00', '10:00:00', '2023-11-23', '2023-11-23', 1, 100.00),
-    ('FL456', 'Calgary', 'Quebec', '12:00:00', '14:00:00', '2023-11-23', '2023-11-23', 2, 150.00);
+    ('FL123', 'Chicago', 'New York', '08:00:00', '10:00:00', '2023-12-01', '2023-12-01', 1, 100.00),
+    ('FL456', 'Calgary', 'Quebec', '12:00:00', '17:00:00', '2023-12-04', '2023-12-04', 2, 150.00),
+	('FL222', 'Calgary', 'Vancouver', '01:00:00', '02:00:00', '2023-12-05', '2023-12-05', 2, 200.00);
 
 -- Create Seats table
 CREATE TABLE Seats (
