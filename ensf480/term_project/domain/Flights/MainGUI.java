@@ -116,20 +116,31 @@ public class MainGUI {
                 gbc.gridy = 0;
                 gbc.insets = new Insets(5, 5, 5, 5);
 
-                // Add components to the panel with GridBagLayout
-                signUpPanel.add(new JLabel("Email:"), gbc);
+                // Set foreground color for labels
+                Color whiteColor = Color.WHITE;
+
+                JLabel emailLabel = new JLabel("Email:");
+                emailLabel.setForeground(whiteColor);
+                signUpPanel.add(emailLabel, gbc);
+
                 gbc.gridy++;
                 JTextField emailField = new JTextField(20);
                 signUpPanel.add(emailField, gbc);
 
                 gbc.gridy++;
-                signUpPanel.add(new JLabel("Username:"), gbc);
+                JLabel usernameLabel = new JLabel("Username:");
+                usernameLabel.setForeground(whiteColor);
+                signUpPanel.add(usernameLabel, gbc);
+
                 gbc.gridy++;
                 JTextField usernameField = new JTextField(20);
                 signUpPanel.add(usernameField, gbc);
 
                 gbc.gridy++;
-                signUpPanel.add(new JLabel("Password:"), gbc);
+                JLabel passwordLabel = new JLabel("Password:");
+                passwordLabel.setForeground(whiteColor);
+                signUpPanel.add(passwordLabel, gbc);
+
                 gbc.gridy++;
                 JPasswordField passwordField = new JPasswordField(20);
                 signUpPanel.add(passwordField, gbc);
