@@ -89,8 +89,7 @@ public class Seat {
                 preparedStatement.setInt(1, this.getSeatId());
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
-                        return (resultSet.getBigDecimal("payment_amount")).setScale(2,
-                                BigDecimal.ROUND_HALF_UP);
+                        return (resultSet.getBigDecimal("payment_amount"));
                     }
                 }
             }

@@ -14,7 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.sql.Connection;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +29,6 @@ public class AirlineAgentBrowseFlights extends JPanel {
     public AirlineAgentBrowseFlights() {
         setLayout(new BorderLayout());
         DatabaseManager.connect("AIRLINE");
-        Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
 
         // Retrieve flight data from PopulateFromDB
         flightsData = PopulateFromDB.setFlights();
@@ -349,8 +348,7 @@ public class AirlineAgentBrowseFlights extends JPanel {
         selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Assuming SeatSelector is the class for Seat Selector page
-                SeatSelector seatSelector = new SeatSelector(flight.getFlightNumber(), flight.getBasePrice());
+                new SeatSelector(flight.getFlightNumber(), flight.getBasePrice());
                 // Close the current AirlineAgentBrowseFlights page
             }
         });
@@ -359,7 +357,7 @@ public class AirlineAgentBrowseFlights extends JPanel {
     }
 
     private JLabel createPriceLabel(BigDecimal price) {
-        JLabel priceLabel = new JLabel("Starting at: $" + price.setScale(2, BigDecimal.ROUND_HALF_UP));
+        JLabel priceLabel = new JLabel("Starting at: $" + price.setScale(2, RoundingMode.HALF_UP));
         priceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         return priceLabel;
     }

@@ -44,7 +44,7 @@ public class SeatSelector extends JFrame {
                 + (selectedSeat != null ? selectedSeat.getSeatRow() + selectedSeat.getSeatNumber() : ""));
         selectedSeatLabel.setFont(new Font("Arial", Font.BOLD, 18));
 
-        seatPriceLabel = new JLabel("Seat Price: $" + basePrice.setScale(2, BigDecimal.ROUND_HALF_UP));
+        seatPriceLabel = new JLabel("Seat Price: $" + basePrice);
         seatPriceLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 
 
@@ -172,7 +172,7 @@ public class SeatSelector extends JFrame {
         // Update the seat price label (you can implement your logic to calculate the
         // seat price)
         BigDecimal seatPrice = calculateSeatPrice(selectedSeat);
-        seatPriceLabel.setText("Seat Price: $" + seatPrice.setScale(2, BigDecimal.ROUND_HALF_UP));
+        seatPriceLabel.setText("Seat Price: $" + seatPrice);
     }
 
     private BigDecimal calculateSeatPrice(Seat seat) {
