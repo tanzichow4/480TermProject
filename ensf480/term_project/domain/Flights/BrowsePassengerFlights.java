@@ -227,7 +227,7 @@ public class BrowsePassengerFlights extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Implement the browse passenger thing
-                
+                BrowsePassenger browsePassenger = new BrowsePassenger(flight.getFlightNumber());
             }
         });
 

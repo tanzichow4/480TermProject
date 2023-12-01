@@ -56,7 +56,6 @@ public class MainGUI {
         cardPanel.add(airlineAgentPortal, "airlineAgentPortal");
 
 
-
         // frame.add(createTopBar(), BorderLayout.NORTH);
         frame.add(cardPanel, BorderLayout.CENTER);
 
