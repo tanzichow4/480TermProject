@@ -27,44 +27,39 @@ public class Login extends JPanel {
         String enteredUsername = usernameField.getText();
         char[] enteredPasswordChars = passwordField.getPassword();
         String enteredPassword = new String(enteredPasswordChars);
-    
-          int redirectValue = isValidLogin(enteredUsername, enteredPassword);
 
-          if (redirectValue == 1) {
-              JOptionPane.showMessageDialog(null, "Login as admin successful!");
-              CardLayout cardLayout = (CardLayout) getParent().getLayout();
-              cardLayout.show(getParent(), "adminManage");
-              usernameField.setText("");
-              passwordField.setText("");
-          } 
-          else if(redirectValue == 0){
-              JOptionPane.showMessageDialog(null, "Login as User Successful");
-              CardLayout cardLayout = (CardLayout) getParent().getLayout();
-              cardLayout.show(getParent(), "browseFlights");
-              usernameField.setText("");
-              passwordField.setText("");
-          }
-          else if(redirectValue == 2){
-              JOptionPane.showMessageDialog(null, "Login as Flight Attendant Successful");
-              CardLayout cardLayout = (CardLayout) getParent().getLayout();
-              cardLayout.show(getParent(), "browsePassengerFlights");
-              usernameField.setText("");
-              passwordField.setText("");
-          }
-          else if(redirectValue == 3){
-              JOptionPane.showMessageDialog(null, "Login as Airline Agent Successful");
-              CardLayout cardLayout = (CardLayout) getParent().getLayout();
-              cardLayout.show(getParent(), "airlineAgentPortal");
-              usernameField.setText("");
-              passwordField.setText("");
-          }
-          else{
-              JOptionPane.showMessageDialog(null, "Invalid username or password. Please try again.");
-              CardLayout cardLayout = (CardLayout) getParent().getLayout();
-              cardLayout.show(getParent(), "landing");
-              usernameField.setText("");
-              passwordField.setText("");
-          }
+        int redirectValue = isValidLogin(enteredUsername, enteredPassword);
+
+        if (redirectValue == 1) {
+            JOptionPane.showMessageDialog(null, "Login as admin successful!");
+            CardLayout cardLayout = (CardLayout) getParent().getLayout();
+            cardLayout.show(getParent(), "adminManage");
+            usernameField.setText("");
+            passwordField.setText("");
+        } else if (redirectValue == 0) {
+            JOptionPane.showMessageDialog(null, "Login as User Successful");
+            CardLayout cardLayout = (CardLayout) getParent().getLayout();
+            cardLayout.show(getParent(), "browseFlights");
+            usernameField.setText("");
+            passwordField.setText("");
+        } else if (redirectValue == 2) {
+            JOptionPane.showMessageDialog(null, "Login as Flight Attendant Successful");
+            CardLayout cardLayout = (CardLayout) getParent().getLayout();
+            cardLayout.show(getParent(), "browsePassengerFlights");
+            usernameField.setText("");
+            passwordField.setText("");
+        } else if (redirectValue == 3) {
+            JOptionPane.showMessageDialog(null, "Login as Airline Agent Successful");
+            CardLayout cardLayout = (CardLayout) getParent().getLayout();
+            cardLayout.show(getParent(), "airlineAgentPortal");
+            usernameField.setText("");
+            passwordField.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid username or password. Please try again.");
+            CardLayout cardLayout = (CardLayout) getParent().getLayout();
+            cardLayout.show(getParent(), "landing");
+            usernameField.setText("");
+            passwordField.setText("");
         }
     }
 
@@ -148,6 +143,11 @@ public class Login extends JPanel {
         passwordField = new JPasswordField(20);
         JButton loginButton = new JButton("Login");
         JButton backButton = new JButton("Back"); // Add Back button
+
+        // Set foreground color for labels
+        Color whiteColor = Color.WHITE;
+        usernameLabel.setForeground(whiteColor);
+        passwordLabel.setForeground(whiteColor);
 
         // Set layout manager for the main panel
         panel.setLayout(new GridBagLayout());
