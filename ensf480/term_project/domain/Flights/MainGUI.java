@@ -70,7 +70,7 @@ public class MainGUI {
                 // ImageIcon imageIcon = new
                 // ImageIcon("/Users/ibrahimwani/eclipse-workspace/AirlineProject/src/images/airplane-image.png");
                 ImageIcon imageIcon = new ImageIcon(
-                        "/Users/ibrahimwani/eclipse-workspace/480TermProject/images/airplane-image.png");
+                        "C:\\Fall 2023\\ENSF480\\480TermProject\\images\\airplane-image.png");
                 Image image = imageIcon.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
@@ -85,7 +85,7 @@ public class MainGUI {
         JButton continueAsGuestButton = new JButton("Register");
         continueAsGuestButton.setFont(new Font("Arial", Font.PLAIN, 20));
         continueAsGuestButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        continueAsGuestButton.setBackground(new Color(0, 0, 102));
+        // continueAsGuestButton.setBackground(new Color(0, 0, 102));
 
         JButton loginButton = new JButton("Login");
         loginButton.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -96,7 +96,7 @@ public class MainGUI {
             public void actionPerformed(ActionEvent e) {
                 // Load the background image
                 ImageIcon backgroundImageIcon = new ImageIcon(
-                        "/Users/ibrahimwani/eclipse-workspace/480TermProject/images/airplane-image.png");
+                        "C:\\Fall 2023\\ENSF480\\480TermProject\\images\\airplane-image.png");
                 Image backgroundImage = backgroundImageIcon.getImage();
 
                 // Create a panel to hold the components with a custom paintComponent method

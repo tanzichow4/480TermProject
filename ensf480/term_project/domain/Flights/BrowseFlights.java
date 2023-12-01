@@ -146,11 +146,11 @@ public class BrowseFlights extends JPanel {
                                             JOptionPane.YES_NO_OPTION);
 
                                     if (confirm == JOptionPane.YES_OPTION) {
-                                        // Call the cancelFlight method to remove the selected flight
-                                        loggedInCustomer.cancelFlight(flightId, seatID);
 
                                         // Send Cancellation email
                                         EmailSender.sendCancelledFlight(loggedInCustomer.getEmail(), seatID, flightId);
+                                         // Call the cancelFlight method to remove the selected flight
+                                        loggedInCustomer.cancelFlight(flightId, seatID);
 
                                         // Clear existing rows
                                         DefaultTableModel model = (DefaultTableModel) table.getModel();
