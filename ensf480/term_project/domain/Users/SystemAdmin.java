@@ -2,6 +2,7 @@ package ensf480.term_project.domain.Users;
 
 import ensf480.term_project.domain.Boundaries.*;
 import ensf480.term_project.domain.Flights.Flight;
+import ensf480.term_project.domain.Users.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +17,10 @@ public class SystemAdmin extends RegisteredUser {
 
     public SystemAdmin(int userID, String username, String password, String email, boolean isloggedin) {
         super(userID, username, password, email, isloggedin, 1); // Set user type to 1 for System Admin
+    }
+
+    public void executeCommand(AdminCommand command) {
+        command.execute();
     }
 
     public void addFlight(Flight flight) {
@@ -52,53 +57,54 @@ public class SystemAdmin extends RegisteredUser {
     
             // Insert seats
             String seatQuery = "INSERT INTO Seats (seat_row, seat_number, seat_type, flight_id, booked) VALUES (?, ?, ?, ?, FALSE)";
-    
+
             try (PreparedStatement seatStatement = connection.prepareStatement(seatQuery)) {
                 int totalSeatsToAdd = 12;  // Change this value if you want to add a different number of seats
-
+            
                 int seatsPerRow = totalSeatsToAdd / 6;  // 2 rows each for A, B, C, D, E, F
                 char[] rows = new char[]{'A', 'B', 'C', 'D', 'E', 'F'};
-    
+            
                 for (char row : rows) {
-                    String seatType = "x";
-                    if (row == 'A' || row == 'B') {
-                        seatType = "Business";
-                    }
-                    else if (row == 'C' || row == 'D') 
-                        {seatType = "Comfort";
-                    }
-                    else if (row == 'E' || row == 'F') 
-                        {seatType = "Ordinary";
-                    }
-
                     for (int seatNumber = 1; seatNumber <= seatsPerRow; seatNumber++) {
+                        String seatType;
+            
+                        if (row == 'A' || row == 'B') {
+                            seatType = "Business";
+                        } else if (row == 'C' || row == 'D') {
+                            seatType = "Comfort";
+                        } else {  // 'E' or 'F'
+                            seatType = "Ordinary";
+                        }
+            
                         seatStatement.setString(1, Character.toString(row));
                         seatStatement.setString(2, Integer.toString(seatNumber));
                         seatStatement.setString(3, seatType);
                         seatStatement.setInt(4, flight.getFlightID());
-    
+            
                         seatStatement.addBatch();
                     }
                 }
                 seatStatement.executeBatch();
+                System.out.println("Flight and seats added to the database successfully.");
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-    
-            System.out.println("Flight and seats added to the database successfully.");
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
     
-    private String determineSeatType(int seatNumber) {
-        // Assign the first 4 seats as "Business," the next 4 seats as "Comfort," and the last 4 seats as "Ordinary" for each row
-        if (seatNumber <= 4) {
-            return "Business";
-        } else if (seatNumber <= 8) {
-            return "Comfort";
-        } else {
-            return "Ordinary";
-        }
-    }
+    // private String determineSeatType(int seatNumber) {
+    //     // Assign the first 4 seats as "Business," the next 4 seats as "Comfort," and the last 4 seats as "Ordinary" for each row
+    //     if (seatNumber <= 4) {
+    //         return "Business";
+    //     } else if (seatNumber <= 8) {
+    //         return "Comfort";
+    //     } else {
+    //         return "Ordinary";
+    //     }
+    // }
     
     public void insertAircraft(String aircraftName) {
         DatabaseManager.connect("AIRLINE");

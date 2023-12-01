@@ -24,6 +24,7 @@ public class PopulateFromDB {
     // Gets all the RegisteredUsers currently in the DB table
     public static List<RegisteredUser> setRegisteredUsers() {
         List<RegisteredUser> userList = new ArrayList<>();
+        registeredUserList.clear();
         DatabaseManager.connect("AIRLINE");
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE"); // Use the connection from DatabaseManager
@@ -140,6 +141,7 @@ public class PopulateFromDB {
     // Call set flights every time the system admin adds a flight
     public static List<Flight> setFlights() {
         List<Flight> flights = new ArrayList<>();
+        flightList.clear();
         DatabaseManager.connect("AIRLINE");
         try {
             Connection connection = DatabaseManager.getConnection("AIRLINE");
@@ -217,46 +219,6 @@ public class PopulateFromDB {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Call this function whenever you go to update the flights in any way in the
-     * DB.
-     * Ensures the lists stay up to date with the current DB
-     */
-    // public static void updateFlights() {
-    // flightList.clear(); // Clear the existing list
-
-    // try {
-    // Connection connection = DatabaseManager.getConnection("AIRLINE");
-    // Statement statement = connection.createStatement();
-    // ResultSet resultSet = statement.executeQuery("SELECT * FROM Flights");
-    // while (resultSet.next()) {
-    // int flightId = resultSet.getInt("flight_id");
-    // String flightNumber = resultSet.getString("flight_number");
-    // String departureLocation = resultSet.getString("departure_location");
-    // String arrivalLocation = resultSet.getString("arrival_location");
-    // LocalDateTime departureTime =
-    // resultSet.getTimestamp("departure_time").toLocalDateTime();
-    // LocalDateTime arrivalTime =
-    // resultSet.getTimestamp("arrival_time").toLocalDateTime();
-    // int aircraftId = resultSet.getInt("aircraft_id");
-    // BigDecimal basePrice = resultSet.getBigDecimal("base_price");
-
-    // // Assuming you have a Flight constructor that takes these parameters
-    // Flight flight = new Flight(flightId, flightNumber, departureLocation,
-    // arrivalLocation, departureTime, arrivalTime, aircraftId, basePrice);
-
-    // // Add Flight object to the list
-    // flightList.add(flight);
-    // }
-    // } catch (SQLException e) {
-    // e.printStackTrace();
-    // }
-    // }
-
-    public static void updateSeats() {
-
     }
 
     // Basic list getters
