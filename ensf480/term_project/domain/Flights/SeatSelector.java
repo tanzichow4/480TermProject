@@ -47,8 +47,6 @@ public class SeatSelector extends JFrame {
         seatPriceLabel = new JLabel("Seat Price: $" + basePrice.setScale(2, BigDecimal.ROUND_HALF_UP));
         seatPriceLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 
-        JLabel seatTypeLabel = new JLabel("Seat Type: ");
-        seatTypeLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 
         selectedSeatTypeLabel = new JLabel("");
         selectedSeatTypeLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -56,7 +54,6 @@ public class SeatSelector extends JFrame {
         JLabel flightIdLabel = new JLabel("Flight ID: " + flightId);
         leftPanel.add(selectedSeatLabel);
         leftPanel.add(seatPriceLabel);
-        leftPanel.add(seatTypeLabel);
         leftPanel.add(selectedSeatTypeLabel);
         leftPanel.add(flightIdLabel);
 

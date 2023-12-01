@@ -65,15 +65,15 @@ public class AirlineAgentBrowseFlights extends JPanel {
         titleLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        // Logout button on the right
-        JButton logoutButton = new JButton("Logout");
-        logoutButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        logoutButton.addActionListener(new ActionListener() {
+        // back button on the right
+        JButton backButton = new JButton("Go Back");
+        backButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Signing out...");
+                JOptionPane.showMessageDialog(null, "Going back..");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "login");
+                cardLayout.show(getParent(), "airlineAgentPortal");
             }
         });
 
@@ -200,7 +200,7 @@ public class AirlineAgentBrowseFlights extends JPanel {
 
         // Add components to the top bar
         topBar.add(titleLabel, BorderLayout.CENTER);
-        topBar.add(logoutButton, BorderLayout.EAST);
+        topBar.add(backButton, BorderLayout.EAST);
         topBar.add(buttonPanel, BorderLayout.WEST);
 
         return topBar;
