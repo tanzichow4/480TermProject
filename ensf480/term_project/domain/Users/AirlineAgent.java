@@ -1,6 +1,5 @@
 package ensf480.term_project.domain.Users;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +27,7 @@ public class AirlineAgent extends RegisteredUser {
                 try (ResultSet paymentResult = paymentStatement.executeQuery()) {
                     if (paymentResult.next()) {
                         int payment_id = paymentResult.getInt("payment_id");
-                        BigDecimal paymentAmount = paymentResult.getBigDecimal("payment_amount");
+                        paymentResult.getBigDecimal("payment_amount");
 
                         // Delete the payment
                         String deletePaymentQuery = "DELETE FROM Payments WHERE payment_id = ?";

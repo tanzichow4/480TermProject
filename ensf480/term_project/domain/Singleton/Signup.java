@@ -1,6 +1,5 @@
 package ensf480.term_project.domain.Singleton;
 
-import ensf480.term_project.domain.Promos.Promo;
 import ensf480.term_project.domain.Users.*;
 
 public class Signup {

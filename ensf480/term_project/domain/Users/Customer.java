@@ -1,12 +1,10 @@
 package ensf480.term_project.domain.Users;
 
 import ensf480.term_project.domain.Boundaries.*;
-import ensf480.term_project.domain.Controllers.EmailSender;
 import ensf480.term_project.domain.Flights.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.math.BigDecimal;
 
 import java.sql.*;
 
@@ -72,28 +70,6 @@ public class Customer extends RegisteredUser {
         return bookedSeats;
     }
 
-    // public void cancelFlight(int flight_id) {
-
-    // try (Connection connection = DatabaseManager.getConnection("BILLING")) {
-    // String deleteQuery = "DELETE FROM Payments " +
-    // "WHERE flight_id = ? AND user_id = ?";
-
-    // try (PreparedStatement deleteStatement =
-    // connection.prepareStatement(deleteQuery)) {
-    // deleteStatement.setInt(1, flight_id);
-    // deleteStatement.setInt(2, this.getUserID());
-
-    // int rowsAffected = deleteStatement.executeUpdate();
-    // if (rowsAffected > 0) {
-    // System.out.println("Flight canceled successfully.");
-    // } else {
-    // System.out.println("Failed to cancel the flight or no payment found.");
-    // }
-    // }
-    // } catch (SQLException e) {
-    // e.printStackTrace();
-    // }
-    // }
 
     public void cancelFlight(int flight_id, int seat_id) {
 
@@ -109,7 +85,7 @@ public class Customer extends RegisteredUser {
                 try (ResultSet paymentResult = paymentStatement.executeQuery()) {
                     if (paymentResult.next()) {
                         int payment_id = paymentResult.getInt("payment_id");
-                        BigDecimal paymentAmount = paymentResult.getBigDecimal("payment_amount");
+                        paymentResult.getBigDecimal("payment_amount");
 
                         // Delete the payment
                         String deletePaymentQuery = "DELETE FROM Payments WHERE payment_id = ?";
@@ -119,12 +95,7 @@ public class Customer extends RegisteredUser {
                             int rowsAffected = deletePaymentStatement.executeUpdate();
 
                             if (rowsAffected > 0) {
-                                // RYAN WORK ON THIS:
-                                System.out.println("Payment canceled successfully.");
-
-                                // String userEmail = getEmail();
-                                // EmailSender.sendCancelledFlight(userEmail, seat_id, flight_id);
-
+                        
                                 // Update the seat "booked" status
                                 DatabaseManager.connect("AIRLINE");
                                 String updateSeatQuery = "UPDATE Seats SET booked = FALSE WHERE seat_id = ?";
