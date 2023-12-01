@@ -3,10 +3,7 @@ package ensf480.term_project.domain.Flights;
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 import ensf480.term_project.domain.Boundaries.PopulateFromDB;
 
-import ensf480.term_project.domain.Users.Customer;
-
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
