@@ -1,5 +1,7 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.AdminStrategies;
 
+import ensf480.term_project.domain.Flights.Flight;
+import ensf480.term_project.domain.GUIPages.LoginGUI;
 import ensf480.term_project.domain.Users.*;
 
 public class AddFlightCommand implements AdminCommand {
@@ -12,7 +14,7 @@ public class AddFlightCommand implements AdminCommand {
     @Override
     public void execute() {
 
-        SystemAdmin systemAdmin = Login.getLoggedInAdmin();
+        SystemAdmin systemAdmin = LoginGUI.getLoggedInAdmin();
         systemAdmin.addFlight(flight);
     }
 }

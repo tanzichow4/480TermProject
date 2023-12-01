@@ -1,4 +1,4 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.GUIPages;
 
 import javax.swing.*;
 import java.sql.Connection;
@@ -10,7 +10,7 @@ import java.util.List;
 
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 
-public class BrowsePassenger extends JPanel {
+public class PassengerListGUI extends JPanel {
     List<String> passengerNames = new ArrayList<>();
     List<String> seatRow = new ArrayList<>();
     List<String> seatNumbers = new ArrayList<>();
@@ -18,7 +18,7 @@ public class BrowsePassenger extends JPanel {
     Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
     Connection billingConnection = DatabaseManager.getConnection("BILLING");
 
-    public BrowsePassenger(int flightId) { // Change the parameter type to int for flight_id
+    public PassengerListGUI(int flightId) { // Change the parameter type to int for flight_id
 
         // Retrieve passenger information for the selected flight (assuming you have lists for passengers)
         initList(flightId, passengerNames, seatRow, seatNumbers);

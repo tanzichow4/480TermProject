@@ -1,8 +1,9 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.GUIPages;
 
 import javax.swing.*;
 
-import ensf480.term_project.domain.Controllers.EmailSender;
+import ensf480.term_project.domain.Flights.Flight;
+import ensf480.term_project.domain.Flights.Seat;
 import ensf480.term_project.domain.Users.*;
 import ensf480.term_project.domain.Payments.*;
 import ensf480.term_project.domain.Boundaries.*;
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
 
-public class PurchasePage extends JFrame {
+public class PurchasePageGUI extends JFrame {
     private Flight flight;
     private Seat selectedSeat;
     private BigDecimal seatPrice;
@@ -24,10 +25,10 @@ public class PurchasePage extends JFrame {
     private JTextField expiryDateField;
     private JTextField securityCodeField;
     private JTextField promoCodeField; // New promo code field
-    private Customer customer = Login.getLoggedInCustomer();
-    private AirlineAgent agent = Login.getLoggedInAirlineAgent();
+    private Customer customer = LoginGUI.getLoggedInCustomer();
+    private AirlineAgent agent = LoginGUI.getLoggedInAirlineAgent();
 
-    public PurchasePage(String flightNumber, Seat selectedSeat, BigDecimal seatPrice, Flight flight) {
+    public PurchasePageGUI(String flightNumber, Seat selectedSeat, BigDecimal seatPrice, Flight flight) {
         this.selectedSeat = selectedSeat;
         this.seatPrice = seatPrice;
         this.flight = flight;
@@ -89,7 +90,7 @@ public class PurchasePage extends JFrame {
                             System.out.println(PromoDatabaseHandler.isPromoCodeValid(promoCode));
                         } else {
                             // Notify the user that the promo code is invalid
-                            JOptionPane.showMessageDialog(PurchasePage.this,
+                            JOptionPane.showMessageDialog(PurchasePageGUI.this,
                                     "Invalid promo code. Please check and try again.", "Error",
                                     JOptionPane.ERROR_MESSAGE);
                             return; // Do not proceed with the purchase if the promo code is invalid
@@ -114,12 +115,12 @@ public class PurchasePage extends JFrame {
                     if (payment.saveToDatabase()) {
                         // Show a confirmation dialog
                         updateSeatStatus(selectedSeat);
-                        JOptionPane.showMessageDialog(PurchasePage.this, "Purchase confirmed!", "Confirmation",
+                        JOptionPane.showMessageDialog(PurchasePageGUI.this, "Purchase confirmed!", "Confirmation",
                                 JOptionPane.INFORMATION_MESSAGE);
 
                         dispose();
                         // Open a new BrowseFlights page
-                        BrowseFlights browseFlights = new BrowseFlights();
+                        BrowseFlightsGUI browseFlights = new BrowseFlightsGUI();
                         browseFlights.setVisible(true);
                         // Send purchase confirmation email
 
@@ -138,14 +139,14 @@ public class PurchasePage extends JFrame {
                         // depending on your application flow
                     } else {
                         // If saving to the database fails, display an error message
-                        JOptionPane.showMessageDialog(PurchasePage.this,
+                        JOptionPane.showMessageDialog(PurchasePageGUI.this,
                                 "Failed to save payment to the database. Please try again.", "Error",
                                 JOptionPane.ERROR_MESSAGE);
                     }
                     // Additional logic for promo code processing can be added here
                 } else {
                     // If credit card info is not valid, display an error message
-                    JOptionPane.showMessageDialog(PurchasePage.this,
+                    JOptionPane.showMessageDialog(PurchasePageGUI.this,
                             "Invalid credit card information. Please check and try again.", "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }

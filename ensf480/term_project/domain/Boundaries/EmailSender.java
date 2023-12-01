@@ -1,10 +1,8 @@
-package ensf480.term_project.domain.Controllers;
+package ensf480.term_project.domain.Boundaries;
 
 import ensf480.term_project.domain.Flights.Flight;
 import ensf480.term_project.domain.Flights.Seat;
 import ensf480.term_project.domain.Promos.Promo;
-import ensf480.term_project.domain.Boundaries.DatabaseManager;
-import ensf480.term_project.domain.Boundaries.FlightSeatTicketGets;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -18,8 +16,8 @@ public class EmailSender {
     // Method to send an email/notification about a ticket purchase
     public static void sendPurchaseConfirmationEmail(String userEmail, int flightID, int seatID) {
         // Retrieve flight and seat details using FlightSeatTicketGets class
-        Flight flight = FlightSeatTicketGets.getFlightDetails(flightID);
-        Seat seat = FlightSeatTicketGets.getSeatDetails(seatID);
+        Flight flight = TicketGetter.getFlightDetails(flightID);
+        Seat seat = TicketGetter.getSeatDetails(seatID);
 
         // Set up properties for the email server
         Properties properties = new Properties();
@@ -156,9 +154,9 @@ public class EmailSender {
     public static void sendCancelledFlight(String userEmail, int seat_id, int flight_id) {
         // Retrieve flight and seat details using FlightSeatTicketGets class
         DatabaseManager.connect("AIRLINE");
-        Flight flight = FlightSeatTicketGets.getFlightDetails(flight_id);
+        Flight flight = TicketGetter.getFlightDetails(flight_id);
         DatabaseManager.connect("AIRLINE");
-        Seat seat = FlightSeatTicketGets.getSeatDetails(seat_id);
+        Seat seat = TicketGetter.getSeatDetails(seat_id);
 
         // Set up properties for the email server
         Properties properties = new Properties();

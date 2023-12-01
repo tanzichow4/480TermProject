@@ -1,12 +1,10 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.GUIPages;
 
+import ensf480.term_project.domain.Boundaries.DatabaseManager;
 import ensf480.term_project.domain.Boundaries.PopulateFromDB;
-
-import ensf480.term_project.domain.Users.Customer;
-
-import ensf480.term_project.domain.Boundaries.PromoDatabaseHandler;
-import ensf480.term_project.domain.Controllers.EmailSender;
-import ensf480.term_project.domain.Promos.Promo;
+import ensf480.term_project.domain.Flights.Flight;
+import ensf480.term_project.domain.Flights.Seat;
+import ensf480.term_project.domain.Users.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -21,7 +19,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrowseFlights extends JPanel {
+public class AABrowseFlightGUI extends JPanel {
     private List<Flight> flightsData;
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
@@ -29,8 +27,10 @@ public class BrowseFlights extends JPanel {
     // Create a filtered list to store the filtered flights
     private List<Flight> filteredFlights;
 
-    public BrowseFlights() {
+    public AABrowseFlightGUI() {
         setLayout(new BorderLayout());
+        DatabaseManager.connect("AIRLINE");
+
         // Retrieve flight data from PopulateFromDB
         flightsData = PopulateFromDB.setFlights();
         filteredFlights = new ArrayList<>(flightsData); // Initialize filteredFlights with all flights
@@ -65,15 +65,15 @@ public class BrowseFlights extends JPanel {
         titleLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        // Logout button on the right
-        JButton logoutButton = new JButton("Logout");
-        logoutButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        logoutButton.addActionListener(new ActionListener() {
+        // back button on the right
+        JButton backButton = new JButton("Go Back");
+        backButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Signing out...");
+                JOptionPane.showMessageDialog(null, "Going back..");
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "login");
+                cardLayout.show(getParent(), "airlineAgentPortal");
             }
         });
 
@@ -86,8 +86,8 @@ public class BrowseFlights extends JPanel {
         managePurchasesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Customer loggedInCustomer = Login.getLoggedInCustomer();
-                List<Seat> bookedSeats = Customer.getSeatsByUserID(loggedInCustomer.getUserID());
+                AirlineAgent loggedInAA = LoginGUI.getLoggedInAirlineAgent();
+                List<Seat> bookedSeats = Customer.getSeatsByUserID(loggedInAA.getUserID());
 
                 if (bookedSeats.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "You have no booked seats.");
@@ -142,26 +142,23 @@ public class BrowseFlights extends JPanel {
                                             JOptionPane.YES_NO_OPTION);
 
                                     if (confirm == JOptionPane.YES_OPTION) {
-
-                                        // Send Cancellation email
-                                        EmailSender.sendCancelledFlight(loggedInCustomer.getEmail(), seatID, flightId);
-                                         // Call the cancelFlight method to remove the selected flight
-                                        loggedInCustomer.cancelFlight(flightId, seatID);
-
-                                        // Clear existing rows
-                                        DefaultTableModel model = (DefaultTableModel) table.getModel();
-                                        model.setRowCount(0);
+                                        // Call the cancelFlight method to remove the selected flight
+                                        loggedInAA.cancelFlight(flightId, seatID);
 
                                         // Update the table to reflect the changes
-                                        List<Seat> updatedBookedSeats = Customer
-                                                .getSeatsByUserID(loggedInCustomer.getUserID());
-                                        for (Seat seat : updatedBookedSeats) {
+                                        AirlineAgent loggedInAA = LoginGUI.getLoggedInAirlineAgent();
+                                        List<Seat> bookedSeats = Customer
+                                                .getSeatsByUserID(loggedInAA.getUserID());
+
+                                        DefaultTableModel model = (DefaultTableModel) table.getModel();
+                                        model.setRowCount(0); // Clear existing rows
+
+                                        for (Seat seat : bookedSeats) {
                                             Flight flight = Flight.getFlightBySeatID(seat.getSeatId());
                                             String seatInfo = seat.getSeatRow() + seat.getSeatNumber();
                                             BigDecimal totalPrice = seat.getPaymentAmount(); // Replace with your method
                                                                                              // to get seat price
-                                            Object[] rowData = { flight.getFlightID(), seat.getSeatId(), seatInfo,
-                                                    seat.getSeatType(),
+                                            Object[] rowData = { flight.getFlightID(), seatInfo, seat.getSeatType(),
                                                     flight.getFlightNumber(), totalPrice };
                                             model.addRow(rowData);
                                         }
@@ -197,24 +194,13 @@ public class BrowseFlights extends JPanel {
             }
         });
 
-        // Manage Account button
-        JButton manageAccountButton = new JButton("Manage Account");
-        manageAccountButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        manageAccountButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showManageAccountDialog();
-            }
-        });
-
         // Add buttons to the panel
         buttonPanel.add(managePurchasesButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(10, 0))); // Add some spacing between buttons
-        buttonPanel.add(manageAccountButton);
 
         // Add components to the top bar
         topBar.add(titleLabel, BorderLayout.CENTER);
-        topBar.add(logoutButton, BorderLayout.EAST);
+        topBar.add(backButton, BorderLayout.EAST);
         topBar.add(buttonPanel, BorderLayout.WEST);
 
         return topBar;
@@ -298,54 +284,6 @@ public class BrowseFlights extends JPanel {
         repaint();
     }
 
-    private void showManageAccountDialog() {
-        // Create a dialog
-        JDialog manageAccountDialog = new JDialog();
-        manageAccountDialog.setTitle("Manage Account");
-        manageAccountDialog.setSize(300, 150);
-        manageAccountDialog.setResizable(false);
-        manageAccountDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-        // Create a panel for the content
-        JPanel dialogPanel = new JPanel();
-        dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
-
-        // Add a checkbox for Promo news
-        JCheckBox promoCheckBox = new JCheckBox("Receive Promo News");
-        // Add your logic here to set the initial state of the checkbox based on user
-        // preferences
-
-        // Add a save button
-        JButton saveButton = new JButton("Save Changes");
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Check if the "Receive Promo News" checkbox is selected
-                if (promoCheckBox.isSelected()) {
-                    // Get the user's email address (replace "getUserEmail()" with the actual method
-                    // to get the email)
-                    List<Promo> promoList = PromoDatabaseHandler.getAllPromos();
-                    Customer customer = Login.getLoggedInCustomer();
-
-                    EmailSender.sendPromoCodeEmail(customer.getEmail(), promoList);
-                }
-                manageAccountDialog.dispose();
-            }
-        });
-
-        // Add components to the panel
-        dialogPanel.add(promoCheckBox);
-        dialogPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add some spacing
-        dialogPanel.add(saveButton);
-
-        // Add the panel to the dialog
-        manageAccountDialog.add(dialogPanel);
-
-        // Set the dialog to be visible
-        manageAccountDialog.setLocationRelativeTo(null);
-        manageAccountDialog.setVisible(true);
-    }
-
     private JPanel createFilterRow(String label, JComponent component) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel labelComponent = new JLabel(label);
@@ -411,9 +349,8 @@ public class BrowseFlights extends JPanel {
         selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Assuming SeatSelector is the class for Seat Selector page
-                new SeatSelector(flight.getFlightNumber(), flight.getBasePrice());
-                // Close the current BrowseFlights page
+                new SeatSelectorGUI(flight.getFlightNumber(), flight.getBasePrice());
+                // Close the current AirlineAgentBrowseFlights page
             }
         });
 

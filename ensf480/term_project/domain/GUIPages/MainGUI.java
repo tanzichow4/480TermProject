@@ -1,10 +1,11 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.GUIPages;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import ensf480.term_project.domain.AdminStrategies.AdminGUIPage;
 import ensf480.term_project.domain.Users.*;
 
 public class MainGUI {
@@ -24,35 +25,35 @@ public class MainGUI {
         cardPanel.add(landingPanel, "landing");
 
         // Create browse flights page
-        BrowseFlights browseFlights = new BrowseFlights(); // Use the BrowseFlights component
+        BrowseFlightsGUI browseFlights = new BrowseFlightsGUI(); // Use the BrowseFlights component
         cardPanel.add(browseFlights, "browseFlights");
 
         // Create Login Page
-        Login login = new Login();
+        LoginGUI login = new LoginGUI();
         cardPanel.add(login, "login");
 
         // Create Admin Page
-        AdminManage adminManage = new AdminManage();
+        AdminGUIPage adminManage = new AdminGUIPage();
         cardPanel.add(adminManage, "adminManage");
 
         // Create Browse Passenger Page
-        BrowsePassengerFlights browsePassengerFlights = new BrowsePassengerFlights();
+        BrowsePassengerFlightsGUI browsePassengerFlights = new BrowsePassengerFlightsGUI();
         cardPanel.add(browsePassengerFlights, "browsePassengerFlights");
 
         // Create Manage Flight Page
-        FlightManager flightManager = new FlightManager(cardLayout, cardPanel);
+        ManageFlightGUI flightManager = new ManageFlightGUI(cardLayout, cardPanel);
         cardPanel.add(flightManager, "flightManager");
 
         // Create Manage Aircraft Page
-        AircraftManager aircraftManager = new AircraftManager(cardLayout, cardPanel);
+        ManageAircraftGUI aircraftManager = new ManageAircraftGUI(cardLayout, cardPanel);
         cardPanel.add(aircraftManager, "aircraftManager");
 
         // Create Airline Agent Browse Flight Page
-        AirlineAgentBrowseFlights airlineAgentBrowseFlights = new AirlineAgentBrowseFlights();
+        AABrowseFlightGUI airlineAgentBrowseFlights = new AABrowseFlightGUI();
         cardPanel.add(airlineAgentBrowseFlights, "airlineAgentBrowseFlights");
 
         // Create Airline Agent Portal Page
-        AirlineAgentPortal airlineAgentPortal = new AirlineAgentPortal();
+        AirlineAgentGUIPage airlineAgentPortal = new AirlineAgentGUIPage();
         cardPanel.add(airlineAgentPortal, "airlineAgentPortal");
 
         // frame.add(createTopBar(), BorderLayout.NORTH);
@@ -157,7 +158,7 @@ public class MainGUI {
                         String password = new String(passwordChars);
 
                         // Implement your sign-up logic here using email, username, and password
-                        Login.setLoggedInCustomer(new Customer(username, password, email, true));
+                        LoginGUI.setLoggedInCustomer(new Customer(username, password, email, true));
 
                         // Assuming successful signup, navigate to the next screen
                         cardLayout.show(cardPanel, "browseFlights");

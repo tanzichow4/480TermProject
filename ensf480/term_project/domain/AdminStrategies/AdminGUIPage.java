@@ -1,7 +1,8 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.AdminStrategies;
 
 import javax.swing.*;
 
+import ensf480.term_project.domain.GUIPages.LoginGUI;
 import ensf480.term_project.domain.Users.RegisteredUser;
 
 import java.awt.*;
@@ -10,9 +11,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminManage extends JPanel {
+public class AdminGUIPage extends JPanel {
 
-    public AdminManage() {
+    public AdminGUIPage() {
         // Set up the main panel
         setLayout(new BorderLayout());
 
@@ -80,7 +81,7 @@ public class AdminManage extends JPanel {
         printUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<RegisteredUser> users = Login.getLoggedInAdmin().printUsers();
+                List<RegisteredUser> users = LoginGUI.getLoggedInAdmin().printUsers();
                 List<String> usernames = new ArrayList<>();
 
                 // Extract usernames from RegisteredUser objects and add them to the list

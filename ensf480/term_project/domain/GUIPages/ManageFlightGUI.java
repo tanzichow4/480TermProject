@@ -1,4 +1,4 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.GUIPages;
 import javax.swing.*;
 import java.util.List;
 import java.awt.*;
@@ -6,14 +6,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 
+import ensf480.term_project.domain.AdminStrategies.AddFlightCommand;
 import ensf480.term_project.domain.Boundaries.PopulateFromDB;
+import ensf480.term_project.domain.Flights.Flight;
 import ensf480.term_project.domain.Users.*;
 
-public class FlightManager extends JPanel {
+public class ManageFlightGUI extends JPanel {
 
     private JTextArea flightTextArea;
 
-    public FlightManager(CardLayout cardLayout, JPanel parentPanel) {
+    public ManageFlightGUI(CardLayout cardLayout, JPanel parentPanel) {
         setLayout(new BorderLayout());
 
         List<Flight> displayingFlightList = PopulateFromDB.getFlightList();
@@ -51,7 +53,7 @@ public class FlightManager extends JPanel {
                         double doubleNewPrice = Double.parseDouble(newPrice);
                         BigDecimal BDNewPrice = BigDecimal.valueOf(doubleNewPrice);
 
-                        SystemAdmin systemAdmin = Login.getLoggedInAdmin();
+                        SystemAdmin systemAdmin = LoginGUI.getLoggedInAdmin();
                         Flight newFlight = new Flight(0, newFlightNumber, newDepartLocation, 
                             newArrivalLocation, newDepartTime, newArrivalTime, newDepartDate, newArrivalDate, 
                             intNewAircraftID, BDNewPrice);
@@ -121,7 +123,7 @@ public class FlightManager extends JPanel {
         JPanel parentPanel = new JPanel(new CardLayout());
         CardLayout cardLayout = (CardLayout) parentPanel.getLayout();
 
-        FlightManager flightManager = new FlightManager(cardLayout, parentPanel);
+        ManageFlightGUI flightManager = new ManageFlightGUI(cardLayout, parentPanel);
         parentPanel.add(flightManager, "flightManager");
 
         frame.add(parentPanel);
