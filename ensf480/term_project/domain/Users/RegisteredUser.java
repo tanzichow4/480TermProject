@@ -1,15 +1,6 @@
-/**
- * Class RegisteredUser
- * Holds the information for every user registered website. Stored in AirlineDB
- * 
- */
-
-
 package ensf480.term_project.domain.Users; 
 
 import ensf480.term_project.domain.Boundaries.*;
-import ensf480.term_project.domain.Flights.*;
-import java.util.List;
 
 import java.sql.*;
 

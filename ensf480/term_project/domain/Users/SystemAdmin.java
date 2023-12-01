@@ -2,7 +2,6 @@ package ensf480.term_project.domain.Users;
 
 import ensf480.term_project.domain.Boundaries.*;
 import ensf480.term_project.domain.Flights.Flight;
-import ensf480.term_project.domain.Users.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
