@@ -18,6 +18,8 @@ public class Customer extends RegisteredUser {
 
     public Customer(String username, String password, String email, boolean isloggedin) {
         super(username, password, email, isloggedin, 0);
+        
+        PopulateFromDB.createSystemCustomers(PopulateFromDB.setRegisteredUsers());
     }
 
     public Customer() {
