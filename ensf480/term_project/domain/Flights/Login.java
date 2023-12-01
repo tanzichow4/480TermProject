@@ -19,7 +19,7 @@ public class Login extends JPanel {
     private static FlightAttendant loggedInFlightAttendant;
     private static Image backgroundImage;
 
-    private static final String BACKGROUND_IMAGE_PATH = "/Users/ibrahimwani/eclipse-workspace/480TermProject/images/airplane-image.png";
+    private static final String BACKGROUND_IMAGE_PATH = "C:\\Fall 2023\\ENSF480\\480TermProject\\images\\airplane-image.png";
 
     private void handleLogin() {
         // Check if the entered username and password are correct (replace with your

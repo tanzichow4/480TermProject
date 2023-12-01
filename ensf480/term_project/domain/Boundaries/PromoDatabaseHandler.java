@@ -10,11 +10,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.crypto.Data;
+
 public class PromoDatabaseHandler {
 
     // Method to get all promos from the database
     public static List<Promo> getAllPromos() {
         List<Promo> promoList = new ArrayList<>();
+
+        DatabaseManager.connect("AIRLINE");
 
         try (Connection connection = DatabaseManager.getConnection("AIRLINE")) {
             String sql = "SELECT * FROM Promos";
