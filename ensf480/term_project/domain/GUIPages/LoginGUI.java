@@ -1,4 +1,4 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.GUIPages;
 
 import javax.swing.*;
 import java.util.List;
@@ -9,7 +9,7 @@ import ensf480.term_project.domain.Users.*;
 import ensf480.term_project.domain.Boundaries.*;
 import java.awt.event.ActionListener;
 
-public class Login extends JPanel {
+public class LoginGUI extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private static RegisteredUser loggedInUser;
@@ -115,7 +115,7 @@ public class Login extends JPanel {
         return 4;
     }
 
-    public Login() {
+    public LoginGUI() {
         initializeUI();
     }
 

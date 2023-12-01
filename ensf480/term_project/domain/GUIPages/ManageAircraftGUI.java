@@ -1,16 +1,17 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.GUIPages;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import ensf480.term_project.domain.AdminStrategies.AddAircraftCommand;
 import ensf480.term_project.domain.Boundaries.PopulateFromDB;
 import ensf480.term_project.domain.Users.*;
 
-public class AircraftManager extends JPanel {
+public class ManageAircraftGUI extends JPanel {
 
-    public AircraftManager(CardLayout cardLayout, JPanel parentPanel) {
+    public ManageAircraftGUI(CardLayout cardLayout, JPanel parentPanel) {
         setLayout(new FlowLayout(FlowLayout.CENTER));
 
         JButton addAircraftButton = new JButton("Add Aircraft");
@@ -39,9 +40,9 @@ public class AircraftManager extends JPanel {
 
                 // Perform actions based on userInput (for example, pass it to your systemAdmin)
                 if (userInput != null) {
-                    SystemAdmin systemAdmin = Login.getLoggedInAdmin();
+                    SystemAdmin systemAdmin = LoginGUI.getLoggedInAdmin();
                     // systemAdmin.insertAircraft(userInput);
-                    AdminCommand addAircraftCommand = new AddAircraftCommand(Login.getLoggedInAdmin(), userInput);
+                    AdminCommand addAircraftCommand = new AddAircraftCommand(LoginGUI.getLoggedInAdmin(), userInput);
                         systemAdmin.executeCommand(addAircraftCommand);
                     PopulateFromDB.setAircrafts();
                 }
@@ -86,7 +87,7 @@ public class AircraftManager extends JPanel {
         JPanel parentPanel = new JPanel(new CardLayout());
         CardLayout cardLayout = (CardLayout) parentPanel.getLayout();
 
-        AircraftManager aircraftManager = new AircraftManager(cardLayout, parentPanel);
+        ManageAircraftGUI aircraftManager = new ManageAircraftGUI(cardLayout, parentPanel);
         frame.add(aircraftManager);
 
         frame.setSize(400, 300);

@@ -9,6 +9,7 @@ package ensf480.term_project.domain;
 
 import ensf480.term_project.domain.Boundaries.*;
 import ensf480.term_project.domain.Flights.*;
+import ensf480.term_project.domain.GUIPages.MainGUI;
 import ensf480.term_project.domain.Users.*;
 
 import javax.swing.*;

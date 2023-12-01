@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
-import ensf480.term_project.domain.Boundaries.FlightSeatTicketGets;
+import ensf480.term_project.domain.Boundaries.TicketGetter;
 import ensf480.term_project.domain.Flights.Flight;
 import ensf480.term_project.domain.Flights.Seat;
 
@@ -90,11 +90,11 @@ public class Ticket {
 
     // Assume you have methods to retrieve Flight and Seat details
     private Flight getFlightDetails(int flightID) {
-        return FlightSeatTicketGets.getFlightDetails(flightID);
+        return TicketGetter.getFlightDetails(flightID);
     }
 
     private Seat getSeatDetails(int seatID) {
-        return FlightSeatTicketGets.getSeatDetails(seatID);
+        return TicketGetter.getSeatDetails(seatID);
 
     }
     public BigDecimal getTicketPrice() {

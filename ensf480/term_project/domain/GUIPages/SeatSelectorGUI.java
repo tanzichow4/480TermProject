@@ -1,6 +1,8 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.GUIPages;
 
 import ensf480.term_project.domain.Boundaries.PopulateFromDB;
+import ensf480.term_project.domain.Flights.Flight;
+import ensf480.term_project.domain.Flights.Seat;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeatSelector extends JFrame {
+public class SeatSelectorGUI extends JFrame {
     private final String flightId;
     private final BigDecimal basePrice;
     private Flight flight;
@@ -20,7 +22,7 @@ public class SeatSelector extends JFrame {
     private JLabel selectedSeatTypeLabel; // Added for displaying seat type
     private JButton closeButton; // Added close button
 
-    public SeatSelector(String flightId, BigDecimal basePrice) {
+    public SeatSelectorGUI(String flightId, BigDecimal basePrice) {
         this.flightId = flightId;
         this.basePrice = basePrice;
         this.selectedSeat = null;
@@ -109,7 +111,7 @@ public class SeatSelector extends JFrame {
                 if (selectedSeat != null) {
                     openPurchasePage(selectedSeat, selectedSeatTypeLabel);
                 } else {
-                    JOptionPane.showMessageDialog(SeatSelector.this, "Please select a seat.");
+                    JOptionPane.showMessageDialog(SeatSelectorGUI.this, "Please select a seat.");
                 }
             }
         });
@@ -205,10 +207,10 @@ public class SeatSelector extends JFrame {
 
         // Create an instance of the PurchasePage class and pass relevant information
         SwingUtilities
-                .invokeLater(() -> new PurchasePage(flightId, selectedSeat, calculateSeatPrice(selectedSeat), flight));
+                .invokeLater(() -> new PurchasePageGUI(flightId, selectedSeat, calculateSeatPrice(selectedSeat), flight));
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new SeatSelector("FL123", BigDecimal.valueOf(100.00)));
+        SwingUtilities.invokeLater(() -> new SeatSelectorGUI("FL123", BigDecimal.valueOf(100.00)));
     }
 }

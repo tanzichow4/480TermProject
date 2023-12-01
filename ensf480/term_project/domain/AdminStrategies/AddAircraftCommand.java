@@ -1,4 +1,4 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.AdminStrategies;
 
 import ensf480.term_project.domain.Users.*;
 

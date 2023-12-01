@@ -1,12 +1,10 @@
-package ensf480.term_project.domain.Controllers;
-
-import ensf480.term_project.domain.Boundaries.*;
+package ensf480.term_project.domain.Boundaries;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlightController {
+public class FlightIDGetter {
     
 
     // Method to get a list of flight IDs from the Flights table

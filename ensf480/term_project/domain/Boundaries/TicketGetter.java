@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class FlightSeatTicketGets {
+public class TicketGetter {
 
     public static Flight getFlightDetails(int flightID) {
         Flight flight = null;

@@ -1,4 +1,4 @@
-package ensf480.term_project.domain.Flights;
+package ensf480.term_project.domain.GUIPages;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,9 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class AirlineAgentPortal extends JPanel {
+public class AirlineAgentGUIPage extends JPanel {
 
-    public AirlineAgentPortal() {
+    public AirlineAgentGUIPage() {
         // Set up the main panel
         setLayout(new BorderLayout());
 
