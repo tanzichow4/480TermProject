@@ -58,6 +58,8 @@ public class Login extends JPanel {
             }
             else{
                 JOptionPane.showMessageDialog(null, "Invalid username or password. Please try again.");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "landing");
                 usernameField.setText("");
                 passwordField.setText("");
             }
