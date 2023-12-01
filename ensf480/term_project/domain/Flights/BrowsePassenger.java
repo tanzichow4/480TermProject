@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 
 public class BrowsePassenger extends JPanel {
@@ -15,6 +16,7 @@ public class BrowsePassenger extends JPanel {
     List<String> passengerNames = new ArrayList<>();
     List<String> seatRow = new ArrayList<>();
     List<String> seatNumbers = new ArrayList<>();
+    
     Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
     Connection billingConnection = DatabaseManager.getConnection("BILLING");
 
@@ -49,76 +51,114 @@ public class BrowsePassenger extends JPanel {
     }
 
     //Inserting all data into the three lists
-    private void initList(String flightNumber, List<String> passengerNames, List<String> seatRow, List<String> seatNumbers){
-        //Clear lists
+    private void initList(String flightNumber, List<String> passengerNames, List<String> seatRow, List<String> seatNumbers) {
+        // Clear lists
         passengerNames.clear();
         seatRow.clear();
         seatNumbers.clear();
-
-        //Initialize Proxy List
+    
+        // Initialize Proxy List
         List<String> userIDList = new ArrayList<>();
         List<String> seatIDList = new ArrayList<>();
-
-        //Query List
-        String sqlQueryUserID = "SELECT user_id FROM Payments WHERE flight_id = " + flightNumber;
-        String sqlQuerySeatID = "SELECT DISTINCT seat_id FROM Payments WHERE flight_id = " + flightNumber;
-        String sqlQueryPassengerName;
-        String sqlQuerySeatRow;
-        String sqlQuerySeatNumber;
-
-        //Filling Proxy Lists
-        try{
-            //Filling userIDList
-            PreparedStatement preparedStatement = billingConnection.prepareStatement(sqlQueryUserID);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int userID = resultSet.getInt("user_id");
-                userIDList.add(Integer.toString(userID));
+    
+        try {
+            // BILLING connection
+            DatabaseManager.connect("BILLING");
+            Connection billingConnection = DatabaseManager.getConnection("BILLING");
+    
+            // Filling userIDList
+            try (Connection connection = billingConnection) {
+                String sqlQueryUserID = "SELECT user_id FROM Payments WHERE flight_id = ?";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQueryUserID)) {
+                    preparedStatement.setString(1, flightNumber);
+    
+                    try (ResultSet resultSetUserID = preparedStatement.executeQuery()) {
+                        while (resultSetUserID.next()) {
+                            int userID = resultSetUserID.getInt("user_id");
+                            userIDList.add(Integer.toString(userID));
+                        }
+                    }
+                }
             }
-            //Filling seatIDList
-            preparedStatement = billingConnection.prepareStatement(sqlQuerySeatID);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int seatID = resultSet.getInt("seat_id");
-                seatIDList.add(Integer.toString(seatID));
+    
+            DatabaseManager.connect("BILLING");
+            billingConnection = DatabaseManager.getConnection("BILLING");
+    
+            // Filling seatIDList
+            try (Connection connection = billingConnection) {
+                String sqlQuerySeatID = "SELECT DISTINCT seat_id FROM Payments WHERE flight_id = ?";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuerySeatID)) {
+                    preparedStatement.setString(1, flightNumber);
+    
+                    try (ResultSet resultSetSeatID = preparedStatement.executeQuery()) {
+                        while (resultSetSeatID.next()) {
+                            int seatID = resultSetSeatID.getInt("seat_id");
+                            seatIDList.add(Integer.toString(seatID));
+                        }
+                    }
+                }
             }
-
-            //Filling PassengerName list
-            for (String id : userIDList){
-                String username = null;
-                sqlQueryPassengerName = "SELECT username FROM RegisteredUsers WHERE user_id = " + id;
-                preparedStatement = airlineConnection.prepareStatement(sqlQueryPassengerName);
-                resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    username = resultSet.getString("username");
-                    passengerNames.add(username);
+    
+            // AIRLINE connection
+            DatabaseManager.connect("AIRLINE");
+            Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
+    
+            // Filling PassengerName list
+            try (Connection connection = airlineConnection) {
+                for (String id : userIDList) {
+                    String username = null;
+                    String sqlQueryPassengerName = "SELECT username FROM RegisteredUsers WHERE user_id = ?";
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQueryPassengerName)) {
+                        preparedStatement.setString(1, id);
+    
+                        try (ResultSet resultSetPassengerName = preparedStatement.executeQuery()) {
+                            if (resultSetPassengerName.next()) {
+                                username = resultSetPassengerName.getString("username");
+                                passengerNames.add(username);
+                            }
+                        }
+                    }
                 }
             }
 
-            //Filling Seat Row and Number
-            for (String id : seatIDList){
-                String row = null;
-                String number = null;
-                sqlQuerySeatRow = "SELECT seat_row FROM Seats WHERE seat_id = " + id;
-                preparedStatement = airlineConnection.prepareStatement(sqlQuerySeatRow);
-                resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    row = resultSet.getString("seat_row");
-                    seatRow.add(row);
-                }
-                sqlQuerySeatNumber = "SELECT seat_number FROM Seats WHERE seat_id = " + id;
-                preparedStatement = airlineConnection.prepareStatement(sqlQuerySeatNumber);
-                resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    number = resultSet.getString("seat_number");
-                    seatNumbers.add(number);
+            DatabaseManager.connect("AIRLINE");
+            airlineConnection = DatabaseManager.getConnection("AIRLINE");
+
+            // Filling Seat Row and Number
+            try (Connection connection = airlineConnection) {
+                for (String id : seatIDList) {
+                    String row = null;
+                    String number = null;
+                    String sqlQuerySeatRow = "SELECT seat_row FROM Seats WHERE seat_id = ?";
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuerySeatRow)) {
+                        preparedStatement.setString(1, id);
+    
+                        try (ResultSet resultSetSeatRow = preparedStatement.executeQuery()) {
+                            if (resultSetSeatRow.next()) {
+                                row = resultSetSeatRow.getString("seat_row");
+                                seatRow.add(row);
+                            }
+                        }
+                    }
+    
+                    String sqlQuerySeatNumber = "SELECT seat_number FROM Seats WHERE seat_id = ?";
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuerySeatNumber)) {
+                        preparedStatement.setString(1, id);
+    
+                        try (ResultSet resultSetSeatNumber = preparedStatement.executeQuery()) {
+                            if (resultSetSeatNumber.next()) {
+                                number = resultSetSeatNumber.getString("seat_number");
+                                seatNumbers.add(number);
+                            }
+                        }
+                    }
                 }
             }
-
+    
         } catch (SQLException e) {
             e.printStackTrace();
         }
-       
+    }    
+    
+}    
 
-    }
-}
