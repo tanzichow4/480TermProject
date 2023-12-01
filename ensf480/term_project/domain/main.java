@@ -9,17 +9,10 @@ package ensf480.term_project.domain;
 
 import ensf480.term_project.domain.Boundaries.*;
 import ensf480.term_project.domain.Flights.*;
-import ensf480.term_project.domain.Payments.*;
-import ensf480.term_project.domain.Promos.Promo;
-import ensf480.term_project.domain.Singleton.*;
 import ensf480.term_project.domain.Users.*;
-import ensf480.term_project.domain.Views.*;
-import java.math.BigDecimal;
 
 import javax.swing.*;
 
-import java.awt.*;
-import java.sql.Connection;
 import java.util.List;
 
 public class main {
@@ -27,10 +20,10 @@ public class main {
 
         // Connect to AIRLINE database
         DatabaseManager.connect("AIRLINE");
-        Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
+        DatabaseManager.getConnection("AIRLINE");
 
         DatabaseManager.connect("BILLING");
-        Connection billingConnection = DatabaseManager.getConnection("BILLING");
+        DatabaseManager.getConnection("BILLING");
 
         // Initialize the list of system users existing in the database
         List<RegisteredUser> users = PopulateFromDB.setRegisteredUsers();
@@ -43,10 +36,10 @@ public class main {
 
         List<AirlineAgent> airlineAgents = PopulateFromDB.createAirlineAgents(users);
 
-        System.out.println("Printing the Airline Agents:");
-        for (AirlineAgent admin : airlineAgents) {
-            System.out.println("Admin name: " + admin.getUsername());
-        }
+        // System.out.println("Printing the Airline Agents:");
+        // for (AirlineAgent admin : airlineAgents) {
+        //     System.out.println("Admin name: " + admin.getUsername());
+        // }
         
         // for (RegisteredUser user : users) {
         //     System.out.println("User: " + user.getEmail());
@@ -55,10 +48,10 @@ public class main {
         // Initialize the flights in the database
         List<Flight> flights = PopulateFromDB.setFlights();
 
-        System.out.println("Printing the System Admins:");
-        for (SystemAdmin admin : admins) {
-            System.out.println("Admin name: " + admin.getUsername());
-        }
+        // System.out.println("Printing the System Admins:");
+        // for (SystemAdmin admin : admins) {
+        //     System.out.println("Admin name: " + admin.getUsername());
+        // }
 
         // /**
         // * System Admin adding a flight functionality:
