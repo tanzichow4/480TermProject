@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
 
 public class PurchasePage extends JFrame {
@@ -186,13 +187,12 @@ public class PurchasePage extends JFrame {
         priceInfoPanel.setBorder(BorderFactory.createTitledBorder("Price Info"));
 
         priceInfoPanel.add(new JLabel("Total Seat Price: $"));
-        priceInfoPanel.add(new JLabel(seatPrice.setScale(2, BigDecimal.ROUND_HALF_UP).toString()));
+        priceInfoPanel.add(new JLabel(seatPrice.setScale(2, RoundingMode.HALF_UP).toString()));
         priceInfoPanel.add(new JLabel("GST (5%): $"));
         priceInfoPanel.add(new JLabel(
-                seatPrice.multiply(new BigDecimal("0.05")).setScale(2, BigDecimal.ROUND_HALF_UP).toString()));
+                seatPrice.multiply(new BigDecimal("0.05")).setScale(2, RoundingMode.HALF_UP).toString()));
         priceInfoPanel.add(new JLabel("Total Amount: $"));
-        priceInfoPanel.add(new JLabel(seatPrice.add(seatPrice.multiply(new BigDecimal("0.05")))
-                .setScale(2, BigDecimal.ROUND_HALF_UP).toString()));
+        priceInfoPanel.add(new JLabel(seatPrice.add(seatPrice.multiply(new BigDecimal("0.05"))).setScale(2, RoundingMode.HALF_UP).toString()));
 
         return priceInfoPanel;
     }

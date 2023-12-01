@@ -2,7 +2,6 @@ package ensf480.term_project.domain.Flights;
 
 import javax.swing.*;
 
-import ensf480.term_project.domain.Boundaries.PopulateFromDB;
 import ensf480.term_project.domain.Users.RegisteredUser;
 
 import java.awt.*;

@@ -1,6 +1,5 @@
 package ensf480.term_project.domain.Flights;
 
-import ensf480.term_project.domain.Boundaries.DatabaseManager;
 import ensf480.term_project.domain.Boundaries.PopulateFromDB;
 
 import ensf480.term_project.domain.Users.Customer;
@@ -18,7 +17,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.sql.Connection;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +31,6 @@ public class BrowseFlights extends JPanel {
 
     public BrowseFlights() {
         setLayout(new BorderLayout());
-        DatabaseManager.connect("AIRLINE");
-        Connection airlineConnection = DatabaseManager.getConnection("AIRLINE");
-
         // Retrieve flight data from PopulateFromDB
         flightsData = PopulateFromDB.setFlights();
         filteredFlights = new ArrayList<>(flightsData); // Initialize filteredFlights with all flights
@@ -416,7 +412,7 @@ public class BrowseFlights extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Assuming SeatSelector is the class for Seat Selector page
-                SeatSelector seatSelector = new SeatSelector(flight.getFlightNumber(), flight.getBasePrice());
+                new SeatSelector(flight.getFlightNumber(), flight.getBasePrice());
                 // Close the current BrowseFlights page
             }
         });
@@ -425,7 +421,7 @@ public class BrowseFlights extends JPanel {
     }
 
     private JLabel createPriceLabel(BigDecimal price) {
-        JLabel priceLabel = new JLabel("Starting at: $" + price.setScale(2, BigDecimal.ROUND_HALF_UP));
+        JLabel priceLabel = new JLabel("Starting at: $" + price.setScale(2, RoundingMode.HALF_UP));
         priceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         return priceLabel;
     }

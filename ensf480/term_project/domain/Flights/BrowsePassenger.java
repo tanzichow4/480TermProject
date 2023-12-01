@@ -11,7 +11,6 @@ import java.util.List;
 import ensf480.term_project.domain.Boundaries.DatabaseManager;
 
 public class BrowsePassenger extends JPanel {
-    private int flightId; // Change the data type to int for flight_id
     List<String> passengerNames = new ArrayList<>();
     List<String> seatRow = new ArrayList<>();
     List<String> seatNumbers = new ArrayList<>();
@@ -20,7 +19,6 @@ public class BrowsePassenger extends JPanel {
     Connection billingConnection = DatabaseManager.getConnection("BILLING");
 
     public BrowsePassenger(int flightId) { // Change the parameter type to int for flight_id
-        this.flightId = flightId;
 
         // Retrieve passenger information for the selected flight (assuming you have lists for passengers)
         initList(flightId, passengerNames, seatRow, seatNumbers);

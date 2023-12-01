@@ -10,8 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.crypto.Data;
-
 public class PromoDatabaseHandler {
 
     // Method to get all promos from the database
