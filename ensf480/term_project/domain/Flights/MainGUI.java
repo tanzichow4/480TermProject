@@ -42,7 +42,6 @@ public class MainGUI {
         // Create Manage Flight Page
         FlightManager flightManager = new FlightManager(cardLayout, cardPanel);
         cardPanel.add(flightManager, "flightManager");
-        
 
         // Create Manage Aircraft Page
         AircraftManager aircraftManager = new AircraftManager(cardLayout, cardPanel);
@@ -56,45 +55,11 @@ public class MainGUI {
         AirlineAgentPortal airlineAgentPortal = new AirlineAgentPortal();
         cardPanel.add(airlineAgentPortal, "airlineAgentPortal");
 
-
         // frame.add(createTopBar(), BorderLayout.NORTH);
         frame.add(cardPanel, BorderLayout.CENTER);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-    }
-
-    private static JPanel createTopBar() {
-        JPanel topBar = new JPanel();
-        topBar.setLayout(new BorderLayout());
-
-        // Menu bar on the left
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Manage Purchases");
-        JMenuItem menuItem = new JMenuItem("Item 1");
-        menu.add(menuItem);
-        menuBar.add(menu);
-
-        // Title in the center
-        JLabel titleLabel = new JLabel("Airline");
-        titleLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        // Login button on the right
-        JButton loginButton = new JButton("Logout");
-        loginButton.setFont(new Font("Arial", Font.PLAIN, 16));
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle login button click
-            }
-        });
-
-        topBar.add(menuBar, BorderLayout.WEST);
-        topBar.add(titleLabel, BorderLayout.CENTER);
-        topBar.add(loginButton, BorderLayout.EAST);
-
-        return topBar;
     }
 
     private static JPanel createLandingPanel() {
@@ -129,21 +94,47 @@ public class MainGUI {
         continueAsGuestButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Create the sign-up screen dynamically
-                JPanel signUpPanel = new JPanel(new GridLayout(4, 2));
+                // Load the background image
+                ImageIcon backgroundImageIcon = new ImageIcon(
+                        "/Users/ibrahimwani/eclipse-workspace/480TermProject/images/airplane-image.png");
+                Image backgroundImage = backgroundImageIcon.getImage();
 
-                signUpPanel.add(new JLabel("Email:"));
-                JTextField emailField = new JTextField();
-                signUpPanel.add(emailField);
+                // Create a panel to hold the components with a custom paintComponent method
+                JPanel signUpPanel = new JPanel() {
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        super.paintComponent(g);
+                        // Draw the background image
+                        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+                    }
+                };
 
-                signUpPanel.add(new JLabel("Username:"));
-                JTextField usernameField = new JTextField();
-                signUpPanel.add(usernameField);
+                // Use a GridBagLayout for more flexibility in component placement
+                signUpPanel.setLayout(new GridBagLayout());
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                gbc.insets = new Insets(5, 5, 5, 5);
 
-                signUpPanel.add(new JLabel("Password:"));
-                JPasswordField passwordField = new JPasswordField();
-                signUpPanel.add(passwordField);
+                // Add components to the panel with GridBagLayout
+                signUpPanel.add(new JLabel("Email:"), gbc);
+                gbc.gridy++;
+                JTextField emailField = new JTextField(20);
+                signUpPanel.add(emailField, gbc);
 
+                gbc.gridy++;
+                signUpPanel.add(new JLabel("Username:"), gbc);
+                gbc.gridy++;
+                JTextField usernameField = new JTextField(20);
+                signUpPanel.add(usernameField, gbc);
+
+                gbc.gridy++;
+                signUpPanel.add(new JLabel("Password:"), gbc);
+                gbc.gridy++;
+                JPasswordField passwordField = new JPasswordField(20);
+                signUpPanel.add(passwordField, gbc);
+
+                gbc.gridy++;
                 JButton signUpButton = new JButton("Sign Up");
                 signUpButton.addActionListener(new ActionListener() {
                     @Override
@@ -152,22 +143,28 @@ public class MainGUI {
                         String email = emailField.getText();
                         String username = usernameField.getText();
                         char[] passwordChars = passwordField.getPassword();
-                        String password = new String(passwordChars); // Convert char array to String
+                        String password = new String(passwordChars);
 
                         // Implement your sign-up logic here using email, username, and password
                         Login.setLoggedInCustomer(new Customer(username, password, email, true));
-                        // For now, just print the entered values
-                        // System.out.println("Email: " + email);
-                        // System.out.println("Username: " + username);
-                        // System.out.println("Password: " + password);
 
                         // Assuming successful signup, navigate to the next screen
                         cardLayout.show(cardPanel, "browseFlights");
                     }
                 });
+                signUpPanel.add(signUpButton, gbc);
 
-                signUpPanel.add(new JLabel()); // Empty label for layout purposes
-                signUpPanel.add(signUpButton);
+                gbc.gridy++;
+                // Add the "Back" button
+                JButton backButton = new JButton("Back");
+                backButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Navigate back to the landing page
+                        cardLayout.show(cardPanel, "landing");
+                    }
+                });
+                signUpPanel.add(backButton, gbc);
 
                 // Add the sign-up screen to your cardPanel
                 cardPanel.add(signUpPanel, "signUp");

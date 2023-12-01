@@ -147,27 +147,25 @@ public class BrowseFlights extends JPanel {
 
                                     if (confirm == JOptionPane.YES_OPTION) {
                                         // Call the cancelFlight method to remove the selected flight
+                                        loggedInCustomer.cancelFlight(flightId, seatID);
 
                                         // Send Cancellation email
                                         EmailSender.sendCancelledFlight(loggedInCustomer.getEmail(), seatID, flightId);
 
-
-                                        loggedInCustomer.cancelFlight(flightId, seatID);
+                                        // Clear existing rows
+                                        DefaultTableModel model = (DefaultTableModel) table.getModel();
+                                        model.setRowCount(0);
 
                                         // Update the table to reflect the changes
-                                        Customer loggedInCustomer = Login.getLoggedInCustomer();
-                                        List<Seat> bookedSeats = Customer
+                                        List<Seat> updatedBookedSeats = Customer
                                                 .getSeatsByUserID(loggedInCustomer.getUserID());
-
-                                        DefaultTableModel model = (DefaultTableModel) table.getModel();
-                                        model.setRowCount(0); // Clear existing rows
-
-                                        for (Seat seat : bookedSeats) {
+                                        for (Seat seat : updatedBookedSeats) {
                                             Flight flight = Flight.getFlightBySeatID(seat.getSeatId());
                                             String seatInfo = seat.getSeatRow() + seat.getSeatNumber();
                                             BigDecimal totalPrice = seat.getPaymentAmount(); // Replace with your method
                                                                                              // to get seat price
-                                            Object[] rowData = { flight.getFlightID(), seatInfo, seat.getSeatType(),
+                                            Object[] rowData = { flight.getFlightID(), seat.getSeatId(), seatInfo,
+                                                    seat.getSeatType(),
                                                     flight.getFlightNumber(), totalPrice };
                                             model.addRow(rowData);
                                         }
