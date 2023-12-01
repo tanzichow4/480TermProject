@@ -66,11 +66,11 @@ public class BrowsePassengerFlights extends JPanel {
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Handle logout button click
+                JOptionPane.showMessageDialog(null, "Signing out...");
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "login");
             }
         });
-
-        // Create a panel to hold the buttons
     
 
         // Add components to the top bar
