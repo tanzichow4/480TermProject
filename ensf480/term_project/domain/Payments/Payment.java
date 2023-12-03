@@ -1,12 +1,13 @@
 package ensf480.term_project.domain.Payments;
 
-import ensf480.term_project.domain.Boundaries.*;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import ensf480.term_project.domain.Controllers.*;
+
 import java.math.BigDecimal;
 
 public class Payment {

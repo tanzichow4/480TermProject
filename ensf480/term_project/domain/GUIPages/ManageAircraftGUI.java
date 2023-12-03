@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import ensf480.term_project.domain.AdminStrategies.AddAircraftCommand;
-import ensf480.term_project.domain.Boundaries.PopulateFromDB;
+import ensf480.term_project.domain.Controllers.PopulateFromDB;
 import ensf480.term_project.domain.Users.*;
 
 public class ManageAircraftGUI extends JPanel {

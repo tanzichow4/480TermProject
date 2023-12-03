@@ -1,7 +1,7 @@
 package ensf480.term_project.domain.GUIPages;
 
-import ensf480.term_project.domain.Boundaries.DatabaseManager;
-import ensf480.term_project.domain.Boundaries.PopulateFromDB;
+import ensf480.term_project.domain.Controllers.DatabaseManager;
+import ensf480.term_project.domain.Controllers.PopulateFromDB;
 import ensf480.term_project.domain.Flights.Flight;
 import ensf480.term_project.domain.Flights.Seat;
 import ensf480.term_project.domain.Users.*;

@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 
 import ensf480.term_project.domain.AdminStrategies.AddFlightCommand;
-import ensf480.term_project.domain.Boundaries.PopulateFromDB;
+import ensf480.term_project.domain.Controllers.PopulateFromDB;
 import ensf480.term_project.domain.Flights.Flight;
 import ensf480.term_project.domain.Users.*;
 

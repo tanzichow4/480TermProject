@@ -1,8 +1,9 @@
 package ensf480.term_project.domain.Flights;
 
-import ensf480.term_project.domain.Boundaries.*;
-
 import java.util.List;
+
+import ensf480.term_project.domain.Controllers.*;
+
 import java.util.ArrayList;
 import java.math.BigDecimal;
 import java.sql.*;

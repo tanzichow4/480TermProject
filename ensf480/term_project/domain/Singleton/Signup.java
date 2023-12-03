@@ -11,7 +11,7 @@ public class Signup {
     // Private constructor to prevent instantiation outside of the class
     private Signup() {
         // Create a new registered user instance
-        // user = new Customer();
+        user = new Customer();
     }
 
     public void sign_up(String username, String password, String email) {

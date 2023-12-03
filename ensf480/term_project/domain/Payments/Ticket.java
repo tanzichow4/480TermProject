@@ -5,8 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import ensf480.term_project.domain.Boundaries.DatabaseManager;
-import ensf480.term_project.domain.Boundaries.TicketGetter;
+import ensf480.term_project.domain.Controllers.DatabaseManager;
+import ensf480.term_project.domain.Controllers.TicketGetter;
 import ensf480.term_project.domain.Flights.Flight;
 import ensf480.term_project.domain.Flights.Seat;
 

@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ensf480.term_project.domain.Boundaries.DatabaseManager;
+import ensf480.term_project.domain.Controllers.DatabaseManager;
 
 public class AirlineAgent extends RegisteredUser {
 

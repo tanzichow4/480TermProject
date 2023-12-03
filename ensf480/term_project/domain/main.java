@@ -7,8 +7,7 @@
 
 package ensf480.term_project.domain;
 
-import ensf480.term_project.domain.Boundaries.*;
-import ensf480.term_project.domain.Flights.*;
+import ensf480.term_project.domain.Controllers.*;
 import ensf480.term_project.domain.GUIPages.MainGUI;
 import ensf480.term_project.domain.Users.*;
 
@@ -31,11 +30,14 @@ public class main {
 
         // Initialize the system admins in the database - this will now be updated and
         // is only initialized once.
-        List<SystemAdmin> admins = PopulateFromDB.createSystemAdmins(users);
+        //List<SystemAdmin> admins = PopulateFromDB.createSystemAdmins(users);
+        PopulateFromDB.createSystemAdmins(users);
         // Initialize the customers in the system
-        List<Customer> customers = PopulateFromDB.createSystemCustomers(users);
+        //List<Customer> customers = PopulateFromDB.createSystemCustomers(users);
+        PopulateFromDB.createSystemCustomers(users);
 
-        List<AirlineAgent> airlineAgents = PopulateFromDB.createAirlineAgents(users);
+        PopulateFromDB.createAirlineAgents(users);
+        //List<AirlineAgent> airlineAgents = PopulateFromDB.createAirlineAgents(users);
 
         // System.out.println("Printing the Airline Agents:");
         // for (AirlineAgent admin : airlineAgents) {
@@ -47,7 +49,8 @@ public class main {
         // }
 
         // Initialize the flights in the database
-        List<Flight> flights = PopulateFromDB.setFlights();
+        //List<Flight> flights = PopulateFromDB.setFlights();
+        PopulateFromDB.setFlights();
 
         // System.out.println("Printing the System Admins:");
         // for (SystemAdmin admin : admins) {

@@ -2,11 +2,11 @@ package ensf480.term_project.domain.GUIPages;
 
 import javax.swing.*;
 
+import ensf480.term_project.domain.Controllers.*;
 import ensf480.term_project.domain.Flights.Flight;
 import ensf480.term_project.domain.Flights.Seat;
 import ensf480.term_project.domain.Users.*;
 import ensf480.term_project.domain.Payments.*;
-import ensf480.term_project.domain.Boundaries.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
