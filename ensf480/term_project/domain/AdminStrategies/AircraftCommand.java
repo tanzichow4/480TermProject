@@ -1,5 +1,5 @@
 package ensf480.term_project.domain.AdminStrategies;
 
-public class AircraftCommand {
-    
+public interface AircraftCommand {
+    public void execute();
 }

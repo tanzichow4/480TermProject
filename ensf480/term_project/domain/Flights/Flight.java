@@ -1,10 +1,11 @@
 package ensf480.term_project.domain.Flights;
 
-import ensf480.term_project.domain.Boundaries.*;
 import java.sql.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import ensf480.term_project.domain.Controllers.*;
 
 public class Flight {
 

@@ -1,8 +1,8 @@
 package ensf480.term_project.domain.Users; 
 
-import ensf480.term_project.domain.Boundaries.*;
-
 import java.sql.*;
+
+import ensf480.term_project.domain.Controllers.*;
 
 public class RegisteredUser {
 

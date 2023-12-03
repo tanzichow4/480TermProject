@@ -1,11 +1,9 @@
 package ensf480.term_project.domain.GUIPages;
 
-import ensf480.term_project.domain.Boundaries.EmailSender;
-import ensf480.term_project.domain.Boundaries.PopulateFromDB;
-
 import ensf480.term_project.domain.Users.Customer;
-
-import ensf480.term_project.domain.Boundaries.PromoDatabaseHandler;
+import ensf480.term_project.domain.Controllers.EmailSender;
+import ensf480.term_project.domain.Controllers.PopulateFromDB;
+import ensf480.term_project.domain.Controllers.PromoDatabaseHandler;
 import ensf480.term_project.domain.Flights.Flight;
 import ensf480.term_project.domain.Flights.Seat;
 import ensf480.term_project.domain.Promos.Promo;
@@ -37,7 +35,7 @@ public class BrowseFlightsGUI extends JPanel {
         flightsData = PopulateFromDB.setFlights();
         filteredFlights = new ArrayList<>(flightsData); // Initialize filteredFlights with all flights
 
-        System.out.println("Flights Data: " + flightsData);
+        //System.out.println("Flights Data: " + flightsData);
 
         // Create top bar
         JPanel topBar = createTopBar();

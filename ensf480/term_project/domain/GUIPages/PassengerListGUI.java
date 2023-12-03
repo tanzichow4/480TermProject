@@ -1,14 +1,15 @@
 package ensf480.term_project.domain.GUIPages;
 
 import javax.swing.*;
+
+import ensf480.term_project.domain.Controllers.DatabaseManager;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import ensf480.term_project.domain.Boundaries.DatabaseManager;
 
 public class PassengerListGUI extends JPanel {
     List<String> passengerNames = new ArrayList<>();

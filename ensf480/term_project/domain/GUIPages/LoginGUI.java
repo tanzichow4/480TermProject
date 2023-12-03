@@ -5,8 +5,9 @@ import java.util.List;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+import ensf480.term_project.domain.Controllers.*;
 import ensf480.term_project.domain.Users.*;
-import ensf480.term_project.domain.Boundaries.*;
+
 import java.awt.event.ActionListener;
 
 public class LoginGUI extends JPanel {
@@ -18,7 +19,7 @@ public class LoginGUI extends JPanel {
     private static AirlineAgent loggedInAirlineAgent;
     private static FlightAttendant loggedInFlightAttendant;
 
-    private static final String BACKGROUND_IMAGE_PATH = "C:\\Fall 2023\\ENSF480\\480TermProject\\images\\airplane-image.png";
+    private static final String BACKGROUND_IMAGE_PATH = "/Users/raina/Downloads/480TermProject/images/airplane-image.png";
 
     private void handleLogin() {
         // Check if the entered username and password are correct (replace with your

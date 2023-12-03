@@ -1,6 +1,6 @@
 package ensf480.term_project.domain.Users;
 
-import ensf480.term_project.domain.Boundaries.*;
+import ensf480.term_project.domain.Controllers.*;
 import ensf480.term_project.domain.Flights.*;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package ensf480.term_project.domain.Boundaries;
+package ensf480.term_project.domain.Controllers;
 
 import ensf480.term_project.domain.Promos.Promo;
 

@@ -1,6 +1,6 @@
 package ensf480.term_project.domain.GUIPages;
 
-import ensf480.term_project.domain.Boundaries.PopulateFromDB;
+import ensf480.term_project.domain.Controllers.PopulateFromDB;
 import ensf480.term_project.domain.Flights.Flight;
 
 import javax.swing.*;

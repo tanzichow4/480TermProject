@@ -1,7 +1,7 @@
 package ensf480.term_project.domain.Users;
 
+import ensf480.term_project.domain.Controllers.*;
 import ensf480.term_project.domain.Flights.*;
-import ensf480.term_project.domain.Boundaries.*;
 
 // Import necessary libraries
 import java.sql.*;
