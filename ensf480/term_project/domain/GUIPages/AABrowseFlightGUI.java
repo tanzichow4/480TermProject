@@ -35,7 +35,7 @@ public class AABrowseFlightGUI extends JPanel {
         flightsData = PopulateFromDB.setFlights();
         filteredFlights = new ArrayList<>(flightsData); // Initialize filteredFlights with all flights
 
-        System.out.println("Flights Data: " + flightsData);
+        //System.out.println("Flights Data: " + flightsData);
 
         // Create top bar
         JPanel topBar = createTopBar();
