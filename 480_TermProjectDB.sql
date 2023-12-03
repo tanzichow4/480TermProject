@@ -118,7 +118,19 @@ INSERT INTO Seats (seat_id, seat_row, seat_number, seat_type, booked, flight_id)
 (21, 'E', '9', 'Ordinary', FALSE, 2),
 (22, 'E', '10', 'Ordinary', FALSE, 2),
 (23, 'F', '11', 'Ordinary', FALSE, 2),
-(24, 'F', '12', 'Ordinary', FALSE, 2);
+(24, 'F', '12', 'Ordinary', FALSE, 2),
+(25, 'A', '1', 'Business', FALSE, 3),
+(26, 'A', '2', 'Business', FALSE, 3),
+(27, 'B', '3', 'Business', FALSE, 3),
+(28, 'B', '4', 'Business', FALSE, 3),
+(29, 'C', '5', 'Comfort', FALSE, 3),
+(30, 'C', '6', 'Comfort', FALSE, 3),
+(31, 'D', '7', 'Comfort', FALSE, 3),
+(32, 'D', '8', 'Comfort', FALSE, 3),
+(33, 'E', '9', 'Ordinary', FALSE, 3),
+(34, 'E', '10', 'Ordinary', FALSE, 3),
+(35, 'F', '11', 'Ordinary', FALSE, 3),
+(36, 'F', '12', 'Ordinary', FALSE, 3);
 
 -- Create Tickets table
 CREATE TABLE Tickets (
